@@ -1,2 +1,2 @@
-# HEP-Pheno-Project
-This repository tracks the progress of my work on a HEP Phenomenology project studying hadronic jet physics in the CERN-FCCee collider.
+# Jet physics in FCCee
+This repository tracks the progress of my work on a HEP Phenomenology project studying hadronic jet physics in the CERN-FCCee collider. The analyses are done using Pythia 8, ROOT, and FastJet frameworks.
