@@ -1,2 +1,2 @@
 # Jet physics in FCCee
-This repository tracks the progress of my work on a HEP Phenomenology project studying hadronic jet physics in the CERN-FCCee. The analysis is coded in C++ using the Pythia 8.312, ROOT 6.32.08, and FastJet 3.4.3 frameworks.
+This repository tracks the progress of my work on a HEP Phenomenology project studying hadronic jet physics in the CERN-FCCee. The analyses are coded in C++ using the Pythia 8.312, ROOT 6.32.08, and FastJet 3.4.3 frameworks.
