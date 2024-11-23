@@ -90,9 +90,9 @@ void plt_LEP912()
 		// Add prob counter
 		PrbTotal += Prb;
 		// Populate histogram
-		hist_exp->SetBinContent(Nch, Prb);
+		hist_exp->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
-		hist_exp->SetBinError(0, 0);
+		hist_exp->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
 	// Scale Probs
 	// hist_exp->Scale(1.0/PrbTotal);
@@ -105,7 +105,7 @@ void plt_LEP912()
 	// Reset
 	PrbTotal=0;
 	// Import Pythia data
-	ifstream infile_pen_1("LEP912_pen.txt");
+	ifstream infile_pen_1("LEP912_pen_H_W_200k.txt");
 	// Read through txt
 	while (getline(infile_pen_1, line)) {	
 		// Set reading order
@@ -114,9 +114,9 @@ void plt_LEP912()
 		// Add prob counter
 		PrbTotal += Prb;
 		// Populate histogram
-		hist_pen_1->SetBinContent(Nch, Prb);
+		hist_pen_1->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
-		hist_pen_1->SetBinError(0, 0);
+		hist_pen_1->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
 	// Scale Probs
 	// hist_pen_1->Scale(1.0/PrbTotal);
@@ -126,27 +126,27 @@ void plt_LEP912()
 
 // //////////////////////////////////////////////////////
 
-// 	// Reset
-// 	PrbTotal=0;
-// 	// Import Pythia data
-// 	ifstream infile_pen_2("soft_ppb900_pen.txt");
-// 	// Read through txt hardsofttop
-// 	while (getline(infile_pen_2, line)) {	
-// 		// Set reading order
-// 		istringstream iss(line);
-// 		iss >> Nch >> Prb >> Err_Prb;
-// 		// Add prob counter
-// 		PrbTotal += Prb;
-// 		// Populate histogram
-// 		hist_pen_2->SetBinContent(Nch, Prb);
-// 		// Populate error bar
-// 		hist_pen_2->SetBinError(0, 0);
-// 	}
-// 	// Scale Probs
-// 	// hist_pen_2->Scale(1.0/PrbTotal);
-// 	cout << "Cumulative Probability (Sft) : " << PrbTotal << endl;
-// 	// Close file
-// 	infile_pen_2.close();
+	// Reset
+	PrbTotal=0;
+	// Import Pythia data
+	ifstream infile_pen_2("LEP912_pen_H_W_Zh_200k.txt");
+	// Read through txt hardsofttop
+	while (getline(infile_pen_2, line)) {	
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Add prob counter
+		PrbTotal += Prb;
+		// Populate histogram
+		hist_pen_2->SetBinContent(hist_exp->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_pen_2->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
+	}
+	// Scale Probs
+	// hist_pen_2->Scale(1.0/PrbTotal);
+	cout << "Cumulative Probability (Ph2) : " << PrbTotal << endl;
+	// Close file
+	infile_pen_2.close();
 
 // //////////////////////////////////////////////////////
 
@@ -177,7 +177,7 @@ void plt_LEP912()
 	// Normalise probability
 	hist_exp->Scale(1.0/hist_exp->Integral());
 	hist_pen_1->Scale(1.0/hist_pen_1->Integral());
-	// hist_pen_2->Scale(1.0/hist_pen_2->Integral());
+	hist_pen_2->Scale(1.0/hist_pen_2->Integral());
 	// hist_pen_3->Scale(1.0/hist_pen_3->Integral());
 
 	// Create canvas
@@ -191,21 +191,20 @@ void plt_LEP912()
 	// Draw histogram
 	hist_exp->Draw("c1");
 	hist_pen_1->Draw("same");
-	// hist_pen_2->Draw("same");
+	hist_pen_2->Draw("same");
 	// hist_pen_3->Draw("same");
-	
 
 	// Add legend
 	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_exp, "Experimental data L3 LEP 284100 events", "p");
-	legend->AddEntry(hist_pen_1, "Pythia 8.312 data (H/W/WW) 200k events", "p");
-	// legend->AddEntry(hist_pen_2, "Pythia 8.312 (S.al)", "p");
+	legend->AddEntry(hist_exp, "Experimental data L3 LEP 284100 events", "lep");
+	legend->AddEntry(hist_pen_1, "Pythia 8.312 data (H/W) 200k events", "lep");
+	legend->AddEntry(hist_pen_2, "Pythia 8.312 data (H/W/Zh) 200k events", "lep");
 	// legend->AddEntry(hist_pen_3, "Pythia 8.312 (H+S+T)", "p");
 	legend->Draw();
 
 	cout << "Integration (Exp) : " << hist_exp->Integral() << endl;
 	cout << "Integration (Ph1) : " << hist_pen_1->Integral() << endl;
-	// cout << "Integration (Ph2) : " << hist_pen_2->Integral() << endl;
+	cout << "Integration (Ph2) : " << hist_pen_2->Integral() << endl;
 	// cout << "Integration (Ph3) : " << hist_pen_3->Integral() << endl;
 
 }

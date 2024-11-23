@@ -51,21 +51,45 @@ int main(){
 
 	// Define study object
 	Pythia pythia;
+	
 	// Define Beam params
-	pythia.readString("Beams:idA = 11");
-	pythia.readString("Beams:idB = -11");
+	pythia.readString("Beams:frameType = 1"); 				// Symmetrical beams
+	pythia.readString("Beams:idA = 11"); 					// Beam A energy
+	pythia.readString("Beams:idB = -11"); 					// Beam B energy
+	// pythia.readString("Tune:pp = 14"); 					// Monash'13 tune
+	
 	// Define centre GeV
 	pythia.readString("Beams:eA  = 45.6.");
 	pythia.readString("Beams:eB  = 45.6.");
-	pythia.readString("Beams:eCM = 91.2.");
-	// Define physics proc
-	pythia.readString("HardQCD:all = on");
-	pythia.readString("WeakSingleBoson:all = on");
-	// pythia.readString("WeakDoubleBoson:all = on");
+	pythia.readString("Beams:eCM = 91.2.");	
+	
+	// Define physics
+	pythia.readString("HardQCD:all = on"); 						// All hard QCD processes
+	// pythia.readString("HardQCD:gg2gg = on");					// gg2gg - Gluon Induced Events (code 111)
+	// pythia.readString("HardQCD:gg2qqbar = on");				// gg2qqbar - (code 112)
+	// pythia.readString("HardQCD:qg2qg = on");					// qg2qg - (code 113)
+	// pythia.readString("HardQCD:qq2qq = on");					// qq2qq - Quark Induced Events (code 114)
+	// pythia.readString("HardQCD:qqbar2gg = on");				// qqbar2gg - (code 115)
+	// pythia.readString("HardQCD:qqbar2qqbarNew = on");		// qqbar2qqbarNew (code 116)
+
+	// pythia.readString("WeakZ0:gmZmode = 1");					// control what Z should decay into
+	// pythia.readString("WeakSingleBoson:all = on");
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->gamma*/Z/W->ff
+	// pythia.readString("WeakSingleBoson:ffbar2W = on");
+	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm) = on");
+	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gmZ) = on");
+	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:W) = on");
+
+	// pythia.readString("PartonLevel:ISR = on"); 				// Initial-state radiation of qq->gluons
+	// pythia.readString("PartonLevel:FSR = on"); 				// Final-state radiation of qq->gluons
+
+	// pythia.readString("PartonLevel:MPI = on");				// multiparton interactions
+	// pythia.readString("PartonLevel:all= on");				// parton event interactions
+
 	// Set phase space cut
-	pythia.readString("PhaseSpace:pTHatMin = 20.");
-	// Set Monash'13 tune
-	// pythia.readString("Tune:pp = 14");
+	// pythia.readString("PhaseSpace:pTHatMin = 20.");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Initialise PYTHIA
 	pythia.init();
@@ -73,12 +97,10 @@ int main(){
 	if (!pythia.init()) return 1;
 
 	// Define histogram
-	Hist mult("charged multiplicity", 28, 2, 56);
+	Hist mult("charged multiplicity", 28, 2, 58);
 
 	// Set # of events
 	int nEvents = 2e5;
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Study events
 	for(int iEvent = 0; iEvent < nEvents; iEvent++ )
@@ -116,7 +138,7 @@ int main(){
 	}
 
 	// Store histogram to txt
-	mult.table("LEP912_pen.txt", false, true, true);
+	mult.table("LEP912_pen_H_W.txt", false, false, true);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
