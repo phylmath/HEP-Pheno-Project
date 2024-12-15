@@ -6,17 +6,28 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+// Pythia
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Basics.h"
+// Fastjet
+#include "fjcore.hh"
+// #include "fastjet/PseudoJet.hh"
+// #include "fastjet/ClusterSequence.hh"
+// ROOT
 #include "TFile.h"
 #include "TTree.h"
+#include "TGraph.h"
+#include "TCanvas.h"
 // Header
 using namespace Pythia8;
 using namespace std;
+using namespace fjcore;
 
 // Code
 int main(){
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Create a file
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
@@ -47,6 +58,8 @@ int main(){
 	tree->Branch("parEta", &parEta, "parEta/D");
 	tree->Branch("parPhi", &parPhi, "parPhi/D");
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Pythia code
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define study object
@@ -100,7 +113,7 @@ int main(){
 	Hist mult("charged multiplicity", 28, 2, 58);
 
 	// Set # of events
-	int nEvents = 2e5;
+	int nEvents = 1;
 
 	// Study events
 	for(int iEvent = 0; iEvent < nEvents; iEvent++ )
@@ -108,7 +121,7 @@ int main(){
 		// Anti-crash
 		if(!pythia.next()) continue;
 		// Print event#
-		cout << "\tEvent#" << iEvent << endl;
+		// cout << "\tEvent#" << iEvent << endl;
 		// Hadron counters
 		int Nch = 0;
 		// Study particles
@@ -138,22 +151,87 @@ int main(){
 	}
 
 	// Store histogram to txt
-	mult.table("LEP912_pen_H_W.txt", false, false, true);
+	// mult.table("LEP912_pen_H_W.txt", false, false, true);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FastJet code
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Fill particles into a vector
+	vector<PseudoJet> particles;
+	// Loop #iteration
+	int entries = tree->GetEntries();
+	// Read branches
+	for (int i = 0; i < entries; i++)
+	{
+		// Load branch
+		tree->GetEntry(i);
+		// Particle vector
+		PseudoJet particle(parPmx, parPmy, parPmz, parMas);
+		// Storing pdgID
+		particle.set_user_index(parNum);
+		// Add particle to vector
+		particles.push_back(particle);
+	}
+
+	// Set jet radius
+	double R = 0.6;
+	// Set lower pT
+	double ptmin = 5.0;
+	
+	// Create jet definition
+	JetDefinition jet_def(antikt_algorithm, R);
+	
+	// Run clustering, sort/store results
+	ClusterSequence cs(particles, jet_def);
+	vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));
+
+	// Print info
+	cout << "Clustering with " << jet_def.description() << endl;
+	
+	// Study jets
+	for (int i = 0; i < jets.size(); i++) 
+	{
+		// Label columns
+		printf("%5s %15s %15s %15s %8s\n","jet #", "rapidity", "phi", "pt", "N");
+
+		// Count jet particles
+		int n_constituents = jets[i].constituents().size();
+
+		// Print jet properties
+		printf("%5u %15.8f %15.8f %15.8f %8u\n", i, jets[i].rap(), jets[i].phi(), jets[i].perp(), n_constituents);
+		
+		// Define constituents vector
+		vector<PseudoJet> constituents = jets[i].constituents();
+
+		printf("%5s %15s %15s %15s %8s\n","par #", "rapidity", "phi", "pt", "ID");
+		// Study jet constituents
+		for (int j = 0; j < constituents.size(); j++)
+		{
+			// Define constituent vector
+			PseudoJet constituent = jets[i].constituents()[j];
+			// Print constituent properties
+			printf("%5u %15.8f %15.8f %15.8f %8i\n", j, constituents[j].rap(), constituents[j].phi(), constituents[j].perp(), constituent.user_index());
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Termination
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Display statistics
-	// pythia.stat();
+	pythia.stat();
 	
 	// Display histogram
-	cout << mult;
+	// cout << mult;
 
-	// write file
+	// Terminate file
 	output->Write();
-
-	// close file
 	output->Close();
-	
+	delete output;
+
+
+
 	// Terminate
 	return 0;
 
