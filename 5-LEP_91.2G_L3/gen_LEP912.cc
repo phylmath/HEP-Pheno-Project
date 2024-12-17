@@ -151,7 +151,13 @@ int main(){
 	}
 
 	// Store histogram to txt
-	// mult.table("LEP912_pen_H_W.txt", false, false, true);
+	mult.table("LEP912_pen_H_W.txt", false, false, true);
+
+	// Display statistics
+	pythia.stat();
+	
+	// Display histogram
+	// cout << mult;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FastJet code
@@ -189,8 +195,8 @@ int main(){
 	// Print info
 	cout << "Clustering with " << jet_def.description() << endl;
 	
-	// Study jets
-	for (int i = 0; i < jets.size(); i++) 
+	// Study jet properties
+	for (int i = 0; i < jets.size(); i++)
 	{
 		// Label columns
 		printf("%5s %15s %15s %15s %8s\n","jet #", "rapidity", "phi", "pt", "N");
@@ -204,7 +210,9 @@ int main(){
 		// Define constituents vector
 		vector<PseudoJet> constituents = jets[i].constituents();
 
+		// Label columns
 		printf("%5s %15s %15s %15s %8s\n","par #", "rapidity", "phi", "pt", "ID");
+
 		// Study jet constituents
 		for (int j = 0; j < constituents.size(); j++)
 		{
@@ -216,23 +224,16 @@ int main(){
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Termination
+// Ending
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Display statistics
-	pythia.stat();
-	
-	// Display histogram
-	// cout << mult;
-
-	// Terminate file
+	// Write file
 	output->Write();
 	output->Close();
 	delete output;
-
-
-
 	// Terminate
 	return 0;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
