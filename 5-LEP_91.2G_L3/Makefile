@@ -1,5 +1,5 @@
 #	Running from personal laptop
-home_gen%: gen%.cc
+gen%: gen%.cc
 #	compile script
 	g++ -O $@.cc -o $@ \
 	-I/home/muffin/0-software/pythia8312/include `root-config --cflags` \
@@ -9,13 +9,13 @@ home_gen%: gen%.cc
 	./$@
 
 #	Running from work computer
-work_gen%: gen%.cc
-#	compile script
-	g++ -O $@.cc -o $@ \
-	-I/home/pmathew/0-software/pythia8313/include `root-config --cflags` \
-	-I/home/pmathew/0-software/fjcore-3.4.3/ \
-	-lpythia8 -L/home/pmathew/0-software/pythia8313/lib `root-config --glibs`
-#	run the scipt
-	./$@
+# work_gen%: gen%.cc
+# #	compile script
+# 	g++ -O $@.cc -o $@ \
+# 	-I/home/pmathew/0-software/pythia8313/include `root-config --cflags` \
+# 	-I/home/pmathew/0-software/fjcore-3.4.3/ \
+# 	-lpythia8 -L/home/pmathew/0-software/pythia8313/lib `root-config --glibs`
+# #	run the scipt
+# 	./$@
 
 # -I/home/muffin/0-software/fastjet-install/bin/fastjet-config `--cxxflags --libs --plugins`
