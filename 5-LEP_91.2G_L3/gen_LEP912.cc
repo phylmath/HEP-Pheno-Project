@@ -73,7 +73,6 @@ int main(){
 	pythia.settings.parm("Beams:eCM", mZ);						// Set energy = mZ
 	pythia.readString("PDF:lepton = off");						// Disable beam substructure
 
-
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->gamma*/Z/W->ff
@@ -163,7 +162,7 @@ int main(){
 	}
 
 	// Set jet radius
-	double R = 0.6;
+	double R = 0.4;
 	// Set lower pT
 	double ptmin = 5.0;
 	

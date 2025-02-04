@@ -32,40 +32,16 @@ void plt_LEP912()
 	hist_exp->GetYaxis()->SetNdivisions(510, kTRUE);
 
     // Define histogram
-	TH1D *hist_pen_1 = new TH1D("hist_pen_1", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 60, 0, 60);
+	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 60, 0, 60);
 	// Beautify
-	hist_pen_1->SetStats(kFALSE);
-	hist_pen_1->SetLineColor(kBlue+1);
-	hist_pen_1->SetMarkerColor(kBlue+1);
-	hist_pen_1->SetMarkerStyle(21);
-	hist_pen_1->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_pen_1->GetYaxis()->SetTitle("Probability Pn");
-	hist_pen_1->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_pen_1->GetYaxis()->SetNdivisions(510, kTRUE);
-
-	// Define histogram
-	TH1D *hist_pen_2 = new TH1D("hist_pen_2", "Charged Hadron Multiplicity distributions [ 900 GeV / 6839 events ]", 60, 0, 60);
-	// Beautify
-	hist_pen_2->SetStats(kFALSE);
-	hist_pen_2->SetLineColor(kGreen+1);
-	hist_pen_2->SetMarkerColor(kGreen+1);
-	hist_pen_2->SetMarkerStyle(22);
-	hist_pen_2->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_pen_2->GetYaxis()->SetTitle("Probability Pn");
-	hist_pen_2->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_pen_2->GetYaxis()->SetNdivisions(510, kTRUE);
-
-	// Define histogram
-	TH1D *hist_pen_3 = new TH1D("hist_pen_3", "Charged Hadron Multiplicity distributions [ 900 GeV / 6839 events ]", 60, 0, 60);
-	// Beautify
-	hist_pen_3->SetStats(kFALSE);
-	hist_pen_3->SetLineColor(kMagenta+2);
-	hist_pen_3->SetMarkerColor(kMagenta+2);
-	hist_pen_3->SetMarkerStyle(23);
-	hist_pen_3->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_pen_3->GetYaxis()->SetTitle("Probability Pn");
-	hist_pen_3->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_pen_3->GetYaxis()->SetNdivisions(510, kTRUE);
+	hist_pen->SetStats(kFALSE);
+	hist_pen->SetLineColor(kBlue+1);
+	hist_pen->SetMarkerColor(kBlue+1);
+	hist_pen->SetMarkerStyle(21);
+	hist_pen->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
+	hist_pen->GetYaxis()->SetTitle("Probability Pn");
+	hist_pen->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_pen->GetYaxis()->SetNdivisions(510, kTRUE);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -114,69 +90,21 @@ void plt_LEP912()
 		// Add prob counter
 		PrbTotal += Prb;
 		// Populate histogram
-		hist_pen_1->SetBinContent(hist_exp->FindBin(Nch), Prb);
+		hist_pen->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
-		hist_pen_1->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
+		hist_pen->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
 	// Scale Probs
-	// hist_pen_1->Scale(1.0/PrbTotal);
+	// hist_pen->Scale(1.0/PrbTotal);
 	cout << "Cumulative Probability (Ph1) : " << PrbTotal << endl;
 	// Close file
 	infile_pen_1.close();
-
-// //////////////////////////////////////////////////////
-
-	// // Reset
-	// PrbTotal=0;
-	// // Import Pythia data
-	// ifstream infile_pen_2("LEP912_pen_H_W_Zh_200k.txt");
-	// // Read through txt hardsofttop
-	// while (getline(infile_pen_2, line)) {	
-	// 	// Set reading order
-	// 	istringstream iss(line);
-	// 	iss >> Nch >> Prb >> Err_Prb;
-	// 	// Add prob counter
-	// 	PrbTotal += Prb;
-	// 	// Populate histogram
-	// 	hist_pen_2->SetBinContent(hist_exp->FindBin(Nch), Prb);
-	// 	// Populate error bar
-	// 	hist_pen_2->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
-	// }
-	// // Scale Probs
-	// // hist_pen_2->Scale(1.0/PrbTotal);
-	// cout << "Cumulative Probability (Ph2) : " << PrbTotal << endl;
-	// // Close file
-	// infile_pen_2.close();
-
-// //////////////////////////////////////////////////////
-
-// 	// Reset
-// 	PrbTotal=0;
-// 	// Import Pythia data
-// 	ifstream infile_pen_3("hardsofttop_ppb900_pen.txt");
-// 	// Read through txt
-// 	while (getline(infile_pen_3, line)) {	
-// 		// Set reading order
-// 		istringstream iss(line);
-// 		iss >> Nch >> Prb >> Err_Prb;
-// 		// Add prob counter
-// 		PrbTotal += Prb;
-// 		// Populate histogram
-// 		hist_pen_3->SetBinContent(Nch, Prb);
-// 		// Populate error bar
-// 		hist_pen_3->SetBinError(0, 0);
-// 	}
-// 	// Scale Probs
-// 	// hist_pen_3->Scale(1.0/PrbTotal);
-// 	cout << "Cumulative Probability (All) : " << PrbTotal << endl;
-// 	// Close file
-// 	infile_pen_3.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Normalise probability
 	hist_exp->Scale(1.0/hist_exp->Integral());
-	hist_pen_1->Scale(1.0/hist_pen_1->Integral());
+	hist_pen->Scale(1.0/hist_pen->Integral());
 	// hist_pen_2->Scale(1.0/hist_pen_2->Integral());
 	// hist_pen_3->Scale(1.0/hist_pen_3->Integral());
 
@@ -188,23 +116,56 @@ void plt_LEP912()
 	c1->SetTicky();
 	c1->SetGridx();
 	c1->SetGridy();
+
+	// Fitting function
+	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf(x,[1],x)", 0, 60);
+	// // Beautify
+	fist_pen->SetLineWidth(3);
+	fist_pen->SetLineColor(kBlue);
+	fist_pen->SetLineStyle(2);
+	// Input fit params
+	fist_pen->SetParameter(0,1.6);			// Normalisation parameter
+	// fist_pen->SetParameter(1,15);			// k - shape parameter
+	fist_pen->SetParameter(1,0.5);			// p - probability parameter
+	// fist_pen->SetParameter(3,18);		// n - number of trials (make independent)
+	// Perform fitting
+	hist_pen->Fit("fist_pen", "R0");		// R(range) Q(suppress terminal output) 0(fit display)
+
+	// Fitting function
+	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 0, 60);
+	// // Beautify
+	fist_exp->SetLineWidth(3);
+	fist_exp->SetLineColor(kRed);
+	fist_exp->SetLineStyle(2);
+	// Input fit params
+	fist_exp->SetParameter(0,1.6);			// Normalisation parameter
+	fist_exp->SetParameter(1,15);			// k - shape parameter
+	fist_exp->SetParameter(2,0.5);			// p - probability parameter
+	// fist_exp->SetParameter(3,18);		// n - number of trials (make independent)
+	// Perform fitting
+	hist_exp->Fit("fist_exp", "R0");		// R(range) Q(suppress terminal output) 0(fit display)
+
 	// Draw histogram
 	hist_exp->Draw("c1");
-	hist_pen_1->Draw("same");
-	// hist_pen_2->Draw("same");
-	// hist_pen_3->Draw("same");
+	// hist_pen->Draw("same");
+	// fist_pen->Draw("same");
+	fist_exp->Draw("same");
 
 	// Add legend
 	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_exp, "Experimental data 284100 events", "lep");
-	legend->AddEntry(hist_pen_1, "Pythia 8.312 data 284100 events", "lep");
-	// legend->AddEntry(hist_pen_2, "Pythia 8.312 data (H/W/Zh) 200k events", "lep");
-	// legend->AddEntry(hist_pen_3, "Pythia 8.312 (H+S+T)", "p");
-	legend->Draw();
+	legend->AddEntry(hist_exp, "Experimental data 284100 events", "p");
+	legend->AddEntry(fist_exp, "NBD fit for Experimental data", "l");
+	legend->AddEntry(hist_pen, "Pythia 8.312 data 284100 events", "p");
+	legend->AddEntry(fist_pen, "NBD fit for Pythia data", "l");
 
+	// legend->SetBorderSize(0);
+	// legend->Draw();
+
+	// Print area under the curves to confirm normalisation
 	cout << "Integration (Exp) : " << hist_exp->Integral() << endl;
-	// cout << "Integration (Ph1) : " << hist_pen_1->Integral() << endl;
-	// cout << "Integration (Ph2) : " << hist_pen_2->Integral() << endl;
-	// cout << "Integration (Ph3) : " << hist_pen_3->Integral() << endl;
+	cout << "Integration (Ph1) : " << hist_pen->Integral() << endl;
+	cout << "HISTO-EXP (K/P/N) : " << fist_exp->GetParameter(0) << "/" << fist_exp->GetParameter(1) << "/" << fist_exp->GetParameter(2) << endl;
+	cout << "HISTO-PEN (K/P/N) : " << fist_pen->GetParameter(0) << "/" << fist_pen->GetParameter(1) << "/" << fist_pen->GetParameter(2) << endl;
+
 
 }
