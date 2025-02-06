@@ -18,9 +18,11 @@ void plt_LEP912()
 {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plotting Hadron Multiplicity
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Define histogram
-    TH1D *hist_exp = new TH1D("hist_exp", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 60, 0, 60);
+    TH1D *hist_exp = new TH1D("hist_exp", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
     // Beautify
 	hist_exp->SetStats(kFALSE);
 	hist_exp->SetLineColor(kRed+1);
@@ -32,7 +34,7 @@ void plt_LEP912()
 	hist_exp->GetYaxis()->SetNdivisions(510, kTRUE);
 
     // Define histogram
-	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 60, 0, 60);
+	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
 	// Beautify
 	hist_pen->SetStats(kFALSE);
 	hist_pen->SetLineColor(kBlue+1);
@@ -42,6 +44,18 @@ void plt_LEP912()
 	hist_pen->GetYaxis()->SetTitle("Probability Pn");
 	hist_pen->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_pen->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Define histogram
+    TH1D *hist_jet = new TH1D("hist_jet", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 5, 0, 4);
+    // Beautify
+	hist_jet->SetStats(kFALSE);
+	hist_jet->SetLineColor(kRed+1);
+	hist_jet->SetMarkerColor(kRed+1);
+	hist_jet->SetMarkerStyle(20);
+	hist_jet->GetXaxis()->SetTitle("Hadronic Jet Multiplicity Ncj");
+	hist_jet->GetYaxis()->SetTitle("Probability Pn");
+	hist_jet->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_jet->GetYaxis()->SetNdivisions(510, kTRUE);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,50 +77,61 @@ void plt_LEP912()
 		// Set reading order
 		istringstream iss(line);
 		iss >> Nch >> Prb >> Err_Nch >> Err_Prb;
-		// Add prob counter
-		PrbTotal += Prb;
 		// Populate histogram
 		hist_exp->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
 		hist_exp->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
-	// Scale Probs
-	// hist_exp->Scale(1.0/PrbTotal);
 	cout << "Cumulative Probability (Exp) : " << PrbTotal << endl;
 	// Close file
 	infile_exp.close();
 
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Reset
 	PrbTotal=0;
 	// Import Pythia data
-	ifstream infile_pen_1("LEP912_pen.txt");
+	ifstream infile_pen("LEP912_nCh.txt");
 	// Read through txt
-	while (getline(infile_pen_1, line)) {	
+	while (getline(infile_pen, line)) {	
 		// Set reading order
 		istringstream iss(line);
 		iss >> Nch >> Prb >> Err_Prb;
-		// Add prob counter
-		PrbTotal += Prb;
 		// Populate histogram
 		hist_pen->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
 		hist_pen->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
-	// Scale Probs
-	// hist_pen->Scale(1.0/PrbTotal);
-	cout << "Cumulative Probability (Ph1) : " << PrbTotal << endl;
+	cout << "Cumulative Probability (Pen) : " << PrbTotal << endl;
 	// Close file
-	infile_pen_1.close();
+	infile_pen.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Reset
+	PrbTotal=0;
+	// Import Pythia data
+	ifstream infile_jet("LEP912_nCj.txt");
+	// Read through txt
+	while (getline(infile_jet, line)) {	
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Populate histogram
+		hist_jet->SetBinContent(hist_jet->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_jet->SetBinError(hist_jet->FindBin(Nch), 0);
+	}
+	cout << "Cumulative Probability (Jet) : " << PrbTotal << endl;
+	// Close file
+	infile_jet.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Normalise probability
 	hist_exp->Scale(1.0/hist_exp->Integral());
 	hist_pen->Scale(1.0/hist_pen->Integral());
-	// hist_pen_2->Scale(1.0/hist_pen_2->Integral());
-	// hist_pen_3->Scale(1.0/hist_pen_3->Integral());
+	hist_jet->Scale(1.0/hist_jet->Integral());
 
 	// Create canvas
 	TCanvas* c1 = new TCanvas("c1", "Charged hadron multiplicity distributions", 800, 600);
@@ -118,21 +143,21 @@ void plt_LEP912()
 	c1->SetGridy();
 
 	// Fitting function
-	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf(x,[1],x)", 0, 60);
+	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
 	// // Beautify
 	fist_pen->SetLineWidth(3);
 	fist_pen->SetLineColor(kBlue);
 	fist_pen->SetLineStyle(2);
 	// Input fit params
 	fist_pen->SetParameter(0,1.6);			// Normalisation parameter
-	// fist_pen->SetParameter(1,15);			// k - shape parameter
-	fist_pen->SetParameter(1,0.5);			// p - probability parameter
+	fist_pen->SetParameter(1,15);			// k - shape parameter
+	fist_pen->SetParameter(2,0.5);			// p - probability parameter
 	// fist_pen->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
 	hist_pen->Fit("fist_pen", "R0");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Fitting function
-	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 0, 60);
+	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
 	// // Beautify
 	fist_exp->SetLineWidth(3);
 	fist_exp->SetLineColor(kRed);
@@ -147,8 +172,8 @@ void plt_LEP912()
 
 	// Draw histogram
 	hist_exp->Draw("c1");
-	// hist_pen->Draw("same");
-	// fist_pen->Draw("same");
+	hist_pen->Draw("same");
+	fist_pen->Draw("same");
 	fist_exp->Draw("same");
 
 	// Add legend
@@ -159,13 +184,30 @@ void plt_LEP912()
 	legend->AddEntry(fist_pen, "NBD fit for Pythia data", "l");
 
 	// legend->SetBorderSize(0);
-	// legend->Draw();
+	legend->Draw("same");
 
 	// Print area under the curves to confirm normalisation
 	cout << "Integration (Exp) : " << hist_exp->Integral() << endl;
-	cout << "Integration (Ph1) : " << hist_pen->Integral() << endl;
-	cout << "HISTO-EXP (K/P/N) : " << fist_exp->GetParameter(0) << "/" << fist_exp->GetParameter(1) << "/" << fist_exp->GetParameter(2) << endl;
-	cout << "HISTO-PEN (K/P/N) : " << fist_pen->GetParameter(0) << "/" << fist_pen->GetParameter(1) << "/" << fist_pen->GetParameter(2) << endl;
+	cout << "Integration (Pen) : " << hist_pen->Integral() << endl;
+	// cout << "HISTO-EXP (K/P/N) : " << fist_exp->GetParameter(0) << "/" << fist_exp->GetParameter(1) << "/" << fist_exp->GetParameter(2) << endl;
+	// cout << "HISTO-PEN (K/P/N) : " << fist_pen->GetParameter(0) << "/" << fist_pen->GetParameter(1) << "/" << fist_pen->GetParameter(2) << endl;
 
+
+
+
+	// Create canvas
+	TCanvas* c2 = new TCanvas("c2", "Hadronic jet multiplicity distributions", 800, 600);
+	// Beautify
+	c2->SetLogy();
+	c2->SetTickx();
+	c2->SetTicky();
+	c2->SetGridx();
+	c2->SetGridy();
+
+	// Draw histogram
+	hist_jet->Draw("c2");
+
+	// Print area under the curves to confirm normalisation
+	cout << "Integration (Pen) : " << hist_exp->Integral() << endl;
 
 }
