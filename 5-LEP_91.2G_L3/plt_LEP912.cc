@@ -46,7 +46,7 @@ void plt_LEP912()
 	hist_pen->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Define histogram
-    TH1D *hist_jet = new TH1D("hist_jet", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 5, 0, 5);
+    TH1D *hist_jet = new TH1D("hist_jet", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
     // Beautify
 	// hist_jet->SetStats(kFALSE);
 	hist_jet->SetLineColor(kRed+1);
@@ -83,7 +83,7 @@ void plt_LEP912()
 		// Populate error bar
 		hist_exp->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
-	cout << "Cumulative Probability (Exp) : " << PrbTotal << endl;
+	// cout << "Cumulative Probability (Exp) : " << PrbTotal << endl;
 	// Close file
 	infile_exp.close();
 
@@ -103,7 +103,7 @@ void plt_LEP912()
 		// Populate error bar
 		hist_pen->SetBinError(hist_exp->FindBin(Nch), Err_Prb);
 	}
-	cout << "Cumulative Probability (Pen) : " << PrbTotal << endl;
+	// cout << "Cumulative Probability (Pen) : " << PrbTotal << endl;
 	// Close file
 	infile_pen.close();
 
@@ -121,9 +121,9 @@ void plt_LEP912()
 		// Populate histogram
 		hist_jet->SetBinContent(hist_jet->FindBin(Nch), Prb);
 		// Populate error bar
-		hist_jet->SetBinError(hist_jet->FindBin(Nch), 0);
+		hist_jet->SetBinError(hist_jet->FindBin(Nch), Err_Prb);
 	}
-	cout << "Cumulative Probability (Jet) : " << PrbTotal << endl;
+	// cout << "Cumulative Probability (Jet) : " << PrbTotal << endl;
 	// Close file
 	infile_jet.close();
 
