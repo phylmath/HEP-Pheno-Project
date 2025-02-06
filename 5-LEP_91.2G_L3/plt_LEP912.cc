@@ -24,7 +24,7 @@ void plt_LEP912()
     // Define histogram
     TH1D *hist_exp = new TH1D("hist_exp", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
     // Beautify
-	hist_exp->SetStats(kFALSE);
+	// hist_exp->SetStats(kFALSE);
 	hist_exp->SetLineColor(kRed+1);
 	hist_exp->SetMarkerColor(kRed+1);
 	hist_exp->SetMarkerStyle(20);
@@ -36,7 +36,7 @@ void plt_LEP912()
     // Define histogram
 	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
 	// Beautify
-	hist_pen->SetStats(kFALSE);
+	// hist_pen->SetStats(kFALSE);
 	hist_pen->SetLineColor(kBlue+1);
 	hist_pen->SetMarkerColor(kBlue+1);
 	hist_pen->SetMarkerStyle(21);
@@ -46,12 +46,13 @@ void plt_LEP912()
 	hist_pen->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Define histogram
-    TH1D *hist_jet = new TH1D("hist_jet", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 5, 0, 4);
+    TH1D *hist_jet = new TH1D("hist_jet", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 5, 0, 5);
     // Beautify
-	hist_jet->SetStats(kFALSE);
+	// hist_jet->SetStats(kFALSE);
 	hist_jet->SetLineColor(kRed+1);
 	hist_jet->SetMarkerColor(kRed+1);
 	hist_jet->SetMarkerStyle(20);
+	hist_jet->SetLineWidth(4);
 	hist_jet->GetXaxis()->SetTitle("Hadronic Jet Multiplicity Ncj");
 	hist_jet->GetYaxis()->SetTitle("Probability Pn");
 	hist_jet->GetXaxis()->SetNdivisions(510, kTRUE);

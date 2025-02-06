@@ -91,7 +91,7 @@ int main(){
 
 	// Define histograms
 	Hist nCharge("charged had multiplicity", 28, 2, 58);
-	Hist nChJets("charged jet multiplicity", 5, 0, 4);
+	Hist nChJets("charged jet multiplicity", 5, 0, 5);
 
 	// Set # of events
 	int nEvent = 284100;
