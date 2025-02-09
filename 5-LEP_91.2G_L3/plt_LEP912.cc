@@ -97,7 +97,8 @@ void plt_LEP912()
 	while (getline(infile_pen, line)) {	
 		// Set reading order
 		istringstream iss(line);
-		iss >> Nch >> Prb >> Err_Prb;
+		// iss >> Nch >> Prb >> Err_Prb;
+		iss >> Nch >> Prb >> Err_Nch >> Err_Prb;
 		// Populate histogram
 		hist_pen->SetBinContent(hist_exp->FindBin(Nch), Prb);
 		// Populate error bar
@@ -155,7 +156,7 @@ void plt_LEP912()
 	fist_pen->SetParameter(2,0.5);			// p - probability parameter
 	// fist_pen->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	hist_pen->Fit("fist_pen", "R0");		// R(range) Q(suppress terminal output) 0(fit display)
+	hist_pen->Fit("fist_pen", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Fitting function
 	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
@@ -169,13 +170,13 @@ void plt_LEP912()
 	fist_exp->SetParameter(2,0.5);			// p - probability parameter
 	// fist_exp->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	hist_exp->Fit("fist_exp", "R0");		// R(range) Q(suppress terminal output) 0(fit display)
+	hist_exp->Fit("fist_exp", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Draw histogram
 	hist_exp->Draw("c1");
-	hist_pen->Draw("same");
-	fist_pen->Draw("same");
 	fist_exp->Draw("same");
+	// hist_pen->Draw("sames");
+	// fist_pen->Draw("same");
 
 	// Add legend
 	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
@@ -185,7 +186,7 @@ void plt_LEP912()
 	legend->AddEntry(fist_pen, "NBD fit for Pythia data", "l");
 
 	// legend->SetBorderSize(0);
-	legend->Draw("same");
+	// legend->Draw("same");
 
 	// Print area under the curves to confirm normalisation
 	cout << "Integration (Exp) : " << hist_exp->Integral() << endl;
@@ -193,22 +194,19 @@ void plt_LEP912()
 	// cout << "HISTO-EXP (K/P/N) : " << fist_exp->GetParameter(0) << "/" << fist_exp->GetParameter(1) << "/" << fist_exp->GetParameter(2) << endl;
 	// cout << "HISTO-PEN (K/P/N) : " << fist_pen->GetParameter(0) << "/" << fist_pen->GetParameter(1) << "/" << fist_pen->GetParameter(2) << endl;
 
+	// // Create canvas
+	// TCanvas* c2 = new TCanvas("c2", "Hadronic jet multiplicity distributions", 800, 600);
+	// // Beautify
+	// c2->SetLogy();
+	// c2->SetTickx();
+	// c2->SetTicky();
+	// c2->SetGridx();
+	// c2->SetGridy();
 
+	// // Draw histogram
+	// hist_jet->Draw("c2");
 
-
-	// Create canvas
-	TCanvas* c2 = new TCanvas("c2", "Hadronic jet multiplicity distributions", 800, 600);
-	// Beautify
-	c2->SetLogy();
-	c2->SetTickx();
-	c2->SetTicky();
-	c2->SetGridx();
-	c2->SetGridy();
-
-	// Draw histogram
-	hist_jet->Draw("c2");
-
-	// Print area under the curves to confirm normalisation
-	cout << "Integration (Pen) : " << hist_exp->Integral() << endl;
+	// // Print area under the curves to confirm normalisation
+	// cout << "Integration (Pen) : " << hist_exp->Integral() << endl;
 
 }
