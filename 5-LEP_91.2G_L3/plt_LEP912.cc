@@ -58,6 +58,45 @@ void plt_LEP912()
 	hist_jet->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_jet->GetYaxis()->SetNdivisions(510, kTRUE);
 
+	// Define histogram
+    TH1D *hist_ncp = new TH1D("hist_ncp", "Intermediate Parton Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
+    // Beautify
+	// hist_jet->SetStats(kFALSE);
+	hist_ncp->SetLineColor(kRed+1);
+	hist_ncp->SetMarkerColor(kRed+1);
+	hist_ncp->SetMarkerStyle(20);
+	hist_ncp->SetLineWidth(4);
+	hist_ncp->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_ncp->GetYaxis()->SetTitle("Probability Pn");
+	hist_ncp->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_ncp->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Define histogram
+    TH1D *hist_ncq = new TH1D("hist_ncq", "Intermediate Quark Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 100);
+    // Beautify
+	// hist_jet->SetStats(kFALSE);
+	hist_ncq->SetLineColor(kBlue+1);
+	hist_ncq->SetMarkerColor(kBlue+1);
+	hist_ncq->SetMarkerStyle(20);
+	hist_ncq->SetLineWidth(4);
+	hist_ncq->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_ncq->GetYaxis()->SetTitle("Probability Pn");
+	hist_ncq->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_ncq->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Define histogram
+    TH1D *hist_ncg = new TH1D("hist_ncg", "Intermediate Gluon Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
+    // Beautify
+	// hist_jet->SetStats(kFALSE);
+	hist_ncg->SetLineColor(kGreen+1);
+	hist_ncg->SetMarkerColor(kGreen+1);
+	hist_ncg->SetMarkerStyle(20);
+	hist_ncg->SetLineWidth(4);
+	hist_ncg->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_ncg->GetYaxis()->SetTitle("Probability Pn");
+	hist_ncg->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_ncg->GetYaxis()->SetNdivisions(510, kTRUE);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Set reading
@@ -124,9 +163,65 @@ void plt_LEP912()
 		// Populate error bar
 		hist_jet->SetBinError(hist_jet->FindBin(Nch), Err_Prb);
 	}
-	// cout << "Cumulative Probability (Jet) : " << PrbTotal << endl;
 	// Close file
 	infile_jet.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Reset
+	PrbTotal=0;
+	// Import Pythia data
+	ifstream infile_ncp("LEP912_nCp.txt");
+	// Read through txt
+	while (getline(infile_ncp, line)) {
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Populate histogram
+		hist_ncp->SetBinContent(hist_ncp->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_ncp->SetBinError(hist_ncp->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_ncp.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Reset
+	PrbTotal=0;
+	// Import Pythia data
+	ifstream infile_ncq("LEP912_nCq.txt");
+	// Read through txt
+	while (getline(infile_ncq, line)) {	
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Populate histogram
+		hist_ncq->SetBinContent(hist_ncq->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_ncq->SetBinError(hist_ncq->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_ncq.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Reset
+	PrbTotal=0;
+	// Import Pythia data
+	ifstream infile_ncg("LEP912_nCg.txt");
+	// Read through txt
+	while (getline(infile_ncg, line)) {	
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Populate histogram
+		hist_ncg->SetBinContent(hist_ncg->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_ncg->SetBinError(hist_ncg->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_ncg.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,15 +229,20 @@ void plt_LEP912()
 	hist_exp->Scale(1.0/hist_exp->Integral());
 	hist_pen->Scale(1.0/hist_pen->Integral());
 	hist_jet->Scale(1.0/hist_jet->Integral());
+	hist_ncp->Scale(1.0/hist_ncp->Integral());
+	hist_ncq->Scale(1.0/hist_ncq->Integral());
+	hist_ncg->Scale(1.0/hist_ncg->Integral());
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Create canvas
-	TCanvas* c1 = new TCanvas("c1", "Charged hadron multiplicity distributions", 800, 600);
+	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 	// Beautify
-	c1->SetLogy();
-	c1->SetTickx();
-	c1->SetTicky();
-	c1->SetGridx();
-	c1->SetGridy();
+	c_nch->SetLogy();
+	c_nch->SetTickx();
+	c_nch->SetTicky();
+	c_nch->SetGridx();
+	c_nch->SetGridy();
 
 	// Fitting function
 	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
@@ -156,7 +256,7 @@ void plt_LEP912()
 	fist_pen->SetParameter(2,0.5);			// p - probability parameter
 	// fist_pen->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	hist_pen->Fit("fist_pen", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// hist_pen->Fit("fist_pen", "RQME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Fitting function
 	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
@@ -170,11 +270,11 @@ void plt_LEP912()
 	fist_exp->SetParameter(2,0.5);			// p - probability parameter
 	// fist_exp->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	hist_exp->Fit("fist_exp", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// hist_exp->Fit("fist_exp", "RQME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Draw histogram
-	hist_exp->Draw("c1");
-	fist_exp->Draw("same");
+	// hist_exp->Draw("c_nch");
+	// fist_exp->Draw("same");
 	// hist_pen->Draw("sames");
 	// fist_pen->Draw("same");
 
@@ -194,19 +294,49 @@ void plt_LEP912()
 	// cout << "HISTO-EXP (K/P/N) : " << fist_exp->GetParameter(0) << "/" << fist_exp->GetParameter(1) << "/" << fist_exp->GetParameter(2) << endl;
 	// cout << "HISTO-PEN (K/P/N) : " << fist_pen->GetParameter(0) << "/" << fist_pen->GetParameter(1) << "/" << fist_pen->GetParameter(2) << endl;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// // Create canvas
-	// TCanvas* c2 = new TCanvas("c2", "Hadronic jet multiplicity distributions", 800, 600);
+	// TCanvas* c_ncj = new TCanvas("c_ncj", "Hadronic jet multiplicity distributions", 800, 600);
 	// // Beautify
-	// c2->SetLogy();
-	// c2->SetTickx();
-	// c2->SetTicky();
-	// c2->SetGridx();
-	// c2->SetGridy();
+	// c_ncj->SetLogy();
+	// c_ncj->SetTickx();
+	// c_ncj->SetTicky();
+	// c_ncj->SetGridx();
+	// c_ncj->SetGridy();
 
 	// // Draw histogram
-	// hist_jet->Draw("c2");
+	// hist_jet->Draw("c_ncj");
 
 	// // Print area under the curves to confirm normalisation
 	// cout << "Integration (Pen) : " << hist_exp->Integral() << endl;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Create canvas
+	TCanvas* c_imp = new TCanvas("c_imp", "Intermediate Parton Multiplicity distributions", 800, 600);
+	// Beautify
+	c_imp->SetLogy();
+	c_imp->SetTickx();
+	c_imp->SetTicky();
+	c_imp->SetGridx();
+	c_imp->SetGridy();
+
+	// Add legend
+	TLegend* lege_imp = new TLegend(0.4, 0.2, 0.85, 0.4);
+	lege_imp->AddEntry(hist_ncp, "Intermediate parton multiplicity", "p");
+	lege_imp->AddEntry(hist_ncq, "Intermediate quarks multiplicity", "p");
+	lege_imp->AddEntry(hist_ncg, "Intermediate gluons multiplicity", "p");
+
+	// Draw histogram
+	hist_ncp->Draw("c_imp");
+	hist_ncq->Draw("sames");
+	hist_ncg->Draw("sames");
+	lege_imp->Draw("same");
+
+	// Print area under the curves to confirm normalisation
+	cout << "Integration (nCp) : " << hist_ncp->Integral() << endl;
+	cout << "Integration (nCq) : " << hist_ncq->Integral() << endl;
+	cout << "Integration (nCg) : " << hist_ncg->Integral() << endl;
 
 }

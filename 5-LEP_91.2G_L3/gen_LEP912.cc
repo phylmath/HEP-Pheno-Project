@@ -92,10 +92,13 @@ int main(){
 	// Define histograms
 	Hist nCharge("charged had multiplicity", 28, 2, 58);
 	Hist nChJets("charged jet multiplicity", 100, 0, 5);
-	Hist nParton("intermediate parton multiplicity", 100, 0, 40);
+	Hist nParton("intermediate parton multiplicity", 100, 0, 100);
+	Hist nPQuark("intermediate quark multiplicity", 100, 0, 100);
+	Hist nPGluon("intermediate gluon multiplicity", 100, 0, 100);
+
 
 	// Set # of events
-	int nEvent = 1;
+	int nEvent = 284100;
 
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ){
@@ -110,6 +113,8 @@ int main(){
 		int nCh = 0;
 		int nCj = 0;
 		int nCp = 0;
+		int nCq = 0;
+		int nCg = 0;
 		
 		// FJ event vector
 		vector<PseudoJet> particles;
@@ -144,36 +149,52 @@ int main(){
 				// Add particle to vector
 				particles.push_back(particle);
 
-				// Counting mediary partons
-				nCp = 0;											// Reset counter
-				int parMom1 = pythia.event[j].mother1();			// Hadron mother-1
-				int parMom2 = pythia.event[j].mother2();			// Hadron mother-2
-				cout << "HADRON LISTING FOR " << parNum << endl;
-				while( parMom1!=0 && parMom2!=0 ){
-					cout << parMom1 << " " << parMom2 << " " << nCp << endl;
-					// Update counter
-					nCp++;
-					// Update mothers
-					parMom1 = pythia.event[parMom1].mother1();
-					parMom2 = pythia.event[parMom2].mother1();					
-				}
-
-				// Populate histogram
-				nParton.fill( nCp );
-
-				// cout << parNum << " " << pythia.event[j].id() << " " << pythia.event[j].mother1() << " " << pythia.event[j].mother2() << " " << endl;
-				cout << "Number of partons: " << nCp << endl;
+				// // Counting mediary partons
+				// nCp = 0;											// Reset counter
+				// int parMom1 = pythia.event[j].mother1();			// Hadron mother-1
+				// int parMom2 = pythia.event[j].mother2();			// Hadron mother-2
+				// cout << "HADRON LISTING FOR " << parNum << endl;
+				// while( parMom1!=0 && parMom2!=0 ){
+				// 	cout << parMom1 << " " << parMom2 << " " << nCp << endl;
+				// 	// Update counter
+				// 	nCp++;
+				// 	// Update mothers
+				// 	parMom1 = pythia.event[parMom1].mother1();
+				// 	parMom2 = pythia.event[parMom2].mother1();					
+				// }
+				// // Populate histogram
+				// nParton.fill( nCp );
+				// // cout << parNum << " " << pythia.event[j].id() << " " << pythia.event[j].mother1() << " " << pythia.event[j].mother2() << " " << endl;
+				// cout << "Number of partons: " << nCp << endl;
 
 			}
+
+			// Parton check
+			if(pythia.event[j].isFinal()==false){
+			
+				// Quark check
+				if(pythia.event[j].id()==1||pythia.event[j].id()==2||pythia.event[j].id()==3||pythia.event[j].id()==4||pythia.event[j].id()==5){
+					// Update counter
+					nCp++; nCq++;
+				}
+				// Gluon check
+				if(pythia.event[j].id()==21){
+					// Update counter
+					nCp++; nCg++;
+				}
+
+			}
+
 		}
 
-		// FastJet clustering
+		// Cluster particles in the event
 		double R = 0.4;															// Jet radius
 		double ptmin = 5.0;														// Lower pT
 		JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
 		ClusterSequence cs(particles, jet_def);									// Run clustering
 		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
-		
+		nCj = jets.size();														// Jet multiplicity
+
 		// // Print results
 		// cout << "Clustering with " << jet_def.description() << endl;			// Print algo info
 		// cout << "TOTAL NUMBER OF JETS " << jets.size() << endl;				// Print jets info
@@ -204,17 +225,21 @@ int main(){
 		// 	}
 		// }
 
-		// Update counter
-		nCj = jets.size();
-
 		// Populate histogram
 		nCharge.fill( nCh );
 		nChJets.fill( nCj );
+		nParton.fill( nCp );
+		nPQuark.fill( nCq );
+		nPGluon.fill( nCg );
+
 	}
 
 	// Store histogram to txt
 	nCharge.table("LEP912_nCh.txt", false, false, true);
 	nChJets.table("LEP912_nCj.txt", false, false, true);
+	nParton.table("LEP912_nCp.txt", false, false, true);
+	nPQuark.table("LEP912_nCq.txt", false, false, true);
+	nPGluon.table("LEP912_nCg.txt", false, false, true);
 
 	// Display statistics
 	// pythia.stat();
@@ -222,6 +247,9 @@ int main(){
 	// Display histogram
 	// cout << nCharge;
 	// cout << nChJets;
+	cout << nParton;
+	cout << nPQuark;
+	cout << nPGluon;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FastJet code
