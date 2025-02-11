@@ -92,9 +92,10 @@ int main(){
 	// Define histograms
 	Hist nCharge("charged had multiplicity", 28, 2, 58);
 	Hist nChJets("charged jet multiplicity", 100, 0, 5);
+	Hist nParton("intermediate parton multiplicity", 100, 0, 40);
 
 	// Set # of events
-	int nEvent = 284100;
+	int nEvent = 1;
 
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ){
@@ -108,6 +109,7 @@ int main(){
 		// Counters
 		int nCh = 0;
 		int nCj = 0;
+		int nCp = 0;
 		
 		// FJ event vector
 		vector<PseudoJet> particles;
@@ -141,6 +143,27 @@ int main(){
 				particle.set_user_index(parNum);
 				// Add particle to vector
 				particles.push_back(particle);
+
+				// Counting mediary partons
+				nCp = 0;											// Reset counter
+				int parMom1 = pythia.event[j].mother1();			// Hadron mother-1
+				int parMom2 = pythia.event[j].mother2();			// Hadron mother-2
+				cout << "HADRON LISTING FOR " << parNum << endl;
+				while( parMom1!=0 && parMom2!=0 ){
+					cout << parMom1 << " " << parMom2 << " " << nCp << endl;
+					// Update counter
+					nCp++;
+					// Update mothers
+					parMom1 = pythia.event[parMom1].mother1();
+					parMom2 = pythia.event[parMom2].mother1();					
+				}
+
+				// Populate histogram
+				nParton.fill( nCp );
+
+				// cout << parNum << " " << pythia.event[j].id() << " " << pythia.event[j].mother1() << " " << pythia.event[j].mother2() << " " << endl;
+				cout << "Number of partons: " << nCp << endl;
+
 			}
 		}
 
