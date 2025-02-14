@@ -244,7 +244,7 @@ void plt_LEP912()
 	c_nch->SetGridy();
 
 	// Fitting function
-	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 1, 57);
+	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
 	// // Beautify
 	fist_pen->SetLineWidth(3);
 	fist_pen->SetLineColor(kBlue);
@@ -258,7 +258,7 @@ void plt_LEP912()
 	hist_pen->Fit("fist_pen", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Fitting function
-	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 1, 57);
+	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
 	// // Beautify
 	fist_exp->SetLineWidth(3);
 	fist_exp->SetLineColor(kRed);
