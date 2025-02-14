@@ -90,12 +90,11 @@ int main(){
 	if (!pythia.init()) return 1;
 
 	// Define histograms
-	Hist nCharge("charged had multiplicity", 28, 2, 58);
+	Hist nCharge("charged had multiplicity", 28, 1, 57);
 	Hist nChJets("charged jet multiplicity", 100, 0, 5);
 	Hist nParton("intermediate parton multiplicity", 100, 0, 100);
 	Hist nPQuark("intermediate quark multiplicity", 100, 0, 100);
 	Hist nPGluon("intermediate gluon multiplicity", 100, 0, 100);
-
 
 	// Set # of events
 	int nEvent = 284100;
@@ -235,11 +234,11 @@ int main(){
 	}
 
 	// Store histogram to txt
-	nCharge.table("LEP912_nCh.txt", false, false, true);
-	nChJets.table("LEP912_nCj.txt", false, false, true);
-	nParton.table("LEP912_nCp.txt", false, false, true);
-	nPQuark.table("LEP912_nCq.txt", false, false, true);
-	nPGluon.table("LEP912_nCg.txt", false, false, true);
+	nCharge.table("LEP912_nCh.txt", false, true, true);
+	nChJets.table("LEP912_nCj.txt", false, true, true);
+	nParton.table("LEP912_nCp.txt", false, true, true);
+	nPQuark.table("LEP912_nCq.txt", false, true, true);
+	nPGluon.table("LEP912_nCg.txt", false, true, true);
 
 	// Display statistics
 	// pythia.stat();
@@ -247,73 +246,38 @@ int main(){
 	// Display histogram
 	// cout << nCharge;
 	// cout << nChJets;
-	cout << nParton;
-	cout << nPQuark;
-	cout << nPGluon;
+	// cout << nParton;
+	// cout << nPQuark;
+	// cout << nPGluon;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// FastJet code
+// TXT conditioning
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Fill particles into a vector
-	// vector<PseudoJet> particles;
-	// // Loop #iteration
-	// int entries = tree->GetEntries();
-	// // Read branches
-	// for (int i = 0; i < entries; i++)
-	// {
-	// 	// Load branch
-	// 	tree->GetEntry(i);
-	// 	// Particle vector
-	// 	PseudoJet particle(parPmx, parPmy, parPmz, parMas);
-	// 	// Storing pdgID
-	// 	particle.set_user_index(parNum);
-	// 	// Add particle to vector
-	// 	particles.push_back(particle);
-	// }
-
-	// // Set jet radius
-	// double R = 0.4;
-	// // Set lower pT
-	// double ptmin = 5.0;
-	
-	// // Create jet definition
-	// JetDefinition jet_def(antikt_algorithm, R);
-	
-	// // Run clustering, sort/store results
-	// ClusterSequence cs(particles, jet_def);
-	// vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));
-
-	// // Print info
-	// cout << "Clustering with " << jet_def.description() << endl;
-	
-	// // Study jet properties
-	// for (int i = 0; i < jets.size(); i++)
-	// {
-	// 	// Label columns
-	// 	printf("%5s %15s %15s %15s %8s\n","jet #", "rapidity", "phi", "pt", "N");
-
-	// 	// Count jet particles
-	// 	int n_constituents = jets[i].constituents().size();
-
-	// 	// Print jet properties
-	// 	printf("%5u %15.8f %15.8f %15.8f %8u\n", i, jets[i].rap(), jets[i].phi(), jets[i].perp(), n_constituents);
-		
-	// 	// Define constituents vector
-	// 	vector<PseudoJet> constituents = jets[i].constituents();
-
-	// 	// Label columns
-	// 	printf("%5s %15s %15s %15s %8s\n","par #", "rapidity", "phi", "pt", "ID");
-
-	// 	// Study jet constituents
-	// 	for (int j = 0; j < constituents.size(); j++)
-	// 	{
-	// 		// Define constituent vector
-	// 		PseudoJet constituent = jets[i].constituents()[j];
-	// 		// Print constituent properties
-	// 		printf("%5u %15.8f %15.8f %15.8f %8i\n", j, constituents[j].rap(), constituents[j].phi(), constituents[j].perp(), constituent.user_index());
-	// 	}
-	// }
+	// Set reading
+	string line;
+    // Open new file
+    ofstream otfile_pen;
+    otfile_pen.open("LEP912_nCh_trim.txt");
+	// Import Pythia data
+	ifstream infile_pen("LEP912_nCh.txt");
+	// Buffers
+	double Nch, Err_Nch=0; float Prb, Err_Prb;
+	// Read through txt
+	while (getline(infile_pen, line)) {	
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Write new data
+		otfile_pen << std::fixed << std::setprecision(0) << Nch << "\t"
+					<< std::scientific << std::setprecision(2) << Prb << "\t"
+					<< std::fixed << std::setprecision(0) << Err_Nch << "\t"
+					<< std::scientific << std::setprecision(2) << Err_Prb
+					<< endl; 
+	}
+	// Close file
+	infile_pen.close();
+	otfile_pen.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Ending

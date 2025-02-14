@@ -22,7 +22,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Define histogram
-    TH1D *hist_exp = new TH1D("hist_exp", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
+    TH1D *hist_exp = new TH1D("hist_exp", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
     // Beautify
 	// hist_exp->SetStats(kFALSE);
 	hist_exp->SetLineColor(kRed+1);
@@ -34,7 +34,7 @@ void plt_LEP912()
 	hist_exp->GetYaxis()->SetNdivisions(510, kTRUE);
 
     // Define histogram
-	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 2, 58);
+	TH1D *hist_pen = new TH1D("hist_pen", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	// Beautify
 	// hist_pen->SetStats(kFALSE);
 	hist_pen->SetLineColor(kBlue+1);
@@ -131,12 +131,11 @@ void plt_LEP912()
 	// Reset
 	PrbTotal=0;
 	// Import Pythia data
-	ifstream infile_pen("LEP912_nCh.txt");
+	ifstream infile_pen("LEP912_nCh_trim.txt");
 	// Read through txt
-	while (getline(infile_pen, line)) {	
+	while (getline(infile_pen, line)) {
 		// Set reading order
 		istringstream iss(line);
-		// iss >> Nch >> Prb >> Err_Prb;
 		iss >> Nch >> Prb >> Err_Nch >> Err_Prb;
 		// Populate histogram
 		hist_pen->SetBinContent(hist_exp->FindBin(Nch), Prb);
@@ -245,7 +244,7 @@ void plt_LEP912()
 	c_nch->SetGridy();
 
 	// Fitting function
-	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
+	TF1 *fist_pen = new TF1("fist_pen", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 1, 57);
 	// // Beautify
 	fist_pen->SetLineWidth(3);
 	fist_pen->SetLineColor(kBlue);
@@ -256,10 +255,10 @@ void plt_LEP912()
 	fist_pen->SetParameter(2,0.5);			// p - probability parameter
 	// fist_pen->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	// hist_pen->Fit("fist_pen", "RQME");		// R(range) Q(suppress terminal output) 0(fit display)
+	hist_pen->Fit("fist_pen", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Fitting function
-	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 58);
+	TF1 *fist_exp = new TF1("fist_exp", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 1, 57);
 	// // Beautify
 	fist_exp->SetLineWidth(3);
 	fist_exp->SetLineColor(kRed);
@@ -270,13 +269,7 @@ void plt_LEP912()
 	fist_exp->SetParameter(2,0.5);			// p - probability parameter
 	// fist_exp->SetParameter(3,18);		// n - number of trials (make independent)
 	// Perform fitting
-	// hist_exp->Fit("fist_exp", "RQME");		// R(range) Q(suppress terminal output) 0(fit display)
-
-	// Draw histogram
-	// hist_exp->Draw("c_nch");
-	// fist_exp->Draw("same");
-	// hist_pen->Draw("sames");
-	// fist_pen->Draw("same");
+	hist_exp->Fit("fist_exp", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
 	// Add legend
 	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
@@ -285,8 +278,13 @@ void plt_LEP912()
 	legend->AddEntry(hist_pen, "Pythia 8.312 data 284100 events", "p");
 	legend->AddEntry(fist_pen, "NBD fit for Pythia data", "l");
 
-	// legend->SetBorderSize(0);
+	// Draw histogram
+	hist_exp->Draw("c_nch");
+	// fist_exp->Draw("same");
+	// hist_pen->Draw("sames");
+	// fist_pen->Draw("same");
 	// legend->Draw("same");
+	// legend->SetBorderSize(0);
 
 	// Print area under the curves to confirm normalisation
 	cout << "Integration (Exp) : " << hist_exp->Integral() << endl;
@@ -314,29 +312,29 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Create canvas
-	TCanvas* c_imp = new TCanvas("c_imp", "Intermediate Parton Multiplicity distributions", 800, 600);
-	// Beautify
-	c_imp->SetLogy();
-	c_imp->SetTickx();
-	c_imp->SetTicky();
-	c_imp->SetGridx();
-	c_imp->SetGridy();
+	// TCanvas* c_imp = new TCanvas("c_imp", "Intermediate Parton Multiplicity distributions", 800, 600);
+	// // Beautify
+	// c_imp->SetLogy();
+	// c_imp->SetTickx();
+	// c_imp->SetTicky();
+	// c_imp->SetGridx();
+	// c_imp->SetGridy();
 
-	// Add legend
-	TLegend* lege_imp = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lege_imp->AddEntry(hist_ncp, "Intermediate parton multiplicity", "p");
-	lege_imp->AddEntry(hist_ncq, "Intermediate quarks multiplicity", "p");
-	lege_imp->AddEntry(hist_ncg, "Intermediate gluons multiplicity", "p");
+	// // Add legend
+	// TLegend* lege_imp = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// lege_imp->AddEntry(hist_ncp, "Intermediate parton multiplicity", "p");
+	// lege_imp->AddEntry(hist_ncq, "Intermediate quarks multiplicity", "p");
+	// lege_imp->AddEntry(hist_ncg, "Intermediate gluons multiplicity", "p");
 
-	// Draw histogram
-	hist_ncp->Draw("c_imp");
-	hist_ncq->Draw("sames");
-	hist_ncg->Draw("sames");
-	lege_imp->Draw("same");
+	// // Draw histogram
+	// hist_ncp->Draw("c_imp");
+	// hist_ncq->Draw("sames");
+	// hist_ncg->Draw("sames");
+	// lege_imp->Draw("same");
 
-	// Print area under the curves to confirm normalisation
-	cout << "Integration (nCp) : " << hist_ncp->Integral() << endl;
-	cout << "Integration (nCq) : " << hist_ncq->Integral() << endl;
-	cout << "Integration (nCg) : " << hist_ncg->Integral() << endl;
+	// // Print area under the curves to confirm normalisation
+	// cout << "Integration (nCp) : " << hist_ncp->Integral() << endl;
+	// cout << "Integration (nCq) : " << hist_ncq->Integral() << endl;
+	// cout << "Integration (nCg) : " << hist_ncg->Integral() << endl;
 
 }
