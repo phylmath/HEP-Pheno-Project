@@ -11,6 +11,8 @@
 #include "Pythia8/Basics.h"
 // Fastjet
 #include "fjcore.hh"
+// #include "fastjet/PseudoJet.hh"
+// #include "fastjet/ClusterSequence.hh"
 // ROOT
 #include "TFile.h"
 #include "TTree.h"
@@ -22,28 +24,13 @@ using namespace Pythia8;
 using namespace std;
 using namespace fjcore;
 // Extras
+void txtrim();
 
 // Code
 int main(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Define Histograms
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	TH1D *hist_nCh = new TH1D("hist_nCh", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
-	// Beautify
-	// hist_exp->SetStats(kFALSE);
-	hist_nCh->SetLineColor(kRed+1);
-	hist_nCh->SetMarkerColor(kRed+1);
-	hist_nCh->SetMarkerStyle(20);
-	hist_nCh->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_nCh->GetYaxis()->SetTitle("Probability Pn");
-	hist_nCh->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nCh->GetYaxis()->SetNdivisions(510, kTRUE);
-	
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Create output TTree file
+// Create a file
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
@@ -61,7 +48,7 @@ int main(){
 	int eveNum, eveSiz, parNum, parPdg;
 	double parMas, parPmx, parPmy, parPmz, parPmt, parEta, parPhi;
 
-	// Define particle branches
+	// Define tree branch data types
 	tree->Branch("eveNum", &eveNum, "eveNum/I");
 	tree->Branch("eveSiz", &eveSiz, "evenS/I");
 	tree->Branch("parNum", &parNum, "parNum/I");
@@ -74,7 +61,16 @@ int main(){
 	tree->Branch("parEta", &parEta, "parEta/D");
 	tree->Branch("parPhi", &parPhi, "parPhi/D");
 
-	// Define histogram branches
+	TH1D *hist_nCh = new TH1D("hist_nCh", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
+	// Beautify
+	// hist_exp->SetStats(kFALSE);
+	hist_nCh->SetLineColor(kRed+1);
+	hist_nCh->SetMarkerColor(kRed+1);
+	hist_nCh->SetMarkerStyle(20);
+	hist_nCh->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
+	hist_nCh->GetYaxis()->SetTitle("Probability Pn");
+	hist_nCh->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nCh->GetYaxis()->SetNdivisions(510, kTRUE);
 	tree->Branch("hist_nCh", &hist_nCh, "hist_nCh/H");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +81,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 100;
+	int nEvent = 284100;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -312,18 +308,18 @@ int main(){
 	}
 
 	// Store histogram to txt
-	nCharge.table("LEP912_nCh.txt", false, true, true);
-	nChJets.table("LEP912_nCj.txt", false, true, true);
-	nParton.table("LEP912_nCp.txt", false, true, true);
-	nPQuark.table("LEP912_nCq.txt", false, true, true);
-	nPGluon.table("LEP912_nCg.txt", false, true, true);
-	Spheric.table("LEP912_sph.txt", false, true, true);
-	Lineric.table("LEP912_lin.txt", false, true, true);
-	Thrusty.table("LEP912_thr.txt", false, true, true);
-	Oblatey.table("LEP912_obl.txt", false, true, true);
-	sphAxis.table("LEP912_spA.txt", false, true, true);
-	linAxis.table("LEP912_lnA.txt", false, true, true);
-	thrAxis.table("LEP912_thA.txt", false, true, true);
+	// nCharge.table("LEP912_nCh.txt", false, true, true);
+	// nChJets.table("LEP912_nCj.txt", false, true, true);
+	// nParton.table("LEP912_nCp.txt", false, true, true);
+	// nPQuark.table("LEP912_nCq.txt", false, true, true);
+	// nPGluon.table("LEP912_nCg.txt", false, true, true);
+	// Spheric.table("LEP912_sph.txt", false, true, true);
+	// Lineric.table("LEP912_lin.txt", false, true, true);
+	// Thrusty.table("LEP912_thr.txt", false, true, true);
+	// Oblatey.table("LEP912_obl.txt", false, true, true);
+	// sphAxis.table("LEP912_spA.txt", false, true, true);
+	// linAxis.table("LEP912_lnA.txt", false, true, true);
+	// thrAxis.table("LEP912_thA.txt", false, true, true);
 
 	// Display statistics
 	// pythia.stat();
@@ -343,6 +339,35 @@ int main(){
 	// cout << thrAxis;
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TXT conditioning
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Set reading
+	string line;
+    // Open new file
+    ofstream otfile_pen;
+    otfile_pen.open("LEP912_nCh_trim.txt");
+	// Open txt file
+	ifstream infile_pen("LEP912_nCh.txt");
+	// Buffers
+	double Nch, Err_Nch=0; float Prb, Err_Prb;
+	// Read through txt
+	while (getline(infile_pen, line)) {
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Write new data
+		otfile_pen << std::fixed << std::setprecision(0) << Nch << "\t"
+					<< std::scientific << std::setprecision(2) << Prb << "\t"
+					<< std::fixed << std::setprecision(0) << Err_Nch << "\t"
+					<< std::scientific << std::setprecision(2) << Err_Prb
+					<< endl; 
+	}
+	// Close file
+	infile_pen.close();
+	otfile_pen.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Ending
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -354,5 +379,37 @@ int main(){
 	return 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+// Function to condition txt file format
+void txtrim(string name){
+
+    // Open new file
+    ofstream otfile;
+    otfile.open(name+"_trim.txt");
+	// Open txt file
+	ifstream infile(name+".txt");
+
+	// Buffers
+	double Nch, Err_Nch=0; float Prb, Err_Prb;
+
+	// Set reading
+	string line;
+	// Read through txt
+	while (getline(infile, line)) {
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Write new data
+		otfile << std::fixed << std::setprecision(0) << Nch << "\t"
+				<< std::scientific << std::setprecision(2) << Prb << "\t"
+				<< std::fixed << std::setprecision(0) << Err_Nch << "\t"
+				<< std::scientific << std::setprecision(2) << Err_Prb
+				<< endl; 
+	}
+	// Close file
+	infile.close();
+	otfile.close();
 
 }
