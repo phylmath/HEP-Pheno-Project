@@ -22,6 +22,8 @@
 using namespace Pythia8;
 using namespace std;
 using namespace fjcore;
+// Extras
+void txtrim();
 
 // Code
 int main(){
@@ -64,14 +66,9 @@ int main(){
 
 	// Define study object
 	Pythia pythia;
-	
-	// Define Beam params
-	// pythia.readString("Beams:frameType = 1"); 				// Symmetrical beams
-	pythia.readString("Beams:idA = 11"); 						// Beam A energy
-	pythia.readString("Beams:idB = -11"); 						// Beam B energy
-	double mZ = pythia.particleData.m0(23);						// Store Z0 mass
-	pythia.settings.parm("Beams:eCM", mZ);						// Set energy = mZ
-	pythia.readString("PDF:lepton = off");						// Disable beam substructure
+
+	// Set # of events
+	int nEvent = 100;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -82,10 +79,19 @@ int main(){
 	// Set phase space cut
 	// pythia.readString("PhaseSpace:pTHatMin = 20.");
 
+	// Define Beam params
+	// pythia.readString("Beams:frameType = 1"); 				// Symmetrical beams
+	pythia.readString("Beams:idA = 11"); 						// Beam A energy
+	pythia.readString("Beams:idB = -11"); 						// Beam B energy
+	double mZ = pythia.particleData.m0(23);						// Store Z0 mass
+	pythia.settings.parm("Beams:eCM", mZ);						// Set energy = mZ
+	pythia.readString("PDF:lepton = off");						// Disable beam substructure
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Initialise PYTHIA
 	pythia.init();
+
 	// Anti-crash
 	if (!pythia.init()) return 1;
 
@@ -95,9 +101,14 @@ int main(){
 	Hist nParton("intermediate parton multiplicity", 100, 0, 100);
 	Hist nPQuark("intermediate quark multiplicity", 100, 0, 100);
 	Hist nPGluon("intermediate gluon multiplicity", 100, 0, 100);
+	Hist Spheric("sphericity", 100, 0., 1.);
+	Hist Lineric("linearity", 100, 0., 1.);
+	Hist Thrusty("thrust", 100, 0.5, 1.);
 
-	// Set # of events
-	int nEvent = 284100;
+	// Initialise analyses
+	Sphericity sph;
+	Sphericity lin(1.);
+	Thrust thr;
 
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ){
@@ -124,8 +135,7 @@ int main(){
 			// Hadron check
 			if(pythia.event[j].isFinal() && pythia.event[j].isCharged() && pythia.event[j].isHadron()){
 				
-				// Update counter
-				nCh++;
+				////////////////////////// STORING TTREE FILES //////////////////////////
 				// Store info in vars
 				eveNum = iEvent;
 				eveSiz = pythia.event.size();
@@ -140,37 +150,27 @@ int main(){
 				parPhi = pythia.event[j].phi();
 				// Populate branches
 				tree->Fill();
+				/////////////////////////////////////////////////////////////////////////
+				
+				////////////////////////// COMPUTING NCH CURVE //////////////////////////
+				// Update counter
+				nCh++;
+				/////////////////////////////////////////////////////////////////////////
 
+				////////////////////////// STORING JETS PARAMS //////////////////////////
 				// FJ particle vector
 				PseudoJet particle(parPmx, parPmy, parPmz, parMas);
 				// Storing pdgID
 				particle.set_user_index(parNum);
 				// Add particle to vector
 				particles.push_back(particle);
-
-				// // Counting mediary partons
-				// nCp = 0;											// Reset counter
-				// int parMom1 = pythia.event[j].mother1();			// Hadron mother-1
-				// int parMom2 = pythia.event[j].mother2();			// Hadron mother-2
-				// cout << "HADRON LISTING FOR " << parNum << endl;
-				// while( parMom1!=0 && parMom2!=0 ){
-				// 	cout << parMom1 << " " << parMom2 << " " << nCp << endl;
-				// 	// Update counter
-				// 	nCp++;
-				// 	// Update mothers
-				// 	parMom1 = pythia.event[parMom1].mother1();
-				// 	parMom2 = pythia.event[parMom2].mother1();					
-				// }
-				// // Populate histogram
-				// nParton.fill( nCp );
-				// // cout << parNum << " " << pythia.event[j].id() << " " << pythia.event[j].mother1() << " " << pythia.event[j].mother2() << " " << endl;
-				// cout << "Number of partons: " << nCp << endl;
+				/////////////////////////////////////////////////////////////////////////
 
 			}
 
+			////////////////////////// COMPUTING PARTONIC NCHs //////////////////////////
 			// Parton check
 			if(pythia.event[j].isFinal()==false){
-			
 				// Quark check
 				if(pythia.event[j].id()==1||pythia.event[j].id()==2||pythia.event[j].id()==3||pythia.event[j].id()==4||pythia.event[j].id()==5){
 					// Update counter
@@ -181,11 +181,11 @@ int main(){
 					// Update counter
 					nCp++; nCg++;
 				}
-
 			}
-
+			/////////////////////////////////////////////////////////////////////////////
 		}
 
+		////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
 		// Cluster particles in the event
 		double R = 0.4;															// Jet radius
 		double ptmin = 5.0;														// Lower pT
@@ -193,13 +193,13 @@ int main(){
 		ClusterSequence cs(particles, jet_def);									// Run clustering
 		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
 		nCj = jets.size();														// Jet multiplicity
-
+		
 		// // Print results
 		// cout << "Clustering with " << jet_def.description() << endl;			// Print algo info
-		// cout << "TOTAL NUMBER OF JETS " << jets.size() << endl;				// Print jets info
+		// cout << "#Event " << iEvent << "\t" << "#Jet " << jets.size() << endl;	// Print jets info
 		// // Run through jets
 		// for (int i = 0; i < jets.size(); i++){
-			
+		
 		// 	// Label columns
 		// 	printf("%5s %15s %15s %15s %8s\n","jet #", "rapidity", "phi", "pt", "N");
 
@@ -223,14 +223,59 @@ int main(){
 		// 		printf("%5u %15.8f %15.8f %15.8f %8i\n", j, constituents[j].rap(), constituents[j].phi(), constituents[j].perp(), constituent.user_index());
 		// 	}
 		// }
+		/////////////////////////////////////////////////////////////////////////////////
 
+		////////////////////////// COMPUTING EVENT SHAPE VARIS //////////////////////////
+		// Sphericity
+		if (sph.analyze( pythia.event )) {
+			if (iEvent < 3) sph.list();
+			spheri.fill( sph.sphericity() );
+			sAxis.fill( sph.eventAxis(1).pz() );
+			double e1 = sph.eigenValue(1);
+			double e2 = sph.eigenValue(2);
+			double e3 = sph.eigenValue(3);
+			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
+			<< e1 << "  " << e2 << "  " << e3 << endl;
+		  }
+
+		// Linearity
+		if (lin.analyze( pythia.event )) {
+			if (iEvent < 3) lin.list();
+			linea.fill( lin.sphericity() );
+			lAxis.fill( lin.eventAxis(1).pz() );
+			double e1 = lin.eigenValue(1);
+			double e2 = lin.eigenValue(2);
+			double e3 = lin.eigenValue(3);
+			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
+			<< e1 << "  " << e2 << "  " << e3 << endl;
+		  }
+
+
+		// Thrust
+		if (thr.analyze( pythia.event )) {
+			if (iEvent < 3) thr.list();
+			thrust.fill( thr.thrust() );
+			oblateness.fill( thr.oblateness() );
+			tAxis.fill( thr.eventAxis(1).pz() );
+			if ( abs(thr.eventAxis(1).pAbs() - 1.) > 1e-8
+			  || abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
+			  || abs(thr.eventAxis(3).pAbs() - 1.) > 1e-8
+			  || abs(thr.eventAxis(1) * thr.eventAxis(2)) > 1e-8
+			  || abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
+			  || abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
+			  cout << " suspicious Thrust eigenvectors " << endl;
+			  thr.list();
+			}
+		  }
+
+		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		// Populate histogram
 		nCharge.fill( nCh );
 		nChJets.fill( nCj );
 		nParton.fill( nCp );
 		nPQuark.fill( nCq );
 		nPGluon.fill( nCg );
-
+		/////////////////////////////////////////////////////////////////////////////////
 	}
 
 	// Store histogram to txt
@@ -259,12 +304,12 @@ int main(){
     // Open new file
     ofstream otfile_pen;
     otfile_pen.open("LEP912_nCh_trim.txt");
-	// Import Pythia data
+	// Open txt file
 	ifstream infile_pen("LEP912_nCh.txt");
 	// Buffers
 	double Nch, Err_Nch=0; float Prb, Err_Prb;
 	// Read through txt
-	while (getline(infile_pen, line)) {	
+	while (getline(infile_pen, line)) {
 		// Set reading order
 		istringstream iss(line);
 		iss >> Nch >> Prb >> Err_Prb;
@@ -291,5 +336,40 @@ int main(){
 	return 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+// Function to condition txt file format
+void txtrim(Hist input, string name){
+
+	// Store histogram to txt
+	input.table(name+".txt", false, true, true);
+
+    // Open new file
+    ofstream otfile;
+    otfile.open(name+"_trim.txt");
+	// Open txt file
+	ifstream infile(name+".txt");
+
+	// Buffers
+	double Nch, Err_Nch=0; float Prb, Err_Prb;
+
+	// Set reading
+	string line;
+	// Read through txt
+	while (getline(infile, line)) {
+		// Set reading order
+		istringstream iss(line);
+		iss >> Nch >> Prb >> Err_Prb;
+		// Write new data
+		otfile << std::fixed << std::setprecision(0) << Nch << "\t"
+				<< std::scientific << std::setprecision(2) << Prb << "\t"
+				<< std::fixed << std::setprecision(0) << Err_Nch << "\t"
+				<< std::scientific << std::setprecision(2) << Err_Prb
+				<< endl; 
+	}
+	// Close file
+	infile.close();
+	otfile.close();
 
 }
