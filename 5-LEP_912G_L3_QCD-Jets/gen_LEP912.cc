@@ -14,9 +14,17 @@
 // ROOT
 #include "TFile.h"
 #include "TTree.h"
-#include <TH1D.h>
+#include "TH1F.h"
+#include "TH1D.h"
 #include "TGraph.h"
 #include "TCanvas.h"
+#include "TROOT.h"
+#include "TMath.h"
+#include "TGraphErrors.h"
+#include "TF1.h"
+#include "TLegend.h"
+#include "TArrow.h"
+#include "TLatex.h"
 // Header
 using namespace Pythia8;
 using namespace std;
@@ -25,22 +33,6 @@ using namespace fjcore;
 
 // Code
 int main(){
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Define Histograms
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	TH1D *hist_nCh = new TH1D("hist_nCh", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
-	// Beautify
-	// hist_exp->SetStats(kFALSE);
-	hist_nCh->SetLineColor(kRed+1);
-	hist_nCh->SetMarkerColor(kRed+1);
-	hist_nCh->SetMarkerStyle(20);
-	hist_nCh->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_nCh->GetYaxis()->SetTitle("Probability Pn");
-	hist_nCh->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nCh->GetYaxis()->SetNdivisions(510, kTRUE);
-	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create output TTree file
@@ -63,7 +55,7 @@ int main(){
 
 	// Define particle branches
 	tree->Branch("eveNum", &eveNum, "eveNum/I");
-	tree->Branch("eveSiz", &eveSiz, "evenS/I");
+	tree->Branch("eveSiz", &eveSiz, "eveSiz/I");
 	tree->Branch("parNum", &parNum, "parNum/I");
 	tree->Branch("parPdg", &parPdg, "parPdg/I");
 	tree->Branch("parMas", &parMas, "parMas/D");
@@ -74,18 +66,224 @@ int main(){
 	tree->Branch("parEta", &parEta, "parEta/D");
 	tree->Branch("parPhi", &parPhi, "parPhi/D");
 
-	// Define histogram branches
-	tree->Branch("hist_nCh", &hist_nCh, "hist_nCh/H");
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Define Histograms, Add branches
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
+	// Beautify
+	hist_nChExpe->SetStats(kFALSE);
+	hist_nChExpe->SetLineColor(kRed+1);
+	hist_nChExpe->SetMarkerColor(kRed+1);
+	hist_nChExpe->SetMarkerStyle(20);
+	hist_nChExpe->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
+	hist_nChExpe->GetYaxis()->SetTitle("Probability Pn");
+	hist_nChExpe->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChExpe->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nChExpe", &hist_nChExpe, "hist_nChExpe");
+
+	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
+	// Beautify
+	hist_nChPyth->SetStats(kFALSE);
+	hist_nChPyth->SetLineColor(kBlue+1);
+	hist_nChPyth->SetMarkerColor(kBlue+1);
+	hist_nChPyth->SetMarkerStyle(20);
+	hist_nChPyth->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
+	hist_nChPyth->GetYaxis()->SetTitle("Probability Pn");
+	hist_nChPyth->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChPyth->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
+
+	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
+	// Beautify
+	hist_nChJets->SetStats(kFALSE);
+	hist_nChJets->SetLineColor(kBlack+1);
+	hist_nChJets->SetMarkerColor(kBlack+1);
+	hist_nChJets->SetMarkerStyle(20);
+	hist_nChJets->SetLineWidth(4);
+	hist_nChJets->GetXaxis()->SetTitle("Hadronic Jet Multiplicity Ncj");
+	hist_nChJets->GetYaxis()->SetTitle("Probability Pn");
+	hist_nChJets->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChJets->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nChJets", &hist_nChJets, "hist_nChJets");
+
+	TH1F *hist_nParton = new TH1F("hist_nParton", "Intermediate Parton Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
+	// Beautify
+	hist_nParton->SetStats(kFALSE);
+	hist_nParton->SetLineColor(kRed+1);
+	hist_nParton->SetMarkerColor(kRed+1);
+	hist_nParton->SetMarkerStyle(20);
+	hist_nParton->SetLineWidth(4);
+	hist_nParton->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_nParton->GetYaxis()->SetTitle("Probability Pn");
+	hist_nParton->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nParton->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
+
+	TH1F *hist_nPQuark = new TH1F("hist_nPQuark", "Intermediate Quark Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 100);
+	// Beautify
+	hist_nPQuark->SetStats(kFALSE);
+	hist_nPQuark->SetLineColor(kBlue+1);
+	hist_nPQuark->SetMarkerColor(kBlue+1);
+	hist_nPQuark->SetMarkerStyle(20);
+	hist_nPQuark->SetLineWidth(4);
+	hist_nPQuark->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_nPQuark->GetYaxis()->SetTitle("Probability Pn");
+	hist_nPQuark->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nPQuark->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nPQuark", &hist_nPQuark, "hist_nPQuark");
+
+	TH1F *hist_nPGluon = new TH1F("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
+	// Beautify
+	hist_nPGluon->SetStats(kFALSE);
+	hist_nPGluon->SetLineColor(kGreen+1);
+	hist_nPGluon->SetMarkerColor(kGreen+1);
+	hist_nPGluon->SetMarkerStyle(20);
+	hist_nPGluon->SetLineWidth(4);
+	hist_nPGluon->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_nPGluon->GetYaxis()->SetTitle("Probability Pn");
+	hist_nPGluon->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nPGluon->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_nPGluon", &hist_nPGluon, "hist_nPGluon");
+
+	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	// Beautify
+	hist_Spheric->SetStats(kFALSE);
+	hist_Spheric->SetLineColor(kBlack);
+	hist_Spheric->SetMarkerColor(kBlack);
+	hist_Spheric->SetMarkerStyle(20);
+	hist_Spheric->SetLineWidth(4);
+	hist_Spheric->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_Spheric->GetYaxis()->SetTitle("Probability Pn");
+	hist_Spheric->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Spheric->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
+
+	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	// Beautify
+	hist_Lineric->SetStats(kFALSE);
+	hist_Lineric->SetLineColor(kBlack);
+	hist_Lineric->SetMarkerColor(kBlack);
+	hist_Lineric->SetMarkerStyle(20);
+	hist_Lineric->SetLineWidth(4);
+	hist_Lineric->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_Lineric->GetYaxis()->SetTitle("Probability Pn");
+	hist_Lineric->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Lineric->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
+
+	TH1F *hist_Thrusty = new TH1F("hist_Thrusty", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
+	// Beautify
+	hist_Thrusty->SetStats(kFALSE);
+	hist_Thrusty->SetLineColor(kBlack);
+	hist_Thrusty->SetMarkerColor(kBlack);
+	hist_Thrusty->SetMarkerStyle(20);
+	hist_Thrusty->SetLineWidth(4);
+	hist_Thrusty->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_Thrusty->GetYaxis()->SetTitle("Probability Pn");
+	hist_Thrusty->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thrusty->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_Thrusty", &hist_Thrusty, "hist_Thrusty");
+
+	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
+	// Beautify
+	hist_Oblatey->SetStats(kFALSE);
+	hist_Oblatey->SetLineColor(kBlack);
+	hist_Oblatey->SetMarkerColor(kBlack);
+	hist_Oblatey->SetMarkerStyle(20);
+	hist_Oblatey->SetLineWidth(4);
+	hist_Oblatey->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_Oblatey->GetYaxis()->SetTitle("Probability Pn");
+	hist_Oblatey->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Oblatey->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
+
+	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	// Beautify
+	hist_sphAxis->SetStats(kFALSE);
+	hist_sphAxis->SetLineColor(kBlack);
+	hist_sphAxis->SetMarkerColor(kBlack);
+	hist_sphAxis->SetMarkerStyle(20);
+	hist_sphAxis->SetLineWidth(4);
+	hist_sphAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_sphAxis->GetYaxis()->SetTitle("Probability Pn");
+	hist_sphAxis->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_sphAxis->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_sphAxis", &hist_sphAxis, "hist_sphAxis");
+
+	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Event Linearity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	// Beautify
+	hist_linAxis->SetStats(kFALSE);
+	hist_linAxis->SetLineColor(kBlack);
+	hist_linAxis->SetMarkerColor(kBlack);
+	hist_linAxis->SetMarkerStyle(20);
+	hist_linAxis->SetLineWidth(4);
+	hist_linAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_linAxis->GetYaxis()->SetTitle("Probability Pn");
+	hist_linAxis->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_linAxis->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_linAxis", &hist_linAxis, "hist_linAxis");
+
+	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Event Thrust axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	// Beautify
+	hist_thrAxis->SetStats(kFALSE);
+	hist_thrAxis->SetLineColor(kBlack);
+	hist_thrAxis->SetMarkerColor(kBlack);
+	hist_thrAxis->SetMarkerStyle(20);
+	hist_thrAxis->SetLineWidth(4);
+	hist_thrAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
+	hist_thrAxis->GetYaxis()->SetTitle("Probability Pn");
+	hist_thrAxis->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_thrAxis->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Add histogram branch
+	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Pythia code
+// Import Experimental data
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Set reading
+	string line;
+	// Hadron counters
+	double Nch; 
+	double PrbTotal=0;
+	double Prb, Err_Nch, Err_Prb;
+
+	// Import experimental data
+	ifstream infile_exp("LEP912_exp.txt");
+	// Read through txt
+	while ( !infile_exp.eof() ) {
+		// Set reading order
+		infile_exp >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_nChExpe->SetBinContent(hist_nChExpe->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_nChExpe->SetBinError(hist_nChExpe->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_exp.close();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Define Pythia params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define study object
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 100;
+	int nEvent = 284100;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -104,6 +302,12 @@ int main(){
 	pythia.settings.parm("Beams:eCM", mZ);						// Set energy = mZ
 	pythia.readString("PDF:lepton = off");						// Disable beam substructure
 
+	// Suppress event listing
+	pythia.readString("Init:showProcesses = false"); 
+	pythia.readString("Next:numberShowEvent = 0"); 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Generate Pythia collisions
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Initialise PYTHIA
@@ -111,20 +315,6 @@ int main(){
 
 	// Anti-crash
 	if (!pythia.init()) return 1;
-
-	// Define histograms
-	Hist nCharge("charged had multiplicity", 28, 1, 57);
-	Hist nChJets("charged jet multiplicity", 100, 0, 5);
-	Hist nParton("intermediate parton multiplicity", 100, 0, 100);
-	Hist nPQuark("intermediate quark multiplicity", 100, 0, 100);
-	Hist nPGluon("intermediate gluon multiplicity", 100, 0, 100);
-	Hist Spheric("sphericity", 100, 0., 1.);
-	Hist Lineric("linearity", 100, 0., 1.);
-	Hist Thrusty("thrust", 100, 0.5, 1.);
-	Hist Oblatey("oblateness", 100, 0.5, 1.);
-	Hist sphAxis("cos(theta)_Sphericity", 100, -1., 1.);
-	Hist linAxis("cos(theta)_Linearity", 100, -1., 1.);
-	Hist thrAxis("cos(theta)_Thrust", 100, -1., 1.);
 
 	// Initialise analyses
 	Sphericity sph;
@@ -156,36 +346,27 @@ int main(){
 			// Hadron check
 			if(pythia.event[j].isFinal() && pythia.event[j].isCharged() && pythia.event[j].isHadron()) {
 				
-				////////////////////////// STORING TTREE FILES //////////////////////////
-				// Store info in vars
-				eveNum = iEvent;
-				eveSiz = pythia.event.size();
-				parNum = j;
-				parPdg = pythia.event[j].id();
-				parMas = pythia.event[j].m();
-				parPmx = pythia.event[j].px();
-				parPmy = pythia.event[j].py();
-				parPmz = pythia.event[j].pz();
-				parPmt = pythia.event[j].pT();
-				parEta = pythia.event[j].eta();
-				parPhi = pythia.event[j].phi();
-				// Populate branches
-				tree->Fill();
-				/////////////////////////////////////////////////////////////////////////
-				
+				////////////////////////// STORING PARTS DATA //////////////////////////
+				eveNum = iEvent;						// Store event number
+				eveSiz = pythia.event.size();			// Store event size
+				parNum = j;								// Store particle number
+				parPdg = pythia.event[j].id();			// Store particle pdg id
+				parMas = pythia.event[j].m();			// Store particle mass
+				parPmx = pythia.event[j].px();			// Store particle momentum-x
+				parPmy = pythia.event[j].py();			// Store particle momentum-y
+				parPmz = pythia.event[j].pz();			// Store particle momentum-z
+				parPmt = pythia.event[j].pT();			// Store particle momentum-t
+				parEta = pythia.event[j].eta();			// Store particle rapidity
+				parPhi = pythia.event[j].phi();			// Store particle azimuthal
+
 				////////////////////////// COMPUTING NCH CURVE //////////////////////////
-				// Update counter
-				nCh++;
-				/////////////////////////////////////////////////////////////////////////
+				nCh++;									// Update counter
 
 				////////////////////////// STORING JETS PARAMS //////////////////////////
-				// FJ particle vector
-				PseudoJet particle(parPmx, parPmy, parPmz, parMas);
-				// Storing pdgID
-				particle.set_user_index(parNum);
-				// Add particle to vector
-				particles.push_back(particle);
-				/////////////////////////////////////////////////////////////////////////
+				
+				PseudoJet particle(parPmx, parPmy, parPmz, parMas);		// FJ particle vector
+				particle.set_user_index(parNum);						// Store particle pdg
+				particles.push_back(particle);							// Add particle to event
 
 			}
 
@@ -194,20 +375,16 @@ int main(){
 			if(pythia.event[j].isFinal()==false) {
 				// Quark check
 				if(pythia.event[j].id()==1||pythia.event[j].id()==2||pythia.event[j].id()==3||pythia.event[j].id()==4||pythia.event[j].id()==5) {
-					// Update counter
-					nCp++; nCq++;
+					nCp++; nCq++;	// Update counter
 				}
 				// Gluon check
 				if(pythia.event[j].id()==21) {
-					// Update counter
-					nCp++; nCg++;
+					nCp++; nCg++;	// Update counter
 				}
 			}
-			/////////////////////////////////////////////////////////////////////////////
 		}
 
 		////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
-		// Cluster particles in the event
 		double R = 0.4;															// Jet radius
 		double ptmin = 5.0;														// Lower pT
 		JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
@@ -244,7 +421,6 @@ int main(){
 		// 		printf("%5u %15.8f %15.8f %15.8f %8i\n", j, constituents[j].rap(), constituents[j].phi(), constituents[j].perp(), constituent.user_index());
 		// 	}
 		// }
-		/////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Sphericity/cosθ_sphericity
@@ -252,8 +428,8 @@ int main(){
 			// // Print few info
 			// if (iEvent < 3) sph.list();
 			// Populate histogram
-			Spheric.fill( sph.sphericity() );
-			sphAxis.fill( sph.eventAxis(1).pz() );
+			hist_Spheric->Fill( sph.sphericity() );
+			hist_sphAxis->Fill( sph.eventAxis(1).pz() );
 			// Sanity check
 			double e1 = sph.eigenValue(1);
 			double e2 = sph.eigenValue(2);
@@ -262,13 +438,14 @@ int main(){
 			<< e1 << "  " << e2 << "  " << e3 << endl;
 		  }
 
+		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Linearity/cosθ_linearity
 		if (lin.analyze( pythia.event )) {
 			// // Print few info
 			// if (iEvent < 3) lin.list();
 			// Populate histogram
-			Lineric.fill( lin.sphericity() );
-			linAxis.fill( lin.eventAxis(1).pz() );
+			hist_Lineric->Fill( lin.sphericity() );
+			hist_linAxis->Fill( lin.eventAxis(1).pz() );
 			// Sanity check
 			double e1 = lin.eigenValue(1);
 			double e2 = lin.eigenValue(2);
@@ -277,14 +454,15 @@ int main(){
 			<< e1 << "  " << e2 << "  " << e3 << endl;
 		  }
 
+		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Thrust/cosθ_thrust/Oblateness
 		if (thr.analyze( pythia.event )) {
 			// // Print few info
 			// if (iEvent < 3) thr.list();
 			// Populate histogram
-			Thrusty.fill( thr.thrust() );
-			Oblatey.fill( thr.oblateness() );
-			thrAxis.fill( thr.eventAxis(1).pz() );
+			hist_Thrusty->Fill( thr.thrust() );
+			hist_Oblatey->Fill( thr.oblateness() );
+			hist_thrAxis->Fill( thr.eventAxis(1).pz() );
 			// Sanity check
 			if ( abs(thr.eventAxis(1).pAbs() - 1.) > 1e-8
 			  || abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
@@ -293,66 +471,45 @@ int main(){
 			  || abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
 			  || abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
 			  cout << " suspicious Thrust eigenvectors " << endl;
-			  thr.list();
+			//   thr.list();
 			}
 		  }
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
-		// Populate Pythia histograms
-		nCharge.fill( nCh );
-		nChJets.fill( nCj );
-		nParton.fill( nCp );
-		nPQuark.fill( nCq );
-		nPGluon.fill( nCg );
+		hist_nChPyth->Fill( nCh );
+		hist_nChJets->Fill( nCj );
+		hist_nParton->Fill( nCp );
+		hist_nPQuark->Fill( nCq );
+		hist_nPGluon->Fill( nCg );
 
-		// Populate ROOT histograms
-		hist_nCh->Fill( nCh );
+		////////////////////////// FILLING DATA TO TREEBRANCHES //////////////////////////
 		tree->Fill();
-		/////////////////////////////////////////////////////////////////////////////////
 	}
 
-	// Store histogram to txt
-	nCharge.table("LEP912_nCh.txt", false, true, true);
-	nChJets.table("LEP912_nCj.txt", false, true, true);
-	nParton.table("LEP912_nCp.txt", false, true, true);
-	nPQuark.table("LEP912_nCq.txt", false, true, true);
-	nPGluon.table("LEP912_nCg.txt", false, true, true);
-	Spheric.table("LEP912_sph.txt", false, true, true);
-	Lineric.table("LEP912_lin.txt", false, true, true);
-	Thrusty.table("LEP912_thr.txt", false, true, true);
-	Oblatey.table("LEP912_obl.txt", false, true, true);
-	sphAxis.table("LEP912_spA.txt", false, true, true);
-	linAxis.table("LEP912_lnA.txt", false, true, true);
-	thrAxis.table("LEP912_thA.txt", false, true, true);
-
-	// Display statistics
-	// pythia.stat();
-
-	// Display histogram
-	// cout << nCharge;
-	// cout << nChJets;
-	// cout << nParton;
-	// cout << nPQuark;
-	// cout << nPGluon;
-	// cout << Spheric;
-	// cout << Lineric;
-	// cout << Thrusty;
-	// cout << Oblatey;
-	// cout << sphAxis;
-	// cout << linAxis;
-	// cout << thrAxis;
-	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Ending
+// Normalising all probabilities
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	hist_nChExpe->Scale(1.0/hist_nChExpe->Integral());
+	hist_nChPyth->Scale(1.0/hist_nChPyth->Integral());
+	hist_nChJets->Scale(1.0/hist_nChJets->Integral());
+	hist_nParton->Scale(1.0/hist_nParton->Integral());
+	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
+	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// File closures
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Write file
 	output->Write();
 	output->Close();
 	delete output;
-	// Terminate
-	return 0;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Terminate
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	return 0;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
