@@ -71,183 +71,42 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
-	// Beautify
-	hist_nChExpe->SetStats(kFALSE);
-	hist_nChExpe->SetLineColor(kRed+1);
-	hist_nChExpe->SetMarkerColor(kRed+1);
-	hist_nChExpe->SetMarkerStyle(20);
-	hist_nChExpe->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_nChExpe->GetYaxis()->SetTitle("Probability Pn");
-	hist_nChExpe->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nChExpe->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nChExpe", &hist_nChExpe, "hist_nChExpe");
 
 	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
-	// Beautify
-	hist_nChPyth->SetStats(kFALSE);
-	hist_nChPyth->SetLineColor(kBlue+1);
-	hist_nChPyth->SetMarkerColor(kBlue+1);
-	hist_nChPyth->SetMarkerStyle(20);
-	hist_nChPyth->GetXaxis()->SetTitle("Charged Hadron Multiplicity Nch");
-	hist_nChPyth->GetYaxis()->SetTitle("Probability Pn");
-	hist_nChPyth->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nChPyth->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
 	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
-	// Beautify
-	hist_nChJets->SetStats(kFALSE);
-	hist_nChJets->SetLineColor(kBlack+1);
-	hist_nChJets->SetMarkerColor(kBlack+1);
-	hist_nChJets->SetMarkerStyle(20);
-	hist_nChJets->SetLineWidth(4);
-	hist_nChJets->GetXaxis()->SetTitle("Hadronic Jet Multiplicity Ncj");
-	hist_nChJets->GetYaxis()->SetTitle("Probability Pn");
-	hist_nChJets->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nChJets->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nChJets", &hist_nChJets, "hist_nChJets");
 
 	TH1F *hist_nParton = new TH1F("hist_nParton", "Intermediate Parton Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
-	// Beautify
-	hist_nParton->SetStats(kFALSE);
-	hist_nParton->SetLineColor(kRed+1);
-	hist_nParton->SetMarkerColor(kRed+1);
-	hist_nParton->SetMarkerStyle(20);
-	hist_nParton->SetLineWidth(4);
-	hist_nParton->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_nParton->GetYaxis()->SetTitle("Probability Pn");
-	hist_nParton->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nParton->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
 
 	TH1F *hist_nPQuark = new TH1F("hist_nPQuark", "Intermediate Quark Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 100);
-	// Beautify
-	hist_nPQuark->SetStats(kFALSE);
-	hist_nPQuark->SetLineColor(kBlue+1);
-	hist_nPQuark->SetMarkerColor(kBlue+1);
-	hist_nPQuark->SetMarkerStyle(20);
-	hist_nPQuark->SetLineWidth(4);
-	hist_nPQuark->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_nPQuark->GetYaxis()->SetTitle("Probability Pn");
-	hist_nPQuark->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nPQuark->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nPQuark", &hist_nPQuark, "hist_nPQuark");
 
 	TH1F *hist_nPGluon = new TH1F("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
-	// Beautify
-	hist_nPGluon->SetStats(kFALSE);
-	hist_nPGluon->SetLineColor(kGreen+1);
-	hist_nPGluon->SetMarkerColor(kGreen+1);
-	hist_nPGluon->SetMarkerStyle(20);
-	hist_nPGluon->SetLineWidth(4);
-	hist_nPGluon->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_nPGluon->GetYaxis()->SetTitle("Probability Pn");
-	hist_nPGluon->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nPGluon->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_nPGluon", &hist_nPGluon, "hist_nPGluon");
 
 	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
-	// Beautify
-	hist_Spheric->SetStats(kFALSE);
-	hist_Spheric->SetLineColor(kBlack);
-	hist_Spheric->SetMarkerColor(kBlack);
-	hist_Spheric->SetMarkerStyle(20);
-	hist_Spheric->SetLineWidth(4);
-	hist_Spheric->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_Spheric->GetYaxis()->SetTitle("Probability Pn");
-	hist_Spheric->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Spheric->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
 
 	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
-	// Beautify
-	hist_Lineric->SetStats(kFALSE);
-	hist_Lineric->SetLineColor(kBlack);
-	hist_Lineric->SetMarkerColor(kBlack);
-	hist_Lineric->SetMarkerStyle(20);
-	hist_Lineric->SetLineWidth(4);
-	hist_Lineric->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_Lineric->GetYaxis()->SetTitle("Probability Pn");
-	hist_Lineric->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Lineric->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
 	TH1F *hist_Thrusty = new TH1F("hist_Thrusty", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
-	// Beautify
-	hist_Thrusty->SetStats(kFALSE);
-	hist_Thrusty->SetLineColor(kBlack);
-	hist_Thrusty->SetMarkerColor(kBlack);
-	hist_Thrusty->SetMarkerStyle(20);
-	hist_Thrusty->SetLineWidth(4);
-	hist_Thrusty->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_Thrusty->GetYaxis()->SetTitle("Probability Pn");
-	hist_Thrusty->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Thrusty->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_Thrusty", &hist_Thrusty, "hist_Thrusty");
 
 	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
-	// Beautify
-	hist_Oblatey->SetStats(kFALSE);
-	hist_Oblatey->SetLineColor(kBlack);
-	hist_Oblatey->SetMarkerColor(kBlack);
-	hist_Oblatey->SetMarkerStyle(20);
-	hist_Oblatey->SetLineWidth(4);
-	hist_Oblatey->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_Oblatey->GetYaxis()->SetTitle("Probability Pn");
-	hist_Oblatey->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Oblatey->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
 
 	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
-	// Beautify
-	hist_sphAxis->SetStats(kFALSE);
-	hist_sphAxis->SetLineColor(kBlack);
-	hist_sphAxis->SetMarkerColor(kBlack);
-	hist_sphAxis->SetMarkerStyle(20);
-	hist_sphAxis->SetLineWidth(4);
-	hist_sphAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_sphAxis->GetYaxis()->SetTitle("Probability Pn");
-	hist_sphAxis->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_sphAxis->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_sphAxis", &hist_sphAxis, "hist_sphAxis");
 
 	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Event Linearity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
-	// Beautify
-	hist_linAxis->SetStats(kFALSE);
-	hist_linAxis->SetLineColor(kBlack);
-	hist_linAxis->SetMarkerColor(kBlack);
-	hist_linAxis->SetMarkerStyle(20);
-	hist_linAxis->SetLineWidth(4);
-	hist_linAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_linAxis->GetYaxis()->SetTitle("Probability Pn");
-	hist_linAxis->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_linAxis->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_linAxis", &hist_linAxis, "hist_linAxis");
 
 	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Event Thrust axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
-	// Beautify
-	hist_thrAxis->SetStats(kFALSE);
-	hist_thrAxis->SetLineColor(kBlack);
-	hist_thrAxis->SetMarkerColor(kBlack);
-	hist_thrAxis->SetMarkerStyle(20);
-	hist_thrAxis->SetLineWidth(4);
-	hist_thrAxis->GetXaxis()->SetTitle("Intermediate parton Multiplicity Ncp");
-	hist_thrAxis->GetYaxis()->SetTitle("Probability Pn");
-	hist_thrAxis->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_thrAxis->GetYaxis()->SetNdivisions(510, kTRUE);
-	// Add histogram branch
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
