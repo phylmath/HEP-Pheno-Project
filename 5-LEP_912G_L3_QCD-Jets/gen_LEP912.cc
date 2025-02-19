@@ -142,7 +142,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 284100;
+	int nEvent = 1e3;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -192,6 +192,8 @@ int main(){
 		// Counters
 		int nCh = 0;
 		int nCj = 0;
+		int nCjq = 0;
+		int nCjg = 0;
 		int nCp = 0;
 		int nCq = 0;
 		int nCg = 0;
@@ -224,7 +226,7 @@ int main(){
 				////////////////////////// STORING JETS PARAMS //////////////////////////
 				
 				PseudoJet particle(parPmx, parPmy, parPmz, parMas);		// FJ particle vector
-				particle.set_user_index(parNum);						// Store particle pdg
+				particle.set_user_index(parPdg);						// Store particle pdg
 				particles.push_back(particle);							// Add particle to event
 
 			}
@@ -251,35 +253,19 @@ int main(){
 		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
 		nCj = jets.size();														// Jet multiplicity
 		
-		// // Print results
-		// cout << "Clustering with " << jet_def.description() << endl;			// Print algo info
-		// cout << "#Event " << iEvent << "\t" << "#Jet " << jets.size() << endl;	// Print jets info
-		// // Run through jets
-		// for (int i = 0; i < jets.size(); i++){
-		
-		// 	// Label columns
-		// 	printf("%5s %15s %15s %15s %8s\n","jet #", "rapidity", "phi", "pt", "N");
-
-		// 	// Count jet particles
-		// 	int n_constituents = jets[i].constituents().size();
-
-		// 	// Print jet properties
-		// 	printf("%5u %15.8f %15.8f %15.8f %8u\n", i, jets[i].rap(), jets[i].phi(), jets[i].perp(), n_constituents);
-			
-		// 	// Define constituents vector
-		// 	vector<PseudoJet> constituents = jets[i].constituents();
-
-		// 	// Label columns
-		// 	printf("%5s %15s %15s %15s %8s\n","par #", "rapidity", "phi", "pt", "ID");
-
-		// 	// Study jet constituents
-		// 	for (int j = 0; j < constituents.size(); j++){
-		// 		// Define constituent vector
-		// 		PseudoJet constituent = jets[i].constituents()[j];
-		// 		// Print constituent properties
-		// 		printf("%5u %15.8f %15.8f %15.8f %8i\n", j, constituents[j].rap(), constituents[j].phi(), constituents[j].perp(), constituent.user_index());
-		// 	}
-		// }
+		// Run through jets
+		for (int i = 0; i < jets.size(); i++) {
+			// Count jet particles
+			int n_constituents = jets[i].constituents().size();
+			// Define constituents vector
+			vector<PseudoJet> constituents = jets[i].constituents();
+			// Study jet constituents
+			for (int j = 0; j < constituents.size(); j++) {
+				// Define constituent vector
+				PseudoJet constituent = jets[i].constituents()[j];
+				}
+			}
+		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Sphericity/cosθ_sphericity
