@@ -42,7 +42,7 @@ int main(){
   	TFile *output = new TFile("out_LEP912.root", "recreate");
 	// Anti-crash
 	if (!output->IsOpen()) {
-		std::cerr << "Error opening output file!" << std::endl;
+		cerr << "Error opening output file!" << endl;
 		return 1;
 	}
 	
@@ -142,7 +142,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e3;
+	int nEvent = 284100;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -180,6 +180,15 @@ int main(){
 	Sphericity lin(1.);
 	Thrust thr;
 
+	// Counters
+	int nCh = 0;
+	int nCj = 0;
+	int nCjq = 0;
+	int nCjg = 0;
+	int nCp = 0;
+	int nCq = 0;
+	int nCg = 0;
+
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
 
@@ -188,15 +197,6 @@ int main(){
 		
 		// Print event#
 		// cout << "\tEvent#" << iEvent << endl;
-		
-		// Counters
-		int nCh = 0;
-		int nCj = 0;
-		int nCjq = 0;
-		int nCjg = 0;
-		int nCp = 0;
-		int nCq = 0;
-		int nCg = 0;
 		
 		// FJ event vector
 		vector<PseudoJet> particles;
@@ -243,7 +243,6 @@ int main(){
 					nCp++; nCg++;	// Update counter
 				}
 			}
-		}
 
 		////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
 		double R = 0.4;															// Jet radius
@@ -281,7 +280,7 @@ int main(){
 			double e3 = sph.eigenValue(3);
 			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
 			<< e1 << "  " << e2 << "  " << e3 << endl;
-		  }
+		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Linearity/cosθ_linearity
@@ -297,7 +296,7 @@ int main(){
 			double e3 = lin.eigenValue(3);
 			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
 			<< e1 << "  " << e2 << "  " << e3 << endl;
-		  }
+		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Thrust/cosθ_thrust/Oblateness
@@ -310,15 +309,15 @@ int main(){
 			hist_thrAxis->Fill( thr.eventAxis(1).pz() );
 			// Sanity check
 			if ( abs(thr.eventAxis(1).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(3).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(1) * thr.eventAxis(2)) > 1e-8
-			  || abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
-			  || abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
-			  cout << " suspicious Thrust eigenvectors " << endl;
+			|| abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
+			|| abs(thr.eventAxis(3).pAbs() - 1.) > 1e-8
+			|| abs(thr.eventAxis(1) * thr.eventAxis(2)) > 1e-8
+			|| abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
+			|| abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
+			cout << " suspicious Thrust eigenvectors " << endl;
 			//   thr.list();
 			}
-		  }
+		}
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );
