@@ -140,7 +140,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 2e5;
+	int nEvent = 1e4;
 
 	// Define physics
 	pythia.readString("HardQCD:all = on"); 					// All hard QCD processes

@@ -180,15 +180,6 @@ int main(){
 	Sphericity lin(1.);
 	Thrust thr;
 
-	// Counters
-	int nCh = 0;
-	int nCj = 0;
-	int nCjq = 0;
-	int nCjg = 0;
-	int nCp = 0;
-	int nCq = 0;
-	int nCg = 0;
-
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
 
@@ -198,6 +189,15 @@ int main(){
 		// Print event#
 		// cout << "\tEvent#" << iEvent << endl;
 		
+		// Counters
+		int nCh = 0;
+		int nCj = 0;
+		int nCjq = 0;
+		int nCjg = 0;
+		int nCp = 0;
+		int nCq = 0;
+		int nCg = 0;
+
 		// FJ event vector
 		vector<PseudoJet> particles;
 
