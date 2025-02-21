@@ -94,8 +94,8 @@ int main(){
 	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1F *hist_Thrusty = new TH1F("hist_Thrusty", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
-	tree->Branch("hist_Thrusty", &hist_Thrusty, "hist_Thrusty");
+	TH1F *hist_ThrustP = new TH1F("hist_ThrustP", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
+	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
 	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
@@ -113,16 +113,13 @@ int main(){
 // Import Experimental data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Set reading
-	string line;
 	// Hadron counters
 	double Nch; 
 	double PrbTotal=0;
 	double Prb, Err_Nch, Err_Prb;
-
-	// Import experimental data
+	// Import data
 	ifstream infile_exp("LEP912_exp.txt");
-	// Read through txt
+	// Read through TXT
 	while ( !infile_exp.eof() ) {
 		// Set reading order
 		infile_exp >> Nch >> Prb >> Err_Nch >> Err_Prb;
@@ -304,7 +301,7 @@ int main(){
 			// // Print few info
 			// if (iEvent < 3) thr.list();
 			// Populate histogram
-			hist_Thrusty->Fill( thr.thrust() );
+			hist_ThrustP->Fill( thr.thrust() );
 			hist_Oblatey->Fill( thr.oblateness() );
 			hist_thrAxis->Fill( thr.eventAxis(1).pz() );
 			// Sanity check
@@ -336,7 +333,11 @@ int main(){
 
 	hist_nChExpe->Scale(1.0/hist_nChExpe->Integral());
 	hist_nChPyth->Scale(1.0/hist_nChPyth->Integral());
+
 	hist_nChJets->Scale(1.0/hist_nChJets->Integral());
+
+	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
+
 	hist_nParton->Scale(1.0/hist_nParton->Integral());
 	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
 	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
