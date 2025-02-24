@@ -32,26 +32,12 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile* input_thrust = new TFile("HEPData-Table_47.root", "READ");
-	// Read Histogram
-	TH1F *hist_ThrustE = (TH1F*)input_thrust->Get("Table 47/Hist1D_y2");
-	// Beautify
-	// hist_nChExpe->SetStats(kFALSE);
-	hist_ThrustE->SetName("Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
-	hist_ThrustE->SetName("hist_ThrustE");
-	hist_ThrustE->SetLineColor(kRed+1);
-	hist_ThrustE->SetMarkerColor(kRed+1);
-	hist_ThrustE->SetMarkerStyle(20);
-	hist_ThrustE->GetXaxis()->SetTitle("Event thrust");
-	hist_ThrustE->GetYaxis()->SetTitle("Probability");
-	hist_ThrustE->GetXaxis()->SetNdivisions(520, kTRUE);
-	hist_ThrustE->GetYaxis()->SetNdivisions(520, kTRUE);
-
-	// Read ROOT
 	TFile* input = new TFile("out_LEP912.root", "READ");
-
+	TFile* input_thrust = new TFile("HEPData-Table_47.root", "READ");
 	// Read TTree
 	TTree* tree = (TTree*)input->Get("tree"); 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
 	TH1F *hist_nChExpe = (TH1F*)input->Get("hist_nChExpe");
@@ -77,6 +63,8 @@ void plt_LEP912()
 	hist_nChPyth->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChPyth->GetYaxis()->SetNdivisions(510, kTRUE);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Read Histogram
 	TH1F *hist_nChJets = (TH1F*)input->Get("hist_nChJets");
 	// Beautify
@@ -84,11 +72,12 @@ void plt_LEP912()
 	hist_nChJets->SetLineColor(kBlack);
 	hist_nChJets->SetMarkerColor(kBlack);
 	hist_nChJets->SetMarkerStyle(20);
-	hist_nChJets->SetLineWidth(4);
 	hist_nChJets->GetXaxis()->SetTitle("Multiplicity");
 	hist_nChJets->GetYaxis()->SetTitle("Probability");
 	hist_nChJets->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChJets->GetYaxis()->SetNdivisions(510, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
 	TH1F *hist_nParton = (TH1F*)input->Get("hist_nParton");
@@ -97,7 +86,6 @@ void plt_LEP912()
 	hist_nParton->SetLineColor(kRed+1);
 	hist_nParton->SetMarkerColor(kRed+1);
 	hist_nParton->SetMarkerStyle(20);
-	hist_nParton->SetLineWidth(4);
 	hist_nParton->GetXaxis()->SetTitle("Multiplicity");
 	hist_nParton->GetYaxis()->SetTitle("Probability");
 	hist_nParton->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -110,7 +98,6 @@ void plt_LEP912()
 	hist_nPQuark->SetLineColor(kBlue+1);
 	hist_nPQuark->SetMarkerColor(kBlue+1);
 	hist_nPQuark->SetMarkerStyle(20);
-	hist_nPQuark->SetLineWidth(4);
 	hist_nPQuark->GetXaxis()->SetTitle("Multiplicity");
 	hist_nPQuark->GetYaxis()->SetTitle("Probability");
 	hist_nPQuark->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -123,11 +110,12 @@ void plt_LEP912()
 	hist_nPGluon->SetLineColor(kGreen+1);
 	hist_nPGluon->SetMarkerColor(kGreen+1);
 	hist_nPGluon->SetMarkerStyle(20);
-	hist_nPGluon->SetLineWidth(4);
 	hist_nPGluon->GetXaxis()->SetTitle("Multiplicity");
 	hist_nPGluon->GetYaxis()->SetTitle("Probability");
 	hist_nPGluon->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nPGluon->GetYaxis()->SetNdivisions(510, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
 	TH1F *hist_Spheric = (TH1F*)input->Get("hist_Spheric");
@@ -136,11 +124,12 @@ void plt_LEP912()
 	hist_Spheric->SetLineColor(kBlack);
 	hist_Spheric->SetMarkerColor(kBlack);
 	hist_Spheric->SetMarkerStyle(20);
-	hist_Spheric->SetLineWidth(4);
 	hist_Spheric->GetXaxis()->SetTitle("Sphericity");
 	hist_Spheric->GetYaxis()->SetTitle("Probability");
 	hist_Spheric->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_Spheric->GetYaxis()->SetNdivisions(510, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
 	TH1F *hist_Lineric = (TH1F*)input->Get("hist_Lineric");
@@ -149,11 +138,42 @@ void plt_LEP912()
 	hist_Lineric->SetLineColor(kBlack);
 	hist_Lineric->SetMarkerColor(kBlack);
 	hist_Lineric->SetMarkerStyle(20);
-	hist_Lineric->SetLineWidth(4);
 	hist_Lineric->GetXaxis()->SetTitle("Linearity");
 	hist_Lineric->GetYaxis()->SetTitle("Probability");
 	hist_Lineric->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_Lineric->GetYaxis()->SetNdivisions(510, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Read Histogram
+	TH1F *hist_ThrustE = (TH1F*)input_thrust->Get("Table 47/Hist1D_y1");
+	// Beautify
+	// hist_nChExpe->SetStats(kFALSE);
+	hist_ThrustE->SetName("Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
+	hist_ThrustE->SetName("hist_ThrustE");
+	hist_ThrustE->SetLineColor(kRed+1);
+	hist_ThrustE->SetMarkerColor(kRed+1);
+	hist_ThrustE->SetMarkerStyle(48);
+	hist_ThrustE->SetMarkerSize(1.5);
+	hist_ThrustE->GetXaxis()->SetTitle("Event thrust");
+	hist_ThrustE->GetYaxis()->SetTitle("Probability");
+	hist_ThrustE->GetXaxis()->SetNdivisions(515, kTRUE);
+	hist_ThrustE->GetYaxis()->SetNdivisions(515, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_ThrustX = (TH1F*)input_thrust->Get("Table 47/Hist1D_y2");
+	// Beautify
+	// hist_ThrustX->SetStats(kFALSE);
+	hist_ThrustX->SetName("Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
+	hist_ThrustX->SetName("hist_ThrustX");
+	hist_ThrustX->SetLineColor(kGreen+2);
+	hist_ThrustX->SetMarkerColor(kGreen+2);
+	hist_ThrustX->SetMarkerStyle(49);
+	hist_ThrustX->SetMarkerSize(1.5);
+	hist_ThrustX->GetXaxis()->SetTitle("Event thrust");
+	hist_ThrustX->GetYaxis()->SetTitle("Probability");
+	hist_ThrustX->GetXaxis()->SetNdivisions(515, kTRUE);
+	hist_ThrustX->GetYaxis()->SetNdivisions(515, kTRUE);
 
 	// Read Histogram
 	TH1F *hist_ThrustP = (TH1F*)input->Get("hist_ThrustP");
@@ -161,12 +181,14 @@ void plt_LEP912()
 	// hist_ThrustP->SetStats(kFALSE);
 	hist_ThrustP->SetLineColor(kBlue+1);
 	hist_ThrustP->SetMarkerColor(kBlue+1);
-	hist_ThrustP->SetMarkerStyle(24);
-	hist_ThrustP->SetLineWidth(4);
+	hist_ThrustP->SetMarkerStyle(29);
+	hist_ThrustP->SetMarkerSize(1.5);
 	hist_ThrustP->GetXaxis()->SetTitle("Thrust");
 	hist_ThrustP->GetYaxis()->SetTitle("Probability");
-	hist_ThrustP->GetXaxis()->SetNdivisions(520, kTRUE);
-	hist_ThrustP->GetYaxis()->SetNdivisions(520, kTRUE);
+	hist_ThrustP->GetXaxis()->SetNdivisions(515, kTRUE);
+	hist_ThrustP->GetYaxis()->SetNdivisions(515, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
 	TH1F *hist_Oblatey = (TH1F*)input->Get("hist_Oblatey");
@@ -175,20 +197,20 @@ void plt_LEP912()
 	hist_Oblatey->SetLineColor(kBlack);
 	hist_Oblatey->SetMarkerColor(kBlack);
 	hist_Oblatey->SetMarkerStyle(20);
-	hist_Oblatey->SetLineWidth(4);
 	hist_Oblatey->GetXaxis()->SetTitle("Oblateness");
 	hist_Oblatey->GetYaxis()->SetTitle("Probability");
 	hist_Oblatey->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_Oblatey->GetYaxis()->SetNdivisions(510, kTRUE);
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// Read Histogram
 	TH1F *hist_sphAxis = (TH1F*)input->Get("hist_sphAxis");
 	// Beautify
 	hist_sphAxis->SetStats(kFALSE);
-	hist_sphAxis->SetLineColor(kBlack);
-	hist_sphAxis->SetMarkerColor(kBlack);
+	hist_sphAxis->SetLineColor(kRed+1);
+	hist_sphAxis->SetMarkerColor(kRed+1);
 	hist_sphAxis->SetMarkerStyle(20);
-	hist_sphAxis->SetLineWidth(4);
 	hist_sphAxis->GetXaxis()->SetTitle("Sphericity axis");
 	hist_sphAxis->GetYaxis()->SetTitle("Probability");
 	hist_sphAxis->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -198,10 +220,9 @@ void plt_LEP912()
 	TH1F *hist_linAxis = (TH1F*)input->Get("hist_linAxis");
 	// Beautify
 	hist_linAxis->SetStats(kFALSE);
-	hist_linAxis->SetLineColor(kBlack);
-	hist_linAxis->SetMarkerColor(kBlack);
+	hist_linAxis->SetLineColor(kGreen+2);
+	hist_linAxis->SetMarkerColor(kGreen+2);
 	hist_linAxis->SetMarkerStyle(20);
-	hist_linAxis->SetLineWidth(4);
 	hist_linAxis->GetXaxis()->SetTitle("Linearity axis");
 	hist_linAxis->GetYaxis()->SetTitle("Probability");
 	hist_linAxis->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -211,10 +232,9 @@ void plt_LEP912()
 	TH1F *hist_thrAxis = (TH1F*)input->Get("hist_thrAxis");
 	// Beautify
 	hist_thrAxis->SetStats(kFALSE);
-	hist_thrAxis->SetLineColor(kBlack);
-	hist_thrAxis->SetMarkerColor(kBlack);
+	hist_thrAxis->SetLineColor(kBlue+1);
+	hist_thrAxis->SetMarkerColor(kBlue+1);
 	hist_thrAxis->SetMarkerStyle(20);
-	hist_thrAxis->SetLineWidth(4);
 	hist_thrAxis->GetXaxis()->SetTitle("Thrust axis");
 	hist_thrAxis->GetYaxis()->SetTitle("Probability");
 	hist_thrAxis->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -231,6 +251,7 @@ void plt_LEP912()
 	hist_nChJets->Scale(1.0/hist_nChJets->Integral());
 
 	hist_ThrustE->Scale(1.0/hist_ThrustE->Integral());
+	hist_ThrustX->Scale(1.0/hist_ThrustX->Integral());
 	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
 
 	hist_nParton->Scale(1.0/hist_nParton->Integral());
@@ -244,6 +265,7 @@ void plt_LEP912()
 	cout << "Integration : " << hist_nChJets->Integral() << endl;
 
 	cout << "Integration : " << hist_ThrustE->Integral() << endl;
+	cout << "Integration : " << hist_ThrustX->Integral() << endl;
 	cout << "Integration : " << hist_ThrustP->Integral() << endl;
 
 	cout << "Integration : " << hist_nParton->Integral() << endl;
@@ -349,14 +371,43 @@ void plt_LEP912()
 
 	// Add legend
 	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_ThrustE, "Experimental data 284100 events", "p");
-	legend->AddEntry(hist_ThrustP, "Pythia 8.312 data 284100 events", "p");
+	legend->AddEntry(hist_ThrustE, "LEP L3 data (udsc)", "p");
+	legend->AddEntry(hist_ThrustX, "LEP L3 data (b)", "p");
+	legend->AddEntry(hist_ThrustP, "Pythia data (udscb)", "p");
 
 	// Draw histogram
 	c_nct->cd();
 	hist_ThrustP->Draw("PS");
+	hist_ThrustX->Draw("sames");
 	hist_ThrustE->Draw("sames");
 	legend->Draw("same");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plotting Axes
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// // Create canvas
+	// TCanvas* c_axx = new TCanvas("c_axx", "Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 800, 600);
+	// // Beautify
+	// c_axx->SetTitle("Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
+	// c_axx->SetLogy();
+	// c_axx->SetTickx();
+	// c_axx->SetTicky();
+	// c_axx->SetGridx();
+	// c_axx->SetGridy();
+
+	// // Add legend
+	// TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// legend->AddEntry(hist_thrAxis, "Thrust axis", "p");
+	// legend->AddEntry(hist_sphAxis, "Sphericity axis", "p");
+	// legend->AddEntry(hist_linAxis, "Linear Sphericity axis", "p");
+
+	// // Draw histogram
+	// c_axx->cd();
+	// hist_thrAxis->Draw("PS");
+	// hist_sphAxis->Draw("sames");
+	// hist_linAxis->Draw("sames");
+	// legend->Draw("same");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Intermediate Parton Multiplicity

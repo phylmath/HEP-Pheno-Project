@@ -91,13 +91,22 @@ int main(){
 	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
 
+	TH1F *hist_Aplanar = new TH1F("hist_Aplanar", "Event Aplanarity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_Aplanar", &hist_Aplanar, "hist_Aplanar");
+
 	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
 	TH1F *hist_ThrustP = new TH1F("hist_ThrustP", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
-	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0.5, 1.);
+	TH1F *hist_ThMajor = new TH1F("hist_ThMajor", "Event Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_ThMajor", &hist_ThMajor, "hist_ThMajor");
+
+	TH1F *hist_ThMinor = new TH1F("hist_ThMinor", "Event Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_ThMinor", &hist_ThMinor, "hist_ThMinor");
+
+	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
 
 	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
@@ -264,57 +273,26 @@ int main(){
 		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Sphericity/cosθ_sphericity
+		// Populate histogram
 		if (sph.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) sph.list();
-			// Populate histogram
-			hist_Spheric->Fill( sph.sphericity() );
-			hist_sphAxis->Fill( sph.eventAxis(1).pz() );
-			// Sanity check
-			double e1 = sph.eigenValue(1);
-			double e2 = sph.eigenValue(2);
-			double e3 = sph.eigenValue(3);
-			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
-			<< e1 << "  " << e2 << "  " << e3 << endl;
+			
+			hist_Spheric->Fill( sph.sphericity() );				// Sphericity = (sum_i p_i^a p_i^b)/(sum_i p_i^2)
+			hist_sphAxis->Fill( sph.eventAxis(1).pz() );		// Cosθ
+			hist_Aplanar->Fill( sph.aplanarity() );				// Aplanarity
 		}
-
-		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Linearity/cosθ_linearity
+		// Populate histogram
 		if (lin.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) lin.list();
-			// Populate histogram
-			hist_Lineric->Fill( lin.sphericity() );
-			hist_linAxis->Fill( lin.eventAxis(1).pz() );
-			// Sanity check
-			double e1 = lin.eigenValue(1);
-			double e2 = lin.eigenValue(2);
-			double e3 = lin.eigenValue(3);
-			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
-			<< e1 << "  " << e2 << "  " << e3 << endl;
+			hist_Lineric->Fill( lin.sphericity() );				// Linear.Sph = (sum_i p_i^a p_i^b p_i^{r-2})/(sum_i p_i^r)
+			hist_linAxis->Fill( lin.eventAxis(1).pz() );		// Cosθ
 		}
-
-		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Thrust/cosθ_thrust/Oblateness
+		// Populate histogram
 		if (thr.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) thr.list();
-			// Populate histogram
-			hist_ThrustP->Fill( thr.thrust() );
-			hist_Oblatey->Fill( thr.oblateness() );
-			hist_thrAxis->Fill( thr.eventAxis(1).pz() );
-			// Sanity check
-			if ( abs(thr.eventAxis(1).pAbs() - 1.) > 1e-8
-			|| abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
-			|| abs(thr.eventAxis(3).pAbs() - 1.) > 1e-8
-			|| abs(thr.eventAxis(1) * thr.eventAxis(2)) > 1e-8
-			|| abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
-			|| abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
-			cout << " suspicious Thrust eigenvectors " << endl;
-			//   thr.list();
+			hist_ThrustP->Fill( thr.thrust() );					// Thrust
+			hist_thrAxis->Fill( thr.eventAxis(1).pz() );		// Cosθ
+			hist_ThMajor->Fill( thr.tMajor() );					// Tmajor  
+			hist_ThMinor->Fill( thr.tMinor() );					// Tminor
+			hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
 			}
-		}
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );
