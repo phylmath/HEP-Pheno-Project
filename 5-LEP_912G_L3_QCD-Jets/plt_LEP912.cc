@@ -276,84 +276,84 @@ void plt_LEP912()
 // Plotting Charged Hadronic Multiplicity (Experimental vs Pythia)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Create canvas
-	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
-	// Beautify
-	// c_nch->SetLogy();
-	c_nch->SetTickx();
-	c_nch->SetTicky();
-	c_nch->SetGridx();
-	c_nch->SetGridy();
-
-	// Fitting function
-	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
-	TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
+	// // Create canvas
+	// TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 	// // Beautify
-	fist_nChPyth->SetLineWidth(3);
-	fist_nChPyth->SetLineColor(kBlue);
-	fist_nChPyth->SetLineStyle(2);
-	// Rename fit params
-	fist_nChPyth->SetParNames("Normalise","Shape","Trials");
-	// Input fit params
-	// fist_nChPyth->SetParameter(0,1.9);					// c - normalisation
-	// fist_nChPyth->SetParameter(1,16);					// k - shape
-	// fist_nChPyth->SetParameter(2,0.6);					// n - probability
-	fist_nChPyth->SetParameter(0,1.88);				// c - normalisation
-	fist_nChPyth->SetParameter(1,12.5);				// k - shape
-	fist_nChPyth->SetParameter(2,19);				// n - probability
-	// Perform fitting
-	hist_nChPyth->Fit("fist_nChPyth", "RME");			// R(range) Q(suppress terminal output) 0(fit display)
+	// // c_nch->SetLogy();
+	// c_nch->SetTickx();
+	// c_nch->SetTicky();
+	// c_nch->SetGridx();
+	// c_nch->SetGridy();
 
-	// Fitting function
-	// TF1 *fist_nChExpe = new TF1("fist_nChExpe", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
-	TF1 *fist_nChExpe = new TF1("fist_nChExpe", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
-	// // Beautify
-	fist_nChExpe->SetLineWidth(3);
-	fist_nChExpe->SetLineColor(kRed);
-	fist_nChExpe->SetLineStyle(2);
-	// Rename fit params
-	fist_nChExpe->SetParNames("Normalise","Shape","Trials");
-	// Input fit params
-	// fist_nChPyth->SetParameter(0,1.9);					// c - normalisation
-	// fist_nChPyth->SetParameter(1,16);					// k - shape
-	// fist_nChPyth->SetParameter(2,0.6);					// n - probability
-	fist_nChExpe->SetParameter(0,1.88);				// Normalisation parameter
-	fist_nChExpe->SetParameter(1,12.5);				// k - shape parameter
-	fist_nChExpe->SetParameter(2,19);				// p - probability parameter
-	// Perform fitting
-	hist_nChExpe->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// // Fitting function
+	// // TF1 *fist_nChPyth = new TF1("fist_nChPyth", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
+	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
+	// // // Beautify
+	// fist_nChPyth->SetLineWidth(3);
+	// fist_nChPyth->SetLineColor(kBlue);
+	// fist_nChPyth->SetLineStyle(2);
+	// // Rename fit params
+	// fist_nChPyth->SetParNames("Normalise","Shape","Trials");
+	// // Input fit params
+	// // fist_nChPyth->SetParameter(0,1.9);					// c - normalisation
+	// // fist_nChPyth->SetParameter(1,16);					// k - shape
+	// // fist_nChPyth->SetParameter(2,0.6);					// n - probability
+	// fist_nChPyth->SetParameter(0,1.88);				// c - normalisation
+	// fist_nChPyth->SetParameter(1,12.5);				// k - shape
+	// fist_nChPyth->SetParameter(2,19);				// n - probability
+	// // Perform fitting
+	// hist_nChPyth->Fit("fist_nChPyth", "RME");			// R(range) Q(suppress terminal output) 0(fit display)
 
-	// Add legend
-	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_nChExpe, "Experimental data 284100 events", "p");
-	legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
-	legend->AddEntry(hist_nChPyth, "Pythia 8.312 data 284100 events", "p");
-	legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
+	// // Fitting function
+	// // TF1 *fist_nChExpe = new TF1("fist_nChExpe", "[0]*ROOT::Math::negative_binomial_pdf([1],[2],x)", 2, 56);
+	// TF1 *fist_nChExpe = new TF1("fist_nChExpe", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
+	// // // Beautify
+	// fist_nChExpe->SetLineWidth(3);
+	// fist_nChExpe->SetLineColor(kRed);
+	// fist_nChExpe->SetLineStyle(2);
+	// // Rename fit params
+	// fist_nChExpe->SetParNames("Normalise","Shape","Trials");
+	// // Input fit params
+	// // fist_nChPyth->SetParameter(0,1.9);					// c - normalisation
+	// // fist_nChPyth->SetParameter(1,16);					// k - shape
+	// // fist_nChPyth->SetParameter(2,0.6);					// n - probability
+	// fist_nChExpe->SetParameter(0,1.88);				// Normalisation parameter
+	// fist_nChExpe->SetParameter(1,12.5);				// k - shape parameter
+	// fist_nChExpe->SetParameter(2,19);				// p - probability parameter
+	// // Perform fitting
+	// hist_nChExpe->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 
-	// Draw histogram
-	c_nch->cd();
-	hist_nChPyth->Draw("PS");
-	hist_nChExpe->Draw("same");
-	fist_nChExpe->Draw("same");
-	fist_nChPyth->Draw("same");
-	legend->Draw("same");
+	// // Add legend
+	// TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// legend->AddEntry(hist_nChExpe, "Experimental data 284100 events", "p");
+	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
+	// legend->AddEntry(hist_nChPyth, "Pythia 8.312 data 284100 events", "p");
+	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
+
+	// // Draw histogram
+	// c_nch->cd();
+	// hist_nChPyth->Draw("PS");
+	// hist_nChExpe->Draw("same");
+	// fist_nChExpe->Draw("same");
+	// fist_nChPyth->Draw("same");
+	// legend->Draw("same");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Hadronic Jet Multiplicity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Create canvas
-	TCanvas* c_ncj = new TCanvas("c_ncj", "Hadronic jet multiplicity distributions", 800, 600);
-	// Beautify
-	// c_ncj->SetLogy();
-	c_ncj->SetTickx();
-	c_ncj->SetTicky();
-	c_ncj->SetGridx();
-	c_ncj->SetGridy();
+	// // Create canvas
+	// TCanvas* c_ncj = new TCanvas("c_ncj", "Hadronic jet multiplicity distributions", 800, 600);
+	// // Beautify
+	// // c_ncj->SetLogy();
+	// c_ncj->SetTickx();
+	// c_ncj->SetTicky();
+	// c_ncj->SetGridx();
+	// c_ncj->SetGridy();
 
-	// Draw histogram
-	c_ncj->cd();
-	hist_nChJets->Draw("PS");
+	// // Draw histogram
+	// c_ncj->cd();
+	// hist_nChJets->Draw("PS");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Thrust
@@ -386,52 +386,52 @@ void plt_LEP912()
 // Plotting Axes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Create canvas
-	TCanvas* c_axx = new TCanvas("c_axx", "Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 800, 600);
-	// Beautify
-	c_axx->SetTitle("Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
-	c_axx->SetLogy();
-	c_axx->SetTickx();
-	c_axx->SetTicky();
-	c_axx->SetGridx();
-	c_axx->SetGridy();
+	// // Create canvas
+	// TCanvas* c_axx = new TCanvas("c_axx", "Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 800, 600);
+	// // Beautify
+	// c_axx->SetTitle("Event Axes distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
+	// c_axx->SetLogy();
+	// c_axx->SetTickx();
+	// c_axx->SetTicky();
+	// c_axx->SetGridx();
+	// c_axx->SetGridy();
 
-	// Add legend
-	TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_thrAxis, "Thrust axis", "p");
-	legend->AddEntry(hist_sphAxis, "Sphericity axis", "p");
-	legend->AddEntry(hist_linAxis, "Linear Sphericity axis", "p");
+	// // Add legend
+	// TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// legend->AddEntry(hist_thrAxis, "Thrust axis", "p");
+	// legend->AddEntry(hist_sphAxis, "Sphericity axis", "p");
+	// legend->AddEntry(hist_linAxis, "Linear Sphericity axis", "p");
 
-	// Draw histogram
-	c_axx->cd();
-	hist_thrAxis->Draw("PS");
-	hist_sphAxis->Draw("sames");
-	hist_linAxis->Draw("sames");
-	legend->Draw("same");
+	// // Draw histogram
+	// c_axx->cd();
+	// hist_thrAxis->Draw("PS");
+	// hist_sphAxis->Draw("sames");
+	// hist_linAxis->Draw("sames");
+	// legend->Draw("same");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Intermediate Parton Multiplicity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Create canvas
-	TCanvas* c_imp = new TCanvas("c_imp", "Intermediate Parton Multiplicity distributions", 800, 600);
-	// Beautify
-	c_imp->SetLogy();
-	c_imp->SetTickx();
-	c_imp->SetTicky();
-	c_imp->SetGridx();
-	c_imp->SetGridy();
+	// // Create canvas
+	// TCanvas* c_imp = new TCanvas("c_imp", "Intermediate Parton Multiplicity distributions", 800, 600);
+	// // Beautify
+	// c_imp->SetLogy();
+	// c_imp->SetTickx();
+	// c_imp->SetTicky();
+	// c_imp->SetGridx();
+	// c_imp->SetGridy();
 
-	// Add legend
-	TLegend* lege_imp = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lege_imp->AddEntry(hist_nParton, "Intermediate parton multiplicity", "p");
-	lege_imp->AddEntry(hist_nPQuark, "Intermediate quarks multiplicity", "p");
-	lege_imp->AddEntry(hist_nPGluon, "Intermediate gluons multiplicity", "p");
+	// // Add legend
+	// TLegend* lege_imp = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// lege_imp->AddEntry(hist_nParton, "Intermediate parton multiplicity", "p");
+	// lege_imp->AddEntry(hist_nPQuark, "Intermediate quarks multiplicity", "p");
+	// lege_imp->AddEntry(hist_nPGluon, "Intermediate gluons multiplicity", "p");
 
-	// Draw histogram
-	hist_nParton->Draw("c_imp");
-	hist_nPQuark->Draw("same");
-	hist_nPGluon->Draw("same");
-	lege_imp->Draw("same");
+	// // Draw histogram
+	// hist_nParton->Draw("c_imp");
+	// hist_nPQuark->Draw("same");
+	// hist_nPGluon->Draw("same");
+	// lege_imp->Draw("same");
 
 }
