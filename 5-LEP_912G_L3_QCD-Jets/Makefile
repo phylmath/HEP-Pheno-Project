@@ -4,7 +4,9 @@ gen%: gen%.cc
 	g++ -O $@.cc -o $@ \
 	-I/home/muffin/0-software/pythia8312/include `root-config --cflags` \
 	-I/home/muffin/0-software/fjcore-3.4.3/ \
-	-lpythia8 -L/home/muffin/0-software/pythia8312/lib `root-config --glibs`
+	-I/home/muffin/0-software/lhapdf-install-6.5.0/include \
+	-lpythia8 -L/home/muffin/0-software/pythia8312/lib `root-config --glibs` \
+	-lLHAPDF -L/home/muffin/0-software/lhapdf-install-6.5.0/lib
 #	run the scipt
 	./$@
 

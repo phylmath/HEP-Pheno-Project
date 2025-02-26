@@ -11,6 +11,8 @@
 #include "Pythia8/Basics.h"
 // Fastjet
 #include "fjcore.hh"
+// LHAPDF
+#include "LHAPDF/LHAPDF.h"
 // ROOT
 #include "TFile.h"
 #include "TTree.h"
@@ -42,7 +44,7 @@ int main(){
   	TFile *output = new TFile("out_LHC140T.root", "recreate");
 	// Anti-crash
 	if (!output->IsOpen()) {
-		std::cerr << "Error opening output file!" << std::endl;
+		cerr << "Error opening output file!" << endl;
 		return 1;
 	}
 	
@@ -70,43 +72,52 @@ int main(){
 // Define Histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LHC at 14 TeV ]", 28, 1, 57);
+	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	tree->Branch("hist_nChExpe", &hist_nChExpe, "hist_nChExpe");
 
-	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LHC at 14 TeV ]", 120, 1, 120);
+	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
-	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LHC at 14 TeV ]", 100, 0, 5);
+	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
 	tree->Branch("hist_nChJets", &hist_nChJets, "hist_nChJets");
 
-	TH1F *hist_nParton = new TH1F("hist_nParton", "Intermediate Parton Multiplicity distributions [ LHC at 14 TeV ]", 25, 0, 100);
+	TH1F *hist_nParton = new TH1F("hist_nParton", "Intermediate Parton Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
 	tree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
 
-	TH1F *hist_nPQuark = new TH1F("hist_nPQuark", "Intermediate Quark Multiplicity distributions [ LHC at 14 TeV ]", 100, 0, 100);
+	TH1F *hist_nPQuark = new TH1F("hist_nPQuark", "Intermediate Quark Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0, 100);
 	tree->Branch("hist_nPQuark", &hist_nPQuark, "hist_nPQuark");
 
-	TH1F *hist_nPGluon = new TH1F("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ LHC at 14 TeV ]", 25, 0, 100);
+	TH1F *hist_nPGluon = new TH1F("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
 	tree->Branch("hist_nPGluon", &hist_nPGluon, "hist_nPGluon");
 
-	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LHC at 14 TeV ]", 100, 0., 1.);
+	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
 
-	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LHC at 14 TeV ]", 100, 0., 1.);
+	TH1F *hist_Aplanar = new TH1F("hist_Aplanar", "Event Aplanarity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_Aplanar", &hist_Aplanar, "hist_Aplanar");
+
+	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1F *hist_Thrusty = new TH1F("hist_Thrusty", "Event Thrust distributions [ LHC at 14 TeV ]", 100, 0.5, 1.);
-	tree->Branch("hist_Thrusty", &hist_Thrusty, "hist_Thrusty");
+	TH1F *hist_ThrustP = new TH1F("hist_ThrustP", "Event Thrust distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
+	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
-	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LHC at 14 TeV ]", 100, 0.5, 1.);
+	TH1F *hist_ThMajor = new TH1F("hist_ThMajor", "Event Thrust Major distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_ThMajor", &hist_ThMajor, "hist_ThMajor");
+
+	TH1F *hist_ThMinor = new TH1F("hist_ThMinor", "Event Thrust Major distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	tree->Branch("hist_ThMinor", &hist_ThMinor, "hist_ThMinor");
+
+	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
 
-	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LHC at 14 TeV ]", 100, -1., 1.);
+	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_sphAxis", &hist_sphAxis, "hist_sphAxis");
 
-	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Event Linearity axis distributions [ LHC at 14 TeV ]", 100, -1., 1.);
+	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Event Linearity axis distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_linAxis", &hist_linAxis, "hist_linAxis");
 
-	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Event Thrust axis distributions [ LHC at 14 TeV ]", 100, -1., 1.);
+	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Event Thrust axis distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +128,9 @@ int main(){
 	// double Nch; 
 	// double PrbTotal=0;
 	// double Prb, Err_Nch, Err_Prb;
-
-	// // Import experimental data
-	// ifstream infile_exp("LEP912_exp.txt");
-	// // Read through txt
+	// // Import data
+	// ifstream infile_exp("LHC140_expT.txt");
+	// // Read through TXT
 	// while ( !infile_exp.eof() ) {
 	// 	// Set reading order
 	// 	infile_exp >> Nch >> Prb >> Err_Nch >> Err_Prb;
@@ -140,20 +150,15 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e4;
+	int nEvent = 1e3;
 
 	// Define physics
-	pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
-	pythia.readString("SoftQCD:all = on");					// All soft QCD processes
+	pythia.readString("HardQCD:all = on"); 							// perturbative processes
+	// pythia.readString("SoftQCD:all = on"); 						// non-perturbative processes
+	pythia.readString("PDF:pSet = LHAPDF6:cteq61");					// beam substructure
 
-	// Set phase space cut
-	// pythia.readString("PhaseSpace:pTHatMin = 20.");
-
-	// Define Beam params
-	pythia.readString("PDF:pSet = 7");							// CTEQ6L-NLO
-
-	// Suress event listing
-	pythia.readString("Init:showProcesses = false"); 
+	// Suppress event listing
+	pythia.readString("Init:showProcesses = false");
 	pythia.readString("Next:numberShowEvent = 0"); 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,10 +188,12 @@ int main(){
 		// Counters
 		int nCh = 0;
 		int nCj = 0;
+		int nCjq = 0;
+		int nCjg = 0;
 		int nCp = 0;
 		int nCq = 0;
 		int nCg = 0;
-		
+
 		// FJ event vector
 		vector<PseudoJet> particles;
 
@@ -197,25 +204,27 @@ int main(){
 			if(pythia.event[j].isFinal() && pythia.event[j].isCharged() && pythia.event[j].isHadron()) {
 				
 				////////////////////////// STORING PARTS DATA //////////////////////////
-				eveNum = iEvent;										// Store event number
-				eveSiz = pythia.event.size();							// Store event size
-				parNum = j;												// Store particle number
-				parPdg = pythia.event[j].id();							// Store particle pdg id
-				parMas = pythia.event[j].m();							// Store particle mass
-				parPmx = pythia.event[j].px();							// Store particle momentum-x
-				parPmy = pythia.event[j].py();							// Store particle momentum-y
-				parPmz = pythia.event[j].pz();							// Store particle momentum-z
-				parPmt = pythia.event[j].pT();							// Store particle momentum-t
-				parEta = pythia.event[j].eta();							// Store particle rapidity
-				parPhi = pythia.event[j].phi();							// Store particle azimuthal
+				eveNum = iEvent;						// Store event number
+				eveSiz = pythia.event.size();			// Store event size
+				parNum = j;								// Store particle number
+				parPdg = pythia.event[j].id();			// Store particle pdg id
+				parMas = pythia.event[j].m();			// Store particle mass
+				parPmx = pythia.event[j].px();			// Store particle momentum-x
+				parPmy = pythia.event[j].py();			// Store particle momentum-y
+				parPmz = pythia.event[j].pz();			// Store particle momentum-z
+				parPmt = pythia.event[j].pT();			// Store particle momentum-t
+				parEta = pythia.event[j].eta();			// Store particle rapidity
+				parPhi = pythia.event[j].phi();			// Store particle azimuthal
 
 				////////////////////////// COMPUTING NCH CURVE //////////////////////////
-				nCh++;													// Update counter
+				nCh++;									// Update counter
 
 				////////////////////////// STORING JETS PARAMS //////////////////////////
+				
 				PseudoJet particle(parPmx, parPmy, parPmz, parMas);		// FJ particle vector
 				particle.set_user_index(parPdg);						// Store particle pdg
 				particles.push_back(particle);							// Add particle to event
+
 			}
 
 			////////////////////////// COMPUTING PARTONIC NCHs //////////////////////////
@@ -230,87 +239,50 @@ int main(){
 					nCp++; nCg++;	// Update counter
 				}
 			}
-		}
 
 		////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
-		double R = 0.4;													// Jet radius
-		double ptmin = 5.0;												// Lower pT
-		JetDefinition jet_def(antikt_algorithm, R);						// Create jet definition
-		ClusterSequence cs(particles, jet_def);							// Run clustering
-		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));// Sort/store results
-		nCj = jets.size();												// Jet multiplicity
+		double R = 0.4;															// Jet radius
+		double ptmin = 5.0;														// Lower pT
+		JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
+		ClusterSequence cs(particles, jet_def);									// Run clustering
+		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
+		nCj = jets.size();														// Jet multiplicity
 		
 		// Run through jets
 		for (int i = 0; i < jets.size(); i++) {
-
 			// Count jet particles
 			int n_constituents = jets[i].constituents().size();
-			
 			// Define constituents vector
 			vector<PseudoJet> constituents = jets[i].constituents();
-
 			// Study jet constituents
 			for (int j = 0; j < constituents.size(); j++) {
-				
 				// Define constituent vector
 				PseudoJet constituent = jets[i].constituents()[j];
-				// Print constituent properties
-
+				}
 			}
 		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Sphericity/cosθ_sphericity
+		// Populate histogram
 		if (sph.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) sph.list();
-			// Populate histogram
-			hist_Spheric->Fill( sph.sphericity() );
-			hist_sphAxis->Fill( sph.eventAxis(1).pz() );
-			// Sanity check
-			double e1 = sph.eigenValue(1);
-			double e2 = sph.eigenValue(2);
-			double e3 = sph.eigenValue(3);
-			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
-			<< e1 << "  " << e2 << "  " << e3 << endl;
-		  }
-
-		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Linearity/cosθ_linearity
+			
+			hist_Spheric->Fill( sph.sphericity() );				// Sphericity = (sum_i p_i^a p_i^b)/(sum_i p_i^2)
+			hist_sphAxis->Fill( sph.eventAxis(1).pz() );		// Cosθ
+			hist_Aplanar->Fill( sph.aplanarity() );				// Aplanarity
+		}
+		// Populate histogram
 		if (lin.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) lin.list();
-			// Populate histogram
-			hist_Lineric->Fill( lin.sphericity() );
-			hist_linAxis->Fill( lin.eventAxis(1).pz() );
-			// Sanity check
-			double e1 = lin.eigenValue(1);
-			double e2 = lin.eigenValue(2);
-			double e3 = lin.eigenValue(3);
-			if (e2 > e1 || e3 > e2) cout << "eigenvalues out of order: "
-			<< e1 << "  " << e2 << "  " << e3 << endl;
-		  }
-
-		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Thrust/cosθ_thrust/Oblateness
+			hist_Lineric->Fill( lin.sphericity() );				// Linear.Sph = (sum_i p_i^a p_i^b p_i^{r-2})/(sum_i p_i^r)
+			hist_linAxis->Fill( lin.eventAxis(1).pz() );		// Cosθ
+		}
+		// Populate histogram
 		if (thr.analyze( pythia.event )) {
-			// // Print few info
-			// if (iEvent < 3) thr.list();
-			// Populate histogram
-			hist_Thrusty->Fill( thr.thrust() );
-			hist_Oblatey->Fill( thr.oblateness() );
-			hist_thrAxis->Fill( thr.eventAxis(1).pz() );
-			// Sanity check
-			if ( abs(thr.eventAxis(1).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(2).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(3).pAbs() - 1.) > 1e-8
-			  || abs(thr.eventAxis(1) * thr.eventAxis(2)) > 1e-8
-			  || abs(thr.eventAxis(1) * thr.eventAxis(3)) > 1e-8
-			  || abs(thr.eventAxis(2) * thr.eventAxis(3)) > 1e-8 ) {
-			  cout << " suspicious Thrust eigenvectors " << endl;
-			//   thr.list();
+			hist_ThrustP->Fill( thr.thrust() );					// Thrust
+			hist_thrAxis->Fill( thr.eventAxis(1).pz() );		// Cosθ
+			hist_ThMajor->Fill( thr.tMajor() );					// Tmajor  
+			hist_ThMinor->Fill( thr.tMinor() );					// Tminor
+			hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
 			}
-		  }
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );
@@ -329,7 +301,11 @@ int main(){
 
 	hist_nChExpe->Scale(1.0/hist_nChExpe->Integral());
 	hist_nChPyth->Scale(1.0/hist_nChPyth->Integral());
+
 	hist_nChJets->Scale(1.0/hist_nChJets->Integral());
+
+	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
+
 	hist_nParton->Scale(1.0/hist_nParton->Integral());
 	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
 	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
