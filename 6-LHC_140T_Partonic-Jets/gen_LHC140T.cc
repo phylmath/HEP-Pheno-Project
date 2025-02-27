@@ -75,7 +75,7 @@ int main(){
 	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	tree->Branch("hist_nChExpe", &hist_nChExpe, "hist_nChExpe");
 
-	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
+	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 200, 1, 200);
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
 	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LHC E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
