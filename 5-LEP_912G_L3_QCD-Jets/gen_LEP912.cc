@@ -76,8 +76,11 @@ int main(){
 	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
-	TH1F *hist_nChJets = new TH1F("hist_nChJets", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
-	tree->Branch("hist_nChJets", &hist_nChJets, "hist_nChJets");
+	TH1F *hist_nJetsCh = new TH1F("hist_nJetsCh", "Hadronic Jet Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0, 5);
+	tree->Branch("hist_nJetsCh", &hist_nJetsCh, "hist_nJetsCh");
+
+	TH1F *hist_nJetsFr = new TH1F("hist_nJetsFr", "Hadronic Jet Constituent multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 30, 0, 30);
+	tree->Branch("hist_nJetsFr", &hist_nJetsFr, "hist_nJetsFr");
 
 	TH1F *hist_nParton = new TH1F("hist_nParton", "Intermediate Parton Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
 	tree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
@@ -88,34 +91,34 @@ int main(){
 	TH1F *hist_nPGluon = new TH1F("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 25, 0, 100);
 	tree->Branch("hist_nPGluon", &hist_nPGluon, "hist_nPGluon");
 
-	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Event Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_Spheric = new TH1F("hist_Spheric", "Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
 
-	TH1F *hist_Aplanar = new TH1F("hist_Aplanar", "Event Aplanarity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_Aplanar = new TH1F("hist_Aplanar", "Aplanarity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Aplanar", &hist_Aplanar, "hist_Aplanar");
 
-	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Event Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_Lineric = new TH1F("hist_Lineric", "Linearised Sphericity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1F *hist_ThrustP = new TH1F("hist_ThrustP", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
+	TH1F *hist_ThrustP = new TH1F("hist_ThrustP", "Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
-	TH1F *hist_ThMajor = new TH1F("hist_ThMajor", "Event Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_ThMajor = new TH1F("hist_ThMajor", "Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_ThMajor", &hist_ThMajor, "hist_ThMajor");
 
-	TH1F *hist_ThMinor = new TH1F("hist_ThMinor", "Event Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_ThMinor = new TH1F("hist_ThMinor", "Thrust Major distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_ThMinor", &hist_ThMinor, "hist_ThMinor");
 
-	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Event Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
+	TH1F *hist_Oblatey = new TH1F("hist_Oblatey", "Oblateness distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, 0., 1.);
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
 
-	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Event Sphericity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	TH1F *hist_sphAxis = new TH1F("hist_sphAxis", "Sphericity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_sphAxis", &hist_sphAxis, "hist_sphAxis");
 
-	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Event Linearity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	TH1F *hist_linAxis = new TH1F("hist_linAxis", "Linearity axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_linAxis", &hist_linAxis, "hist_linAxis");
 
-	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Event Thrust axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
+	TH1F *hist_thrAxis = new TH1F("hist_thrAxis", "Thrust axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +151,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 284100;
+	int nEvent = 248100;
 
 	// Define physics
 	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
@@ -196,13 +199,12 @@ int main(){
 		// cout << "\tEvent#" << iEvent << endl;
 		
 		// Counters
-		int nCh = 0;
-		int nCj = 0;
-		int nCjq = 0;
-		int nCjg = 0;
-		int nCp = 0;
-		int nCq = 0;
-		int nCg = 0;
+		int nCh = 0;		// Charged Hadron Multiplicity
+		int nJc = 0;		// Jet multiplicity
+		int nJf = 0;		// Jet fraction
+		int nCp = 0;		// Intermediate parton
+		int nCq = 0;		// Intermediate quarks
+		int nCg = 0;		// Intermediate gluons
 
 		// FJ event vector
 		vector<PseudoJet> particles;
@@ -230,7 +232,6 @@ int main(){
 				nCh++;									// Update counter
 
 				////////////////////////// STORING JETS PARAMS //////////////////////////
-				
 				PseudoJet particle(parPmx, parPmy, parPmz, parMas);		// FJ particle vector
 				particle.set_user_index(parPdg);						// Store particle pdg
 				particles.push_back(particle);							// Add particle to event
@@ -256,10 +257,12 @@ int main(){
 		JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
 		ClusterSequence cs(particles, jet_def);									// Run clustering
 		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
-		nCj = jets.size();														// Jet multiplicity
+		nJc = jets.size();														// Jet multiplicity
 		
 		// Run through jets
 		for (int i = 0; i < jets.size(); i++) {
+			// Store jet fraction
+			nJf = jets[i].constituents().size();
 			// Count jet particles
 			int n_constituents = jets[i].constituents().size();
 			// Define constituents vector
@@ -270,6 +273,7 @@ int main(){
 				PseudoJet constituent = jets[i].constituents()[j];
 				}
 			}
+		
 		}
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
@@ -296,7 +300,8 @@ int main(){
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );
-		hist_nChJets->Fill( nCj );
+		hist_nJetsCh->Fill( nJc );
+		hist_nJetsFr->Fill( nJf );
 		hist_nParton->Fill( nCp );
 		hist_nPQuark->Fill( nCq );
 		hist_nPGluon->Fill( nCg );
@@ -304,21 +309,6 @@ int main(){
 		////////////////////////// FILLING DATA TO TREEBRANCHES //////////////////////////
 		tree->Fill();
 	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Normalising all probabilities
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-
-	hist_nChExpe->Scale(1.0/hist_nChExpe->Integral());
-	hist_nChPyth->Scale(1.0/hist_nChPyth->Integral());
-
-	hist_nChJets->Scale(1.0/hist_nChJets->Integral());
-
-	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
-
-	hist_nParton->Scale(1.0/hist_nParton->Integral());
-	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
-	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // File closures

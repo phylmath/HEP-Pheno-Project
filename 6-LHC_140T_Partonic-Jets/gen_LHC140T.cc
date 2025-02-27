@@ -150,12 +150,12 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e3;
+	int nEvent = 5e3;
 
 	// Define physics
 	pythia.readString("HardQCD:all = on"); 							// perturbative processes
 	// pythia.readString("SoftQCD:all = on"); 						// non-perturbative processes
-	pythia.readString("PDF:pSet = LHAPDF6:cteq61");					// beam substructure
+	pythia.readString("PDF:pSet = LHAPDF6:cteq6l1/0");				// beam substructure
 
 	// Suppress event listing
 	pythia.readString("Init:showProcesses = false");
