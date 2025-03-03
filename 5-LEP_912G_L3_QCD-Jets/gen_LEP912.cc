@@ -25,6 +25,8 @@
 #include "TLegend.h"
 #include "TArrow.h"
 #include "TLatex.h"
+#include "TPaveStats.h"
+#include "TList.h"
 // Header
 using namespace Pythia8;
 using namespace std;
