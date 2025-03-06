@@ -72,9 +72,6 @@ int main(){
 // Define Histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_nChExpe = new TH1F("hist_nChExpe", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
-	tree->Branch("hist_nChExpe", &hist_nChExpe, "hist_nChExpe");
-
 	TH1F *hist_nChPyth = new TH1F("hist_nChPyth", "Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 28, 1, 57);
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
@@ -124,28 +121,6 @@ int main(){
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Import Experimental data
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Hadron counters
-	double Nch; 
-	double PrbTotal=0;
-	double Prb, Err_Nch, Err_Prb;
-	// Import data
-	ifstream infile_exp("LEP912_exp.txt");
-	// Read through TXT
-	while ( !infile_exp.eof() ) {
-		// Set reading order
-		infile_exp >> Nch >> Prb >> Err_Nch >> Err_Prb;
-		// Populate histogram
-		hist_nChExpe->SetBinContent(hist_nChExpe->FindBin(Nch), Prb);
-		// Populate error bar
-		hist_nChExpe->SetBinError(hist_nChExpe->FindBin(Nch), Err_Prb);
-	}
-	// Close file
-	infile_exp.close();
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -169,8 +144,9 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
 	pythia.readString("Beams:idB = -11"); 						// Beam B energy
 	double mZ = pythia.particleData.m0(23);						// Store Z0 mass
-	pythia.settings.parm("Beams:eCM", mZ);						// Set energy = mZ
-	pythia.readString("PDF:lepton = off");						// Disable beam substructure
+	double mW = pythia.particleData.m0(24);						// Store W+ mass
+	pythia.settings.parm("Beams:eCM", mZ);						// Set centre-of-mass
+	pythia.readString("PDF:lepton = off");						// Disable substructure
 
 	// Suppress event listing
 	pythia.readString("Init:showProcesses = false"); 

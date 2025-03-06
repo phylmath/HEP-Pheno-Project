@@ -24,6 +24,9 @@
 #include "TList.h"
 // Header
 using namespace std;
+// Extras
+// void Beautify(TH1F inhist);
+
 
 // Code
 void plt_LEP912()
@@ -34,42 +37,157 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile* input = new TFile("out_LEP912.root", "READ");
-	TFile* input_thrust = new TFile("HEPData-Table_47.root", "READ");
+	TFile* input_LEP_Z0 = new TFile("out_LEP912_Z0.root", "READ");
+	TFile* input_LEP_2W = new TFile("out_LEP912_2W.root", "READ");
+	// TFile* input_thrust = new TFile("HEPData-Table_47.root", "READ");
 	// Read TTree
-	TTree* tree = (TTree*)input->Get("tree"); 
+	TTree* tree = (TTree*)input_LEP_Z0->Get("tree");
+
+	// Buffers
+	double Nch; 
+	double PrbTotal=0;
+	double Prb, Err_Nch, Err_Prb;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_nChExpe = (TH1F*)input->Get("hist_nChExpe");
+	TH1F *hist_nChPyZ0 = (TH1F*)input_LEP_Z0->Get("hist_nChPyth");
 	// Beautify
-	// hist_nChExpe->SetStats(kFALSE);
-	hist_nChExpe->SetLineColor(kRed+1);
-	hist_nChExpe->SetMarkerColor(kRed+1);
-	hist_nChExpe->SetMarkerStyle(20);
-	hist_nChExpe->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChExpe->GetYaxis()->SetTitle("Probability");
-	hist_nChExpe->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nChExpe->GetYaxis()->SetNdivisions(510, kTRUE);
+	hist_nChPyZ0->SetStats(kFALSE);
+	hist_nChPyZ0->SetName("Fit results");
+	hist_nChPyZ0->SetLineColor(kBlack);
+	hist_nChPyZ0->SetMarkerColor(kBlack);
+	hist_nChPyZ0->SetMarkerStyle(kOpenSquare);
+	hist_nChPyZ0->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChPyZ0->GetYaxis()->SetTitle("Probability");
+	hist_nChPyZ0->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChPyZ0->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Make Histogram
+	TH1F *hist_nChExLZ = new TH1F("hist_nChExLZ", " ", 28, 1, 57);
+	// Beautify
+	hist_nChExLZ->SetStats(kFALSE);
+	hist_nChExLZ->SetName(" L3 91.2 GeV ]");
+	hist_nChExLZ->SetName("hist_nChExLZ");
+	hist_nChExLZ->SetLineColor(kBlack);
+	hist_nChExLZ->SetMarkerColor(kBlack);
+	hist_nChExLZ->SetMarkerStyle(kOpenCircle);
+	hist_nChExLZ->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChExLZ->GetYaxis()->SetTitle("Probability");
+	hist_nChExLZ->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChExLZ->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Import data
+	ifstream infile_00("EXP_LEP_912_L3_NCH.txt");
+	// Read through TXT
+	while ( !infile_00.eof() ) {
+		// Set reading order
+		infile_00 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_nChExLZ->SetBinContent(hist_nChExLZ->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_nChExLZ->SetBinError(hist_nChExLZ->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_00.close();
+
+	// Make Histogram
+	TH1F *hist_nChExOZ = new TH1F("hist_nChExOZ", " ", 27, 1, 55);
+	// Beautify
+	hist_nChExOZ->SetStats(kFALSE);
+	hist_nChExOZ->SetName(" OPAL 91.2 GeV ]");
+	hist_nChExOZ->SetName("hist_nChExOZ");
+	hist_nChExOZ->SetLineColor(kBlack);
+	hist_nChExOZ->SetMarkerColor(kBlack);
+	hist_nChExOZ->SetMarkerStyle(kOpenTriangleUp);
+	hist_nChExOZ->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChExOZ->GetYaxis()->SetTitle("Probability");
+	hist_nChExOZ->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChExOZ->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Import data
+	ifstream infile_01("EXP_LEP_912_OPAL_NCH.txt");
+	// Read through TXT
+	while ( !infile_01.eof() ) {
+		// Set reading order
+		infile_01 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_nChExOZ->SetBinContent(hist_nChExOZ->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_nChExOZ->SetBinError(hist_nChExOZ->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_01.close();
 
 	// Read Histogram
-	TH1F *hist_nChPyth = (TH1F*)input->Get("hist_nChPyth");
+	TH1F *hist_nChPy2W = (TH1F*)input_LEP_2W->Get("hist_nChPyth");
 	// Beautify
-	// hist_nChPyth->SetStats(kFALSE);
-	hist_nChPyth->SetName("Fit results");
-	hist_nChPyth->SetLineColor(kBlue+1);
-	hist_nChPyth->SetMarkerColor(kBlue+1);
-	hist_nChPyth->SetMarkerStyle(20);
-	hist_nChPyth->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChPyth->GetYaxis()->SetTitle("Probability");
-	hist_nChPyth->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_nChPyth->GetYaxis()->SetNdivisions(510, kTRUE);
+	hist_nChPy2W->SetStats(kFALSE);
+	hist_nChPy2W->SetName("Fit results");
+	hist_nChPy2W->SetLineColor(kRed+1);
+	hist_nChPy2W->SetMarkerColor(kRed+1);
+	hist_nChPy2W->SetMarkerStyle(kOpenSquare);
+	hist_nChPy2W->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChPy2W->GetYaxis()->SetTitle("Probability");
+	hist_nChPy2W->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChPy2W->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Make Histogram
+	TH1F *hist_nChExLW = new TH1F("hist_nChExLW", " ", 22, 9, 53);
+	// Beautify
+	hist_nChExLW->SetStats(kFALSE);
+	hist_nChExLW->SetName(" L3 161 GeV ]");
+	hist_nChExLW->SetName("hist_nChExLW");
+	hist_nChExLW->SetLineColor(kRed+1);
+	hist_nChExLW->SetMarkerColor(kRed+1);
+	hist_nChExLW->SetMarkerStyle(kOpenCircle);
+	hist_nChExLW->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChExLW->GetYaxis()->SetTitle("Probability");
+	hist_nChExLW->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChExLW->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Import data
+	ifstream infile_03("EXP_LEP_161_L3_NCH.txt");
+	// Read through TXT
+	while ( !infile_03.eof() ) {
+		// Set reading order
+		infile_03 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_nChExLW->SetBinContent(hist_nChExLW->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_nChExLW->SetBinError(hist_nChExLW->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_03.close();
+
+	// Make Histogram
+	TH1F *hist_nChExOW = new TH1F("hist_nChExOW", " ", 25, 7, 57);
+	// Beautify
+	hist_nChExOW->SetStats(kFALSE);
+	hist_nChExOW->SetName(" OPAL 161 GeV ]");
+	hist_nChExOW->SetName("hist_nChExOW");
+	hist_nChExOW->SetLineColor(kRed+1);
+	hist_nChExOW->SetMarkerColor(kRed+1);
+	hist_nChExOW->SetMarkerStyle(kOpenTriangleUp);
+	hist_nChExOW->GetXaxis()->SetTitle("Multiplicity");
+	hist_nChExOW->GetYaxis()->SetTitle("Probability");
+	hist_nChExOW->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nChExOW->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Import data
+	ifstream infile_02("EXP_LEP_161_OPAL_NCH.txt");
+	// Read through TXT
+	while ( !infile_02.eof() ) {
+		// Set reading order
+		infile_02 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_nChExOW->SetBinContent(hist_nChExOW->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_nChExOW->SetBinError(hist_nChExOW->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_02.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_nJetsCh = (TH1F*)input->Get("hist_nJetsCh");
+	TH1F *hist_nJetsCh = (TH1F*)input_LEP_Z0->Get("hist_nJetsCh");
 	// Beautify
 	// hist_nJetsCh->SetStats(kFALSE);
 	hist_nJetsCh->SetLineColor(kBlue+1);
@@ -83,7 +201,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_nParton = (TH1F*)input->Get("hist_nParton");
+	TH1F *hist_nParton = (TH1F*)input_LEP_Z0->Get("hist_nParton");
 	// Beautify
 	hist_nParton->SetStats(kFALSE);
 	hist_nParton->SetLineColor(kRed+1);
@@ -95,7 +213,7 @@ void plt_LEP912()
 	hist_nParton->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Read Histogram
-	TH1F *hist_nPQuark = (TH1F*)input->Get("hist_nPQuark");
+	TH1F *hist_nPQuark = (TH1F*)input_LEP_Z0->Get("hist_nPQuark");
 	// Beautify
 	hist_nPQuark->SetStats(kFALSE);
 	hist_nPQuark->SetLineColor(kBlue+1);
@@ -107,7 +225,7 @@ void plt_LEP912()
 	hist_nPQuark->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Read Histogram
-	TH1F *hist_nPGluon = (TH1F*)input->Get("hist_nPGluon");
+	TH1F *hist_nPGluon = (TH1F*)input_LEP_Z0->Get("hist_nPGluon");
 	// Beautify
 	hist_nPGluon->SetStats(kFALSE);
 	hist_nPGluon->SetLineColor(kGreen+1);
@@ -121,7 +239,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_Spheric = (TH1F*)input->Get("hist_Spheric");
+	TH1F *hist_Spheric = (TH1F*)input_LEP_Z0->Get("hist_Spheric");
 	// Beautify
 	hist_Spheric->SetStats(kFALSE);
 	hist_Spheric->SetLineColor(kBlack);
@@ -135,7 +253,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_Lineric = (TH1F*)input->Get("hist_Lineric");
+	TH1F *hist_Lineric = (TH1F*)input_LEP_Z0->Get("hist_Lineric");
 	// Beautify
 	hist_Lineric->SetStats(kFALSE);
 	hist_Lineric->SetLineColor(kBlack);
@@ -163,23 +281,19 @@ void plt_LEP912()
 	hist_ThrustE->GetYaxis()->SetTitle("Probability");
 	hist_ThrustE->GetXaxis()->SetNdivisions(515, kTRUE);
 	hist_ThrustE->GetYaxis()->SetNdivisions(515, kTRUE);
-	// Hadron counters
-	double Nch; 
-	double PrbTotal=0;
-	double Prb, Err_Nch, Err_Prb;
 	// Import data
-	ifstream infile_1("LEP912_tex_udsc.txt");
+	ifstream infile_10("EXP_LEP_912_L3_THR_udsc.txt");
 	// Read through TXT
-	while ( !infile_1.eof() ) {
+	while ( !infile_10.eof() ) {
 		// Set reading order
-		infile_1 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		infile_10 >> Nch >> Prb >> Err_Nch >> Err_Prb;
 		// Populate histogram
 		hist_ThrustE->SetBinContent(hist_ThrustE->FindBin(Nch), Prb);
 		// Populate error bar
 		hist_ThrustE->SetBinError(hist_ThrustE->FindBin(Nch), Err_Prb);
 	}
 	// Close file
-	infile_1.close();
+	infile_10.close();
 
 	// // Read Histogram
 	// TH1F *hist_ThrustX = (TH1F*)input_thrust->Get("Table 47/Hist1D_y2");
@@ -197,21 +311,21 @@ void plt_LEP912()
 	hist_ThrustX->GetXaxis()->SetNdivisions(515, kTRUE);
 	hist_ThrustX->GetYaxis()->SetNdivisions(515, kTRUE);
 	// Import data
-	ifstream infile_2("LEP912_tex_b.txt");
+	ifstream infile_11("EXP_LEP_912_L3_THR_b.txt");
 	// Read through TXT
-	while ( !infile_2.eof() ) {
+	while ( !infile_11.eof() ) {
 		// Set reading order
-		infile_2 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		infile_11 >> Nch >> Prb >> Err_Nch >> Err_Prb;
 		// Populate histogram
 		hist_ThrustX->SetBinContent(hist_ThrustX->FindBin(Nch), Prb);
 		// Populate error bar
 		hist_ThrustX->SetBinError(hist_ThrustX->FindBin(Nch), Err_Prb);
 	}
 	// Close file
-	infile_2.close();
+	infile_11.close();
 
 	// Read Histogram
-	TH1F *hist_ThrustP = (TH1F*)input->Get("hist_ThrustP");
+	TH1F *hist_ThrustP = (TH1F*)input_LEP_Z0->Get("hist_ThrustP");
 	// Beautify
 	// hist_ThrustP->SetStats(kFALSE);
 	hist_ThrustP->SetLineColor(kBlue+1);
@@ -226,7 +340,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_Oblatey = (TH1F*)input->Get("hist_Oblatey");
+	TH1F *hist_Oblatey = (TH1F*)input_LEP_Z0->Get("hist_Oblatey");
 	// Beautify
 	hist_Oblatey->SetStats(kFALSE);
 	hist_Oblatey->SetLineColor(kBlack);
@@ -240,7 +354,7 @@ void plt_LEP912()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Read Histogram
-	TH1F *hist_sphAxis = (TH1F*)input->Get("hist_sphAxis");
+	TH1F *hist_sphAxis = (TH1F*)input_LEP_Z0->Get("hist_sphAxis");
 	// Beautify
 	hist_sphAxis->SetStats(kFALSE);
 	hist_sphAxis->SetLineColor(kRed+1);
@@ -252,7 +366,7 @@ void plt_LEP912()
 	hist_sphAxis->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Read Histogram
-	TH1F *hist_linAxis = (TH1F*)input->Get("hist_linAxis");
+	TH1F *hist_linAxis = (TH1F*)input_LEP_Z0->Get("hist_linAxis");
 	// Beautify
 	hist_linAxis->SetStats(kFALSE);
 	hist_linAxis->SetLineColor(kGreen+2);
@@ -264,7 +378,7 @@ void plt_LEP912()
 	hist_linAxis->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// Read Histogram
-	TH1F *hist_thrAxis = (TH1F*)input->Get("hist_thrAxis");
+	TH1F *hist_thrAxis = (TH1F*)input_LEP_Z0->Get("hist_thrAxis");
 	// Beautify
 	hist_thrAxis->SetStats(kFALSE);
 	hist_thrAxis->SetLineColor(kBlue+1);
@@ -276,29 +390,34 @@ void plt_LEP912()
 	hist_thrAxis->GetYaxis()->SetNdivisions(510, kTRUE);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Normalising all probabilities
+// Normalising probabilities
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// Divide by area under histogram
-	hist_nChExpe->Scale(1.0/hist_nChExpe->Integral());
-	hist_nChPyth->Scale(1.0/hist_nChPyth->Integral());
+	// Divide by area under hist
+	hist_nChExLZ->Scale(1.0/hist_nChExLZ->Integral());
+	hist_nChExLW->Scale(1.0/hist_nChExLW->Integral());
+	hist_nChExOZ->Scale(1.0/hist_nChExOZ->Integral());
+	hist_nChExOW->Scale(1.0/hist_nChExOW->Integral());
+	hist_nChPyZ0->Scale(1.0/hist_nChPyZ0->Integral());
+	hist_nChPy2W->Scale(1.0/hist_nChPy2W->Integral());
 
 	hist_nJetsCh->Scale(1.0/hist_nJetsCh->Integral());
 
 	hist_ThrustE->Scale(1.0/hist_ThrustE->Integral());
 	hist_ThrustX->Scale(1.0/hist_ThrustX->Integral());
 	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
-	// hist_ThrustE->Scale(1/0.025);
-	// hist_ThrustX->Scale(1/0.025);
-	// hist_ThrustP->Scale(1/0.025);
 
 	hist_nParton->Scale(1.0/hist_nParton->Integral());
 	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
 	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
 
 	// Print check of integrals
-	cout << "Integration : " << hist_nChExpe->Integral() << endl;
-	cout << "Integration : " << hist_nChPyth->Integral() << endl;
+	cout << "Integration : " << hist_nChExLZ->Integral() << endl;
+	cout << "Integration : " << hist_nChExLW->Integral() << endl;
+	cout << "Integration : " << hist_nChExOZ->Integral() << endl;
+	cout << "Integration : " << hist_nChExOW->Integral() << endl;
+	cout << "Integration : " << hist_nChPyZ0->Integral() << endl;
+	cout << "Integration : " << hist_nChPy2W->Integral() << endl;
 
 	cout << "Integration : " << hist_nJetsCh->Integral() << endl;
 
@@ -314,18 +433,22 @@ void plt_LEP912()
 // Plotting Charged Hadronic Multiplicity (Experimental vs Pythia)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Create canvas
-	// TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
-	// // Beautify
-	// // c_nch->SetLogy();
-	// c_nch->SetTickx();
-	// c_nch->SetTicky();
-	// c_nch->SetGridx();
-	// c_nch->SetGridy();
-	// // Draw
-	// c_nch->cd();
-	// hist_nChPyth->Draw("PS");
-	// hist_nChExpe->Draw("same");
+	// Create canvas
+	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
+	// Beautify
+	// c_nch->SetLogy();
+	c_nch->SetTickx();
+	c_nch->SetTicky();
+	c_nch->SetGridx();
+	c_nch->SetGridy();
+	// Draw
+	c_nch->cd();
+	hist_nChPyZ0->Draw("PS");
+	hist_nChExLZ->Draw("same");
+	hist_nChExOZ->Draw("same");
+	hist_nChPy2W->Draw("PS");
+	hist_nChExLW->Draw("same");
+	hist_nChExOW->Draw("same");
 
 	// // Fit Pythia data
 	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
@@ -340,7 +463,7 @@ void plt_LEP912()
 	// fist_nChPyth->SetParameter(1,12.5);				// k - shape
 	// fist_nChPyth->SetParameter(2,19);				// n - expected mean
 	// // Perform fit
-	// hist_nChPyth->Fit("fist_nChPyth", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// hist_nChPyZ0->Fit("fist_nChPyth", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 	// // Draw
 	// fist_nChPyth->Draw("same");
 
@@ -357,18 +480,22 @@ void plt_LEP912()
 	// fist_nChExpe->SetParameter(1,12.5);				// k - shape
 	// fist_nChExpe->SetParameter(2,19);				// n - expected mean
 	// // Perform fit
-	// hist_nChExpe->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// hist_nChExLZ->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 	// // Draw fit
 	// fist_nChExpe->Draw("same");
 
-	// // Add legend
-	// TLegend *legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	// legend->AddEntry(hist_nChExpe, "Experimental data", "p");
-	// // legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
-	// legend->AddEntry(hist_nChPyth, "Pythia 8.312 data", "p");
-	// // legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
-	// // Draw legend
-	// legend->Draw("same");
+	// Add legend
+	TLegend *legend = new TLegend(0.4, 0.2, 0.85, 0.4);
+	legend->AddEntry(hist_nChPyZ0, "Pythia 8.3 at Z0", "p");
+	legend->AddEntry(hist_nChExLZ, "LEP L3 at Z0", "p");
+	legend->AddEntry(hist_nChExOZ, "LEP OPAL at Z0", "p");
+	legend->AddEntry(hist_nChPy2W, "Pythia 8.3 at 2W", "p");
+	legend->AddEntry(hist_nChExLW, "LEP L3 at 2W", "p");
+	legend->AddEntry(hist_nChExOW, "LEP OPAL at 2W", "p");
+	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
+	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
+	// Draw legend
+	legend->Draw("same");
 
 	// // Modify stat-box
 	// gStyle->SetOptStat();
@@ -408,26 +535,26 @@ void plt_LEP912()
 	// ps->AddText(buffer.str().c_str());
 	// buffer.str(std::string());
 	// // Update stat-box
-	// hist_nChPyth->SetStats(0);
-	// hist_nChExpe->SetStats(0);
+	// hist_nChPyZ0->SetStats(0);
+	// hist_nChExLZ->SetStats(0);
 	// c_nch->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Hadronic Jet Multiplicity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Create canvas
-	TCanvas* c_ncj = new TCanvas("c_ncj", "Hadronic jet multiplicity distributions", 800, 600);
-	// Beautify
-	// c_ncj->SetLogy();
-	c_ncj->SetTickx();
-	c_ncj->SetTicky();
-	c_ncj->SetGridx();
-	c_ncj->SetGridy();
+	// // Create canvas
+	// TCanvas* c_ncj = new TCanvas("c_ncj", "Hadronic jet multiplicity distributions", 800, 600);
+	// // Beautify
+	// // c_ncj->SetLogy();
+	// c_ncj->SetTickx();
+	// c_ncj->SetTicky();
+	// c_ncj->SetGridx();
+	// c_ncj->SetGridy();
 
-	// Draw histogram
-	c_ncj->cd();
-	hist_nJetsCh->Draw("PS");
+	// // Draw histogram
+	// c_ncj->cd();
+	// hist_nJetsCh->Draw("PS");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Thrust
@@ -457,7 +584,7 @@ void plt_LEP912()
 	// legend->Draw("same");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Plotting Axes
+// Plotting Event Axes
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// // Create canvas
@@ -509,3 +636,8 @@ void plt_LEP912()
 	// lege_imp->Draw("same");
 
 }
+
+// void Beautify(TH1F inhist)
+// {
+
+// }
