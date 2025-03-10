@@ -433,6 +433,16 @@ void plt_LEP912()
 // Plotting Charged Hadronic Multiplicity (Experimental vs Pythia)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// // KNO scaling
+	// double histMax = hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean();
+	// double histBin = 0.025;
+	// int numBins = static_cast<int>( TMath::Ceil( hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean() ) );
+	// TH1D* KNO_hist_nChPyZ0("KNO_hist_nChPyZ0", " ", hist_nChPyZ0->GetNbinsX(), hist_nChPyZ0->GetXaxis()->GetXmin(), hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean());
+
+	// cout << hist_nChPyZ0->GetMean() << endl;
+	// cout << numBins << endl;
+	// cout << hist_nChPyZ0->GetNbinsX() << endl;
+
 	// Create canvas
 	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 	// Beautify
@@ -442,13 +452,13 @@ void plt_LEP912()
 	c_nch->SetGridx();
 	c_nch->SetGridy();
 	// Draw
-	c_nch->cd();
-	hist_nChPyZ0->Draw("PS");
-	hist_nChExLZ->Draw("same");
-	hist_nChExOZ->Draw("same");
-	hist_nChPy2W->Draw("PS");
-	hist_nChExLW->Draw("same");
-	hist_nChExOW->Draw("same");
+	// c_nch->cd();
+	// hist_nChPyZ0->Draw("PS");
+	// hist_nChExLZ->Draw("same");
+	// hist_nChExOZ->Draw("same");
+	// hist_nChPy2W->Draw("same");
+	// hist_nChExLW->Draw("same");
+	// hist_nChExOW->Draw("same");
 
 	// // Fit Pythia data
 	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
@@ -497,8 +507,9 @@ void plt_LEP912()
 	// Draw legend
 	legend->Draw("same");
 
-	// // Modify stat-box
-	// gStyle->SetOptStat();
+	// Modify stat-box
+	gStyle->SetOptStat();
+	gStyle->SetErrorX(0.00001);
 	// TPaveStats *ps = (TPaveStats *)c_nch->GetPrimitive("stats");
 	// ps->SetName("mystats");
 	// // Delete existing lines
@@ -537,7 +548,7 @@ void plt_LEP912()
 	// // Update stat-box
 	// hist_nChPyZ0->SetStats(0);
 	// hist_nChExLZ->SetStats(0);
-	// c_nch->Modified();
+	c_nch->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Hadronic Jet Multiplicity
