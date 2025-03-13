@@ -58,8 +58,8 @@ void plt_LEP912()
 	hist_nChPyZ0->SetLineColor(kBlack);
 	hist_nChPyZ0->SetMarkerColor(kBlack);
 	hist_nChPyZ0->SetMarkerStyle(kOpenSquare);
-	hist_nChPyZ0->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChPyZ0->GetYaxis()->SetTitle("Probability");
+	hist_nChPyZ0->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChPyZ0->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChPyZ0->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChPyZ0->GetYaxis()->SetNdivisions(510, kTRUE);
 
@@ -72,8 +72,8 @@ void plt_LEP912()
 	hist_nChExLZ->SetLineColor(kBlack);
 	hist_nChExLZ->SetMarkerColor(kBlack);
 	hist_nChExLZ->SetMarkerStyle(kOpenCircle);
-	hist_nChExLZ->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChExLZ->GetYaxis()->SetTitle("Probability");
+	hist_nChExLZ->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChExLZ->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChExLZ->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChExLZ->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
@@ -99,8 +99,8 @@ void plt_LEP912()
 	hist_nChExOZ->SetLineColor(kBlack);
 	hist_nChExOZ->SetMarkerColor(kBlack);
 	hist_nChExOZ->SetMarkerStyle(kOpenTriangleUp);
-	hist_nChExOZ->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChExOZ->GetYaxis()->SetTitle("Probability");
+	hist_nChExOZ->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChExOZ->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChExOZ->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChExOZ->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
@@ -125,8 +125,8 @@ void plt_LEP912()
 	hist_nChPy2W->SetLineColor(kRed+1);
 	hist_nChPy2W->SetMarkerColor(kRed+1);
 	hist_nChPy2W->SetMarkerStyle(kOpenSquare);
-	hist_nChPy2W->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChPy2W->GetYaxis()->SetTitle("Probability");
+	hist_nChPy2W->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChPy2W->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChPy2W->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChPy2W->GetYaxis()->SetNdivisions(510, kTRUE);
 
@@ -139,8 +139,8 @@ void plt_LEP912()
 	hist_nChExLW->SetLineColor(kRed+1);
 	hist_nChExLW->SetMarkerColor(kRed+1);
 	hist_nChExLW->SetMarkerStyle(kOpenCircle);
-	hist_nChExLW->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChExLW->GetYaxis()->SetTitle("Probability");
+	hist_nChExLW->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChExLW->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChExLW->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChExLW->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
@@ -166,8 +166,8 @@ void plt_LEP912()
 	hist_nChExOW->SetLineColor(kRed+1);
 	hist_nChExOW->SetMarkerColor(kRed+1);
 	hist_nChExOW->SetMarkerStyle(kOpenTriangleUp);
-	hist_nChExOW->GetXaxis()->SetTitle("Multiplicity");
-	hist_nChExOW->GetYaxis()->SetTitle("Probability");
+	hist_nChExOW->GetXaxis()->SetTitle("N_{CH}");
+	hist_nChExOW->GetYaxis()->SetTitle("P(N_{CH})");
 	hist_nChExOW->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_nChExOW->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
@@ -430,35 +430,230 @@ void plt_LEP912()
 	cout << "Integration : " << hist_nPGluon->Integral() << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// KNO Scaling
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	// Axes params
+	double histNch = hist_nChPyZ0->GetMean();
+	double histMax = hist_nChPyZ0->GetXaxis()->GetXmax()/histNch;
+	double histMin = hist_nChPyZ0->GetXaxis()->GetXmin()/histNch;
+	double histBin = hist_nChPyZ0->GetBinWidth(10)/histNch;
+	int numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChPyZ0 = new TH1D("KNOO_nChPyZ0", "KNO Scaled Charged Hadron Multiplicity distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChPyZ0->SetStats(kFALSE);
+	KNOO_nChPyZ0->SetLineColor(kBlack);
+	KNOO_nChPyZ0->SetMarkerColor(kBlack);
+	KNOO_nChPyZ0->SetMarkerStyle(kOpenSquare);
+	KNOO_nChPyZ0->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChPyZ0->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChPyZ0->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChPyZ0->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChPyZ0->GetNbinsX(); ++bin) {
+	double nCh = hist_nChPyZ0->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChPyZ0->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChPyZ0->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChPyZ0->GetBinError(bin) / histNch;
+	KNOO_nChPyZ0->Fill(scaledNch, scaledContent);
+	KNOO_nChPyZ0->SetBinError(KNOO_nChPyZ0->FindBin(scaledNch), scaledError);
+	}
+
+	// Axes params
+	histNch = hist_nChExLZ->GetMean();
+	histMax = hist_nChExLZ->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nChExLZ->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nChExLZ->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChExLZ = new TH1D("KNOO_nChExLZ", " ", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChExLZ->SetStats(kFALSE);
+	KNOO_nChExLZ->SetLineColor(kBlack);
+	KNOO_nChExLZ->SetMarkerColor(kBlack);
+	KNOO_nChExLZ->SetMarkerStyle(kOpenCircle);
+	KNOO_nChExLZ->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChExLZ->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChExLZ->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChExLZ->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChExLZ->GetNbinsX(); ++bin) {
+	double nCh = hist_nChExLZ->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChExLZ->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChExLZ->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChExLZ->GetBinError(bin) / histNch;
+	KNOO_nChExLZ->Fill(scaledNch, scaledContent);
+	KNOO_nChExLZ->SetBinError(KNOO_nChExLZ->FindBin(scaledNch), scaledError);
+	}
+
+	// Axes params
+	histNch = hist_nChExOZ->GetMean();
+	histMax = hist_nChExOZ->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nChExOZ->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nChExOZ->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChExOZ = new TH1D("KNOO_nChExOZ", " ", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChExOZ->SetStats(kFALSE);
+	KNOO_nChExOZ->SetLineColor(kBlack);
+	KNOO_nChExOZ->SetMarkerColor(kBlack);
+	KNOO_nChExOZ->SetMarkerStyle(kOpenTriangleUp);
+	KNOO_nChExOZ->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChExOZ->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChExOZ->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChExOZ->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChExOZ->GetNbinsX(); ++bin) {
+	double nCh = hist_nChExOZ->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChExOZ->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChExOZ->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChExOZ->GetBinError(bin) / histNch;
+	KNOO_nChExOZ->Fill(scaledNch, scaledContent);
+	KNOO_nChExOZ->SetBinError(KNOO_nChExOZ->FindBin(scaledNch), scaledError);
+	}
+
+	// Axes params
+	histNch = hist_nChPy2W->GetMean();
+	histMax = hist_nChPy2W->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nChPy2W->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nChPy2W->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChPy2W = new TH1D("KNOO_nChPy2W", " ", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChPy2W->SetStats(kFALSE);
+	KNOO_nChPy2W->SetLineColor(kRed+1);
+	KNOO_nChPy2W->SetMarkerColor(kRed+1);
+	KNOO_nChPy2W->SetMarkerStyle(kOpenSquare);
+	KNOO_nChPy2W->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChPy2W->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChPy2W->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChPy2W->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChPy2W->GetNbinsX(); ++bin) {
+	double nCh = hist_nChPy2W->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChPy2W->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChPy2W->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChPy2W->GetBinError(bin) / histNch;
+	KNOO_nChPy2W->Fill(scaledNch, scaledContent);
+	KNOO_nChPy2W->SetBinError(KNOO_nChPy2W->FindBin(scaledNch), scaledError);
+	}
+
+	// Axes params
+	histNch = hist_nChExLW->GetMean();
+	histMax = hist_nChExLW->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nChExLW->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nChExLW->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChExLW = new TH1D("KNOO_nChExLW", " ", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChExLW->SetStats(kFALSE);
+	KNOO_nChExLW->SetLineColor(kRed+1);
+	KNOO_nChExLW->SetMarkerColor(kRed+1);
+	KNOO_nChExLW->SetMarkerStyle(kOpenCircle);
+	KNOO_nChExLW->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChExLW->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChExLW->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChExLW->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChExLW->GetNbinsX(); ++bin) {
+	double nCh = hist_nChExLW->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChExLW->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChExLW->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChExLW->GetBinError(bin) / histNch;
+	KNOO_nChExLW->Fill(scaledNch, scaledContent);
+	KNOO_nChExLW->SetBinError(KNOO_nChExLW->FindBin(scaledNch), scaledError);
+	}
+
+	// Axes params
+	histNch = hist_nChExOW->GetMean();
+	histMax = hist_nChExOW->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nChExOW->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nChExOW->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nChExOW = new TH1D("KNOO_nChExOW", " ", numBin, 0, histMax);
+	// Beautify
+	KNOO_nChExOW->SetStats(kFALSE);
+	KNOO_nChExOW->SetLineColor(kRed+1);
+	KNOO_nChExOW->SetMarkerColor(kRed+1);
+	KNOO_nChExOW->SetMarkerStyle(kOpenTriangleUp);
+	KNOO_nChExOW->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nChExOW->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nChExOW->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nChExOW->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nChExOW->GetNbinsX(); ++bin) {
+	double nCh = hist_nChExOW->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nChExOW->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nChExOW->GetBinContent(bin) * histNch;
+	double scaledError = hist_nChExOW->GetBinError(bin) / histNch;
+	KNOO_nChExOW->Fill(scaledNch, scaledContent);
+	KNOO_nChExOW->SetBinError(KNOO_nChExOW->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Charged Hadronic Multiplicity (Experimental vs Pythia)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // KNO scaling
-	// double histMax = hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean();
-	// double histBin = 0.025;
-	// int numBins = static_cast<int>( TMath::Ceil( hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean() ) );
-	// TH1D* KNO_hist_nChPyZ0("KNO_hist_nChPyZ0", " ", hist_nChPyZ0->GetNbinsX(), hist_nChPyZ0->GetXaxis()->GetXmin(), hist_nChPyZ0->GetXaxis()->GetXmax() / hist_nChPyZ0->GetMean());
-
-	// cout << hist_nChPyZ0->GetMean() << endl;
-	// cout << numBins << endl;
-	// cout << hist_nChPyZ0->GetNbinsX() << endl;
+	// Add legend
+	TLegend *legend = new TLegend(0.4, 0.2, 0.85, 0.4);
+	legend->AddEntry(hist_nChPyZ0, "Pythia 8.3 at Z0", "p");
+	legend->AddEntry(hist_nChExLZ, "LEP L3 at Z0", "p");
+	legend->AddEntry(hist_nChExOZ, "LEP OPAL at Z0", "p");
+	legend->AddEntry(hist_nChPy2W, "Pythia 8.3 at 2W", "p");
+	legend->AddEntry(hist_nChExLW, "LEP L3 at 2W", "p");
+	legend->AddEntry(hist_nChExOW, "LEP OPAL at 2W", "p");
+	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
+	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
+	// Draw legend
+	legend->Draw("same");
 
 	// Create canvas
 	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 	// Beautify
 	// c_nch->SetLogy();
-	c_nch->SetTickx();
-	c_nch->SetTicky();
-	c_nch->SetGridx();
-	c_nch->SetGridy();
+	// c_nch->SetTickx();
+	// c_nch->SetTicky();
+	// c_nch->SetGridx();
+	// c_nch->SetGridy();
 	// Draw
-	// c_nch->cd();
-	// hist_nChPyZ0->Draw("PS");
-	// hist_nChExLZ->Draw("same");
-	// hist_nChExOZ->Draw("same");
-	// hist_nChPy2W->Draw("same");
-	// hist_nChExLW->Draw("same");
-	// hist_nChExOW->Draw("same");
+	c_nch->Divide(2,1);
+	c_nch->cd(1);
+	// c_nch->cd(1)->SetLogy();
+	c_nch->cd(1)->SetTickx();
+	c_nch->cd(1)->SetTicky();
+	c_nch->cd(1)->SetGridx();
+	c_nch->cd(1)->SetGridy();
+	hist_nChPyZ0->Draw("PS");
+	hist_nChExLZ->Draw("same");
+	hist_nChExOZ->Draw("same");
+	hist_nChPy2W->Draw("same");
+	hist_nChExLW->Draw("same");
+	hist_nChExOW->Draw("same");
+	legend->Draw("same");
+	c_nch->cd(2);
+	// c_nch->cd(2)->SetLogy();
+	c_nch->cd(2)->SetTickx();
+	c_nch->cd(2)->SetTicky();
+	c_nch->cd(2)->SetGridx();
+	c_nch->cd(2)->SetGridy();
+	KNOO_nChPyZ0->Draw("PS");
+	KNOO_nChExLZ->Draw("same");
+	KNOO_nChExOZ->Draw("same");
+	KNOO_nChPy2W->Draw("same");
+	KNOO_nChExLW->Draw("same");
+	KNOO_nChExOW->Draw("same");
+	legend->Draw("same");
 
 	// // Fit Pythia data
 	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
@@ -493,19 +688,6 @@ void plt_LEP912()
 	// hist_nChExLZ->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
 	// // Draw fit
 	// fist_nChExpe->Draw("same");
-
-	// Add legend
-	TLegend *legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_nChPyZ0, "Pythia 8.3 at Z0", "p");
-	legend->AddEntry(hist_nChExLZ, "LEP L3 at Z0", "p");
-	legend->AddEntry(hist_nChExOZ, "LEP OPAL at Z0", "p");
-	legend->AddEntry(hist_nChPy2W, "Pythia 8.3 at 2W", "p");
-	legend->AddEntry(hist_nChExLW, "LEP L3 at 2W", "p");
-	legend->AddEntry(hist_nChExOW, "LEP OPAL at 2W", "p");
-	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
-	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
-	// Draw legend
-	legend->Draw("same");
 
 	// Modify stat-box
 	gStyle->SetOptStat();
