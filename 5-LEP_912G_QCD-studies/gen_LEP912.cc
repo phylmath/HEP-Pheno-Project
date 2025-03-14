@@ -214,8 +214,30 @@ int main(){
 				particle.set_user_index(parPdg);						// Store particle pdg
 				particles.push_back(particle);							// Add particle to event
 
+				////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
+				double R = 0.4;															// Jet radius
+				double ptmin = 5.0;														// Lower pT
+				JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
+				ClusterSequence cs(particles, jet_def);									// Run clustering
+				vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
+				nJc = jets.size();														// Jet multiplicity
+				
+				// Run through jets
+				for (int i = 0; i < jets.size(); i++) {
+				// Store jet fraction
+				nJf = jets[i].constituents().size();
+				// Count jet particles
+				int n_constituents = jets[i].constituents().size();
+				// Define constituents vector
+				vector<PseudoJet> constituents = jets[i].constituents();
+				// Study jet constituents
+				for (int j = 0; j < constituents.size(); j++) {
+					// Define constituent vector
+					PseudoJet constituent = jets[i].constituents()[j];
+					}
+				}
 			}
-
+			
 			////////////////////////// COMPUTING PARTONIC NCHs //////////////////////////
 			// Parton check
 			if(pythia.event[j].isFinal()==false) {
@@ -228,32 +250,8 @@ int main(){
 					nCp++; nCg++;	// Update counter
 				}
 			}
-
-		////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
-		double R = 0.4;															// Jet radius
-		double ptmin = 5.0;														// Lower pT
-		JetDefinition jet_def(antikt_algorithm, R);								// Create jet definition
-		ClusterSequence cs(particles, jet_def);									// Run clustering
-		vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
-		nJc = jets.size();														// Jet multiplicity
-		
-		// Run through jets
-		for (int i = 0; i < jets.size(); i++) {
-			// Store jet fraction
-			nJf = jets[i].constituents().size();
-			// Count jet particles
-			int n_constituents = jets[i].constituents().size();
-			// Define constituents vector
-			vector<PseudoJet> constituents = jets[i].constituents();
-			// Study jet constituents
-			for (int j = 0; j < constituents.size(); j++) {
-				// Define constituent vector
-				PseudoJet constituent = jets[i].constituents()[j];
-				}
-			}
-		
 		}
-
+		
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
 		// Populate histogram
 		if (sph.analyze( pythia.event )) {

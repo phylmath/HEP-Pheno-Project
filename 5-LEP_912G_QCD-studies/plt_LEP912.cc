@@ -456,7 +456,7 @@ void plt_LEP912()
 	double binContent = hist_nChPyZ0->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChPyZ0->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChPyZ0->GetBinError(bin) / histNch;
+	double scaledError = hist_nChPyZ0->GetBinError(bin) * histNch;
 	KNOO_nChPyZ0->Fill(scaledNch, scaledContent);
 	KNOO_nChPyZ0->SetBinError(KNOO_nChPyZ0->FindBin(scaledNch), scaledError);
 	}
@@ -484,7 +484,7 @@ void plt_LEP912()
 	double binContent = hist_nChExLZ->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChExLZ->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChExLZ->GetBinError(bin) / histNch;
+	double scaledError = hist_nChExLZ->GetBinError(bin) * histNch;
 	KNOO_nChExLZ->Fill(scaledNch, scaledContent);
 	KNOO_nChExLZ->SetBinError(KNOO_nChExLZ->FindBin(scaledNch), scaledError);
 	}
@@ -512,7 +512,7 @@ void plt_LEP912()
 	double binContent = hist_nChExOZ->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChExOZ->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChExOZ->GetBinError(bin) / histNch;
+	double scaledError = hist_nChExOZ->GetBinError(bin) * histNch;
 	KNOO_nChExOZ->Fill(scaledNch, scaledContent);
 	KNOO_nChExOZ->SetBinError(KNOO_nChExOZ->FindBin(scaledNch), scaledError);
 	}
@@ -540,7 +540,7 @@ void plt_LEP912()
 	double binContent = hist_nChPy2W->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChPy2W->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChPy2W->GetBinError(bin) / histNch;
+	double scaledError = hist_nChPy2W->GetBinError(bin) * histNch;
 	KNOO_nChPy2W->Fill(scaledNch, scaledContent);
 	KNOO_nChPy2W->SetBinError(KNOO_nChPy2W->FindBin(scaledNch), scaledError);
 	}
@@ -568,7 +568,7 @@ void plt_LEP912()
 	double binContent = hist_nChExLW->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChExLW->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChExLW->GetBinError(bin) / histNch;
+	double scaledError = hist_nChExLW->GetBinError(bin) * histNch;
 	KNOO_nChExLW->Fill(scaledNch, scaledContent);
 	KNOO_nChExLW->SetBinError(KNOO_nChExLW->FindBin(scaledNch), scaledError);
 	}
@@ -596,7 +596,7 @@ void plt_LEP912()
 	double binContent = hist_nChExOW->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
 	double scaledContent = hist_nChExOW->GetBinContent(bin) * histNch;
-	double scaledError = hist_nChExOW->GetBinError(bin) / histNch;
+	double scaledError = hist_nChExOW->GetBinError(bin) * histNch;
 	KNOO_nChExOW->Fill(scaledNch, scaledContent);
 	KNOO_nChExOW->SetBinError(KNOO_nChExOW->FindBin(scaledNch), scaledError);
 	}
@@ -615,8 +615,6 @@ void plt_LEP912()
 	legend->AddEntry(hist_nChExOW, "LEP OPAL at 2W", "p");
 	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
 	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
-	// Draw legend
-	legend->Draw("same");
 
 	// Create canvas
 	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
@@ -629,7 +627,7 @@ void plt_LEP912()
 	// Draw
 	c_nch->Divide(2,1);
 	c_nch->cd(1);
-	// c_nch->cd(1)->SetLogy();
+	c_nch->cd(1)->SetLogy();
 	c_nch->cd(1)->SetTickx();
 	c_nch->cd(1)->SetTicky();
 	c_nch->cd(1)->SetGridx();
@@ -642,7 +640,7 @@ void plt_LEP912()
 	hist_nChExOW->Draw("same");
 	legend->Draw("same");
 	c_nch->cd(2);
-	// c_nch->cd(2)->SetLogy();
+	c_nch->cd(2)->SetLogy();
 	c_nch->cd(2)->SetTickx();
 	c_nch->cd(2)->SetTicky();
 	c_nch->cd(2)->SetGridx();
