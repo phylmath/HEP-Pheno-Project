@@ -120,6 +120,25 @@ int main(){
 	TH1D *hist_thrAxis = new TH1D("hist_thrAxis", "Thrust axis distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
+	TH1D *hist_nChLund = new TH1D("hist_nChLund", "Lund Jet multiplicity", 40, -0.5, 39.5);
+	tree->Branch("hist_nChLund", &hist_nChLund, "hist_nChLund");
+
+	TH1D *hist_nChJade = new TH1D("hist_nChJade", "Jade jet multiplicity", 40, -0.5, 39.5);
+	tree->Branch("hist_nChJade", &hist_nChJade, "hist_nChJade");
+
+	TH1D *hist_nChDurh = new TH1D("hist_nChDurh", "Durham jet multiplicity", 40, -0.5, 39.5);
+	tree->Branch("hist_nChDurh", &hist_nChDurh, "hist_nChDurh");
+
+	TH1D *hist_difLund = new TH1D("hist_difLund", "Lund e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difLund", &hist_difLund, "hist_difLund");
+
+	TH1D *hist_difJade = new TH1D("hist_difJade", "Jade e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difJade", &hist_difJade, "hist_difJade");
+
+	TH1D *hist_difDurh = new TH1D("hist_difDurh", "Durham e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difDurh", &hist_difDurh, "hist_difDurh");
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,19 +147,20 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e4;
+	int nEvent = 1e5;
 
-	// Define physics
-	// pythia.readString("HardQCD:all = on"); 					// All hard QCD processes
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->gamma*/Z/W->ff
+	// Electroweak processes
+	pythia.readString("WeakZ0:gmZmode = 0");					// ee->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee->γ*γ*Z0Z0
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee->γ*γ*Z0Z0
+
+	// Single 
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->γ*/Z/W->ff
 	pythia.readString("23:onMode = off");						// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5");				// turn on Z iff (duscb)
 
-	// Set phase space cut
-	// pythia.readString("PhaseSpace:pTHatMin = 20.");
 
 	// Define Beam params
-	// pythia.readString("Beams:frameType = 1"); 				// Symmetrical beams
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
 	pythia.readString("Beams:idB = -11"); 						// Beam B energy
 	double mZ = pythia.particleData.m0(23);						// Store Z0 mass
@@ -166,6 +186,9 @@ int main(){
 	Sphericity sph;
 	Sphericity lin(1.);
 	Thrust thr;
+	ClusterJet lund("Lund");
+	ClusterJet jade("Jade");
+	ClusterJet durham("Durham");
 
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
@@ -273,6 +296,25 @@ int main(){
 			hist_ThMinor->Fill( thr.tMinor() );					// Tminor
 			hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
 			}
+
+		// Populate histogram
+		if (lund.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChLund->Fill( lund.size() );
+			for (int k = 0; k < lund.size() - 1; ++k)
+			hist_difLund->Fill( lund.p(k).e() - lund.p(k+1).e() );
+		}
+
+		if (jade.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChJade->Fill( jade.size() );
+			for (int k = 0; k < jade.size() - 1; ++k)
+			hist_difJade->Fill( jade.p(k).e() - jade.p(k+1).e() );
+		}
+		
+		if (durham.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChDurh->Fill( durham.size() );
+			for (int k = 0; k < durham.size() - 1; ++k)
+			hist_difDurh->Fill( durham.p(k).e() - durham.p(k+1).e() );
+		}
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );

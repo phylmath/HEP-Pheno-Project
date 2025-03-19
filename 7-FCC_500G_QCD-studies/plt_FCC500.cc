@@ -24,9 +24,6 @@
 #include "TList.h"
 // Header
 using namespace std;
-// Extras
-// void Beautify(TH1F inhist);
-
 
 // Code
 void plt_FCC500()

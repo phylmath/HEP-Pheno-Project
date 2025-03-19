@@ -120,6 +120,15 @@ int main(){
 	TH1D *hist_thrAxis = new TH1D("hist_thrAxis", "Thrust axis distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 100, -1., 1.);
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
+	TH1D *hist_difLund = new TH1D("hist_difLund", "Lund e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difLund", &hist_difLund, "hist_difLund");
+
+	TH1D *hist_difJade = new TH1D("hist_difJade", "Jade e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difJade", &hist_difJade, "hist_difJade");
+
+	TH1D *hist_difDurh = new TH1D("hist_difDurh", "Durham e_i - e_{i+1}", 100, -5.,45.);
+	tree->Branch("hist_difDurh", &hist_difDurh, "hist_difDurh");
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,6 +282,25 @@ int main(){
 			hist_ThMinor->Fill( thr.tMinor() );					// Tminor
 			hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
 			}
+
+		// Populate histogram
+		if (lund.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChLund->Fill( lund.size() );
+			for (int k = 0; k < lund.size() - 1; ++k)
+			hist_difLund->Fill( lund.p(k).e() - lund.p(k+1).e() );
+		}
+
+		if (jade.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChJade->Fill( jade.size() );
+			for (int k = 0; k < jade.size() - 1; ++k)
+			hist_difJade->Fill( jade.p(k).e() - jade.p(k+1).e() );
+		}
+		
+		if (durham.analyze( pythia.event, 0.01, 0.)) {
+			hist_nChDurh->Fill( durham.size() );
+			for (int k = 0; k < durham.size() - 1; ++k)
+			hist_difDurh->Fill( durham.p(k).e() - durham.p(k+1).e() );
+		}
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
 		hist_nChPyth->Fill( nCh );
