@@ -138,7 +138,6 @@ int main(){
 	TH1D *hist_difDurh = new TH1D("hist_difDurh", "Durham e_i - e_{i+1}", 100, -5.,45.);
 	tree->Branch("hist_difDurh", &hist_difDurh, "hist_difDurh");
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,16 +148,35 @@ int main(){
 	// Set # of events
 	int nEvent = 1e5;
 
-	// Electroweak processes
-	pythia.readString("WeakZ0:gmZmode = 0");					// ee->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee->γ*γ*Z0Z0
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee->γ*γ*Z0Z0
+	// QCD processes
+	pythia.readString("HardQCD:all = off");						// hadronisation
 
-	// Single 
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->γ*/Z/W->ff
+	// Electroweak processes
+	pythia.readString("WeakZ0:gmZmode = 0");
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
+	// pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
+
+	// Boson hadronic decays
 	pythia.readString("23:onMode = off");						// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5");				// turn on Z iff (duscb)
+	pythia.readString("24:onMode = off");						// turn off W production
+	pythia.readString("24:onIfAny = 1 2 3 4 5 15");				// turn on W iff (duscb and τν)
 
+	// Photon processes
+	pythia.readString("PhotonCollision:all = off");
+	pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
+	pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
+	pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
+	pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
+	pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
+	pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
+
+	// ISR processes
+	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
+	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
 
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
