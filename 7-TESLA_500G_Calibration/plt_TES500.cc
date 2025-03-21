@@ -26,7 +26,7 @@
 using namespace std;
 
 // Code
-void plt_FCC500()
+void plt_TES500()
 {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,9 +34,9 @@ void plt_FCC500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile* input_FCC500 = new TFile("out_FCC500.root", "READ");
+	TFile* input_TES500 = new TFile("out_TES500.root", "READ");
 	// Read TTree
-	TTree* tree = (TTree*)input_FCC500->Get("tree");
+	TTree* tree = (TTree*)input_TES500->Get("tree");
 
 	// Buffers
 	double Nch; 
@@ -75,7 +75,7 @@ void plt_FCC500()
 	infile_10.close();
 
 	// Read Histogram
-	TH1F *hist_ThrustP = (TH1F*)input_FCC500->Get("hist_ThrustP");
+	TH1F *hist_ThrustP = (TH1F*)input_TES500->Get("hist_ThrustP");
 	// Beautify
 	// hist_ThrustP->SetStats(kFALSE);
 	hist_ThrustP->SetLineColor(kBlue+1);

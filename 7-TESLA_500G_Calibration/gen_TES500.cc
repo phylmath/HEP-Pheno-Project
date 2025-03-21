@@ -41,7 +41,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("out_FCC500.root", "recreate");
+  	TFile *output = new TFile("out_TES500.root", "recreate");
 	// Anti-crash
 	if (!output->IsOpen()) {
 		cerr << "Error opening output file!" << endl;
@@ -72,52 +72,52 @@ int main(){
 // Define Histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1D *hist_nChPyth = new TH1D("hist_nChPyth", "Charged Hadron Multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 50, 0, 100);
+	TH1D *hist_nChPyth = new TH1D("hist_nChPyth", "Charged Hadron Multiplicity distributions", 50, 0, 100);
 	tree->Branch("hist_nChPyth", &hist_nChPyth, "hist_nChPyth");
 
-	TH1D *hist_nJetsCh = new TH1D("hist_nJetsCh", "Hadronic Jet Multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0, 5);
+	TH1D *hist_nJetsCh = new TH1D("hist_nJetsCh", "Hadronic Jet Multiplicity distributions", 100, 0, 5);
 	tree->Branch("hist_nJetsCh", &hist_nJetsCh, "hist_nJetsCh");
 
-	TH1D *hist_nJetsFr = new TH1D("hist_nJetsFr", "Hadronic Jet Constituent multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 30, 0, 30);
+	TH1D *hist_nJetsFr = new TH1D("hist_nJetsFr", "Hadronic Jet Constituent multiplicity distributions", 30, 0, 30);
 	tree->Branch("hist_nJetsFr", &hist_nJetsFr, "hist_nJetsFr");
 
-	TH1D *hist_nParton = new TH1D("hist_nParton", "Intermediate Parton Multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 25, 0, 100);
+	TH1D *hist_nParton = new TH1D("hist_nParton", "Intermediate Parton Multiplicity distributions", 25, 0, 100);
 	tree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
 
-	TH1D *hist_nPQuark = new TH1D("hist_nPQuark", "Intermediate Quark Multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0, 100);
+	TH1D *hist_nPQuark = new TH1D("hist_nPQuark", "Intermediate Quark Multiplicity distributions", 100, 0, 100);
 	tree->Branch("hist_nPQuark", &hist_nPQuark, "hist_nPQuark");
 
-	TH1D *hist_nPGluon = new TH1D("hist_nPGluon", "Intermediate Gluon Multiplicity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 25, 0, 100);
+	TH1D *hist_nPGluon = new TH1D("hist_nPGluon", "Intermediate Gluon Multiplicity distributions", 25, 0, 100);
 	tree->Branch("hist_nPGluon", &hist_nPGluon, "hist_nPGluon");
 
-	TH1D *hist_Spheric = new TH1D("hist_Spheric", "Sphericity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_Spheric = new TH1D("hist_Spheric", "Sphericity distributions", 100, 0., 1.);
 	tree->Branch("hist_Spheric", &hist_Spheric, "hist_Spheric");
 
-	TH1D *hist_Aplanar = new TH1D("hist_Aplanar", "Aplanarity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_Aplanar = new TH1D("hist_Aplanar", "Aplanarity distributions", 100, 0., 1.);
 	tree->Branch("hist_Aplanar", &hist_Aplanar, "hist_Aplanar");
 
-	TH1D *hist_Lineric = new TH1D("hist_Lineric", "Linearised Sphericity distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_Lineric = new TH1D("hist_Lineric", "Linearised Sphericity distributions", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions [ FCC E^{+} E^{-} at 500 GeV ]", 17, 0.575, 1.);
+	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", 17, 0.575, 1.);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
-	TH1D *hist_ThMajor = new TH1D("hist_ThMajor", "Thrust Major distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_ThMajor = new TH1D("hist_ThMajor", "Thrust Major distributions", 100, 0., 1.);
 	tree->Branch("hist_ThMajor", &hist_ThMajor, "hist_ThMajor");
 
-	TH1D *hist_ThMinor = new TH1D("hist_ThMinor", "Thrust Major distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_ThMinor = new TH1D("hist_ThMinor", "Thrust Major distributions", 100, 0., 1.);
 	tree->Branch("hist_ThMinor", &hist_ThMinor, "hist_ThMinor");
 
-	TH1D *hist_Oblatey = new TH1D("hist_Oblatey", "Oblateness distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, 0., 1.);
+	TH1D *hist_Oblatey = new TH1D("hist_Oblatey", "Oblateness distributions", 100, 0., 1.);
 	tree->Branch("hist_Oblatey", &hist_Oblatey, "hist_Oblatey");
 
-	TH1D *hist_sphAxis = new TH1D("hist_sphAxis", "Sphericity axis distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, -1., 1.);
+	TH1D *hist_sphAxis = new TH1D("hist_sphAxis", "Sphericity axis distributions", 100, -1., 1.);
 	tree->Branch("hist_sphAxis", &hist_sphAxis, "hist_sphAxis");
 
-	TH1D *hist_linAxis = new TH1D("hist_linAxis", "Linearity axis distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, -1., 1.);
+	TH1D *hist_linAxis = new TH1D("hist_linAxis", "Linearity axis distributions", 100, -1., 1.);
 	tree->Branch("hist_linAxis", &hist_linAxis, "hist_linAxis");
 
-	TH1D *hist_thrAxis = new TH1D("hist_thrAxis", "Thrust axis distributions [ FCC E^{+} E^{-} at 500 GeV ]", 100, -1., 1.);
+	TH1D *hist_thrAxis = new TH1D("hist_thrAxis", "Thrust axis distributions", 100, -1., 1.);
 	tree->Branch("hist_thrAxis", &hist_thrAxis, "hist_thrAxis");
 
 	TH1D *hist_nChLund = new TH1D("hist_nChLund", "Lund Jet multiplicity", 40, -0.5, 39.5);
