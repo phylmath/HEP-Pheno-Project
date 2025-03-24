@@ -424,30 +424,40 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Add legend
-	TLegend *lg_thr = new TLegend(0.4, 0.2, 0.85, 0.4);
-	// lg_thr->AddEntry(hist_Thr_LEP_Z0, "Pyth | 91.2 GeV (LEP)", "p");
-	lg_thr->AddEntry(hist_Thr_TES500, "Pyth | 500. GeV (TESLA)", "p");
-	lg_thr->AddEntry(hist_Thr_TES50t, "Pyth | 500. GeV (TESLA+top)", "p");
-	lg_thr->AddEntry(hist_Thr_Exp500, "1999 | 500. GeV (TESLA)", "p");
-	lg_thr->AddEntry(hist_Thr_Exp50t, "1999 | 500. GeV (TESLA+top)", "p");
-	lg_thr->SetTextSize(0.03);
+	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
+	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3 500 GeV", "p");
+	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Paper 500 GeV", "p");
+	lg_thr1->SetTextSize(0.03);
+
+	// Add legend
+	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
+	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3 500 GeV (top)", "p");
+	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Paper 500 GeV (top)", "p");
+	lg_thr2->SetTextSize(0.03);
 
 	// Create canvas
 	TCanvas* c_thr = new TCanvas("c_thr", "Charged hadron multiplicity distributions", 800, 600);
 
 	// Beautify
-	c_thr->SetLeftMargin(0.15);
-	c_thr->SetLogy();
-	c_thr->SetTickx(); c_thr->SetTicky();
-	c_thr->SetGridx(); c_thr->SetGridy();
+	c_thr->Divide(2,1);
+	c_thr->cd(1)->SetLeftMargin(0.15);
+	// c_thr->cd(1)->SetLogy();
+	c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
+	c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
+	c_thr->cd(2)->SetLeftMargin(0.15);
+	// c_thr->cd(2)->SetLogy();
+	c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
+	c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
 	
 	// Draw
-	hist_Thr_Exp500->Draw("p");
+	c_thr->cd(1);
+	hist_Thr_TES500->Draw("p");
+	hist_Thr_Exp500->Draw("psame");
+	lg_thr1->Draw("same");
+	c_thr->cd(2);
+	hist_Thr_TES50t->Draw("p");
 	hist_Thr_Exp50t->Draw("psame");
-	hist_Thr_TES500->Draw("psame");
-	hist_Thr_TES50t->Draw("psame");
-	// hist_Thr_LEP_Z0->Draw("psame");
-	lg_thr->Draw("same");
+	lg_thr2->Draw("same");
 
 	// Modify stat-box
 	gStyle->SetOptStat();

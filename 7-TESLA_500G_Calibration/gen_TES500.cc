@@ -41,7 +41,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("out_TES500.root", "recreate");
+  	TFile *output = new TFile("out_TES_500.root", "recreate");
 	// Anti-crash
 	if (!output->IsOpen()) {
 		cerr << "Error opening output file!" << endl;
@@ -99,7 +99,8 @@ int main(){
 	TH1D *hist_Lineric = new TH1D("hist_Lineric", "Linearised Sphericity distributions", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", 50, 0, 0.4);
+	float xbin[] = {0.00E+00,1.00E-02,2.00E-02,3.00E-02,4.00E-02,5.00E-02,7.00E-02,9.00E-02,1.20E-01,1.50E-01,2.20E-01,3.00E-01};
+	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
 	TH1D *hist_ThMajor = new TH1D("hist_ThMajor", "Thrust Major distributions", 100, 0., 1.);
@@ -152,47 +153,43 @@ int main(){
 	double mZ = pythia.particleData.m0(23);						// Z0 mass
 	double mW = pythia.particleData.m0(24);						// W+ mass
 
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->gamma*/Z/W->ff
+	// QCD processes
+	pythia.readString("HardQCD:all = off");						// QCD master switch
+
+	// Electroweak processes
+	pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
+	// pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
+
+	// Boson hadronic decays
 	pythia.readString("23:onMode = off");						// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5");				// turn on Z iff (duscb)
+	pythia.readString("24:onMode = off");						// turn off W production
+	pythia.readString("24:onIfAny = 1 2 3 4 5 15");				// turn on W iff (duscb and τν)
 
-	// // QCD processes
-	// pythia.readString("HardQCD:all = off");						// QCD master switch
+	// Top processes
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = off");			// ee'->tt'
 
-	// // Electroweak processes
-	// pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
-	// pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
-	// // pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
-	// pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
-	// pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
-	// pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
+	// Photon processes
+	pythia.readString("PhotonCollision:all = off");
+	pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
+	pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
+	pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
+	pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
+	pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
+	pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
 
-	// // Boson hadronic decays
-	// pythia.readString("23:onMode = off");						// turn off Z production
-	// pythia.readString("23:onIfAny = 1 2 3 4 5 6");				// turn on Z iff (duscb)
-	// pythia.readString("24:onMode = off");						// turn off W production
-	// pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");			// turn on W iff (duscb and τν)
-
-	// // Top processes
-	// pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");			// ee'->tt'
-
-	// // Photon processes
-	// pythia.readString("PhotonCollision:all = off");
-	// pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
-	// pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
-	// pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
-	// pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
-	// pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
-	// pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
-
-	// // ISR processes
-	// pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
-	// pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
+	// ISR processes
+	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
+	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
 
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
 	pythia.readString("Beams:idB = -11"); 						// Beam B energy
-	pythia.settings.parm("Beams:eCM", mZ);						// Set centre-of-mass
+	pythia.settings.parm("Beams:eCM", 500);						// Set centre-of-mass
 	pythia.readString("PDF:lepton = off");						// Disable substructure
 
 	// Suppress event listing
