@@ -34,9 +34,16 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile* input_TES500 = new TFile("out_TES500.root", "READ");
+	TFile* inputfile_LEP_Z0 = new TFile("out_LEP_912.root", "READ");
+	TFile* inputfile_TESLEP = new TFile("out_TES_LEP.root", "READ");
+	TFile* inputfile_TES500 = new TFile("out_TES_500.root", "READ");
+	TFile* inputfile_TES50t = new TFile("out_TES_50t.root", "READ");
+	
 	// Read TTree
-	TTree* tree = (TTree*)input_TES500->Get("tree");
+	TTree* trees_LEP_Z0 = (TTree*)inputfile_LEP_Z0->Get("tree");
+	TTree* trees_TESLEP = (TTree*)inputfile_TESLEP->Get("tree");
+	TTree* trees_TES500 = (TTree*)inputfile_TES500->Get("tree");
+	TTree* trees_TES50t = (TTree*)inputfile_TES50t->Get("tree");
 
 	// Buffers
 	double Nch; 
@@ -45,240 +52,405 @@ void plt_TES500()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Read Histogram
-	// TH1F *hist_ThrustE = (TH1F*)input_thrust->Get("Table 47/Hist1D_y1");
-	TH1F *hist_ThrustE = new TH1F("hist_ThrustE", "Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 17, 0.575, 1.);
+	// Read Histogram
+	TH1F *hist_nCh_LEP_Z0 = (TH1F*)inputfile_LEP_Z0->Get("hist_nChPyth");
 	// Beautify
-	// hist_ThrustE->SetStats(kFALSE);
-	hist_ThrustE->SetName("Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
-	hist_ThrustE->SetName("hist_ThrustE");
-	hist_ThrustE->SetLineColor(kRed+1);
-	hist_ThrustE->SetMarkerColor(kRed+1);
-	hist_ThrustE->SetMarkerStyle(48);
-	hist_ThrustE->SetMarkerSize(1.5);
-	hist_ThrustE->GetXaxis()->SetTitle("Thrust");
-	hist_ThrustE->GetYaxis()->SetTitle("Probability");
-	hist_ThrustE->GetXaxis()->SetNdivisions(515, kTRUE);
-	hist_ThrustE->GetYaxis()->SetNdivisions(515, kTRUE);
+	hist_nCh_LEP_Z0->SetStats(kFALSE);
+	hist_nCh_LEP_Z0->SetTitle("Charged Hadron Multiplicity e^{+}e^{-}");
+	hist_nCh_LEP_Z0->SetName("hist_nCh_LEP_Z0");
+	hist_nCh_LEP_Z0->SetLineColor(kBlack);
+	hist_nCh_LEP_Z0->SetMarkerColor(kBlack);
+	hist_nCh_LEP_Z0->SetMarkerStyle(kOpenCircle);
+	hist_nCh_LEP_Z0->GetXaxis()->SetTitle("N_{CH}");
+	hist_nCh_LEP_Z0->GetYaxis()->SetTitle("P(N_{CH})");
+	hist_nCh_LEP_Z0->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nCh_LEP_Z0->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_nCh_TESLEP = (TH1F*)inputfile_TESLEP->Get("hist_nChPyth");
+	// Beautify
+	hist_nCh_TESLEP->SetStats(kFALSE);
+	hist_nCh_TESLEP->SetTitle("Charged Hadron Multiplicity e^{+}e^{-}");
+	hist_nCh_TESLEP->SetName("hist_nCh_TESLEP");
+	hist_nCh_TESLEP->SetLineColor(kBlack);
+	hist_nCh_TESLEP->SetMarkerColor(kBlack);
+	hist_nCh_TESLEP->SetMarkerStyle(kOpenTriangleUp);
+	hist_nCh_TESLEP->GetXaxis()->SetTitle("N_{CH}");
+	hist_nCh_TESLEP->GetYaxis()->SetTitle("P(N_{CH})");
+	hist_nCh_TESLEP->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nCh_TESLEP->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_nCh_TES500 = (TH1F*)inputfile_TES500->Get("hist_nChPyth");
+	// Beautify
+	hist_nCh_TES500->SetStats(kFALSE);
+	hist_nCh_TES500->SetTitle("Charged Hadron Multiplicity e^{+}e^{-}");
+	hist_nCh_TES500->SetName("hist_nCh_TES500");
+	hist_nCh_TES500->SetLineColor(kRed+1);
+	hist_nCh_TES500->SetMarkerColor(kRed+1);
+	hist_nCh_TES500->SetMarkerStyle(kOpenTriangleUp);
+	hist_nCh_TES500->GetXaxis()->SetTitle("N_{CH}");
+	hist_nCh_TES500->GetYaxis()->SetTitle("P(N_{CH})");
+	hist_nCh_TES500->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nCh_TES500->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_nCh_TES50t = (TH1F*)inputfile_TES50t->Get("hist_nChPyth");
+	// Beautify
+	hist_nCh_TES50t->SetStats(kFALSE);
+	hist_nCh_TES50t->SetTitle("Charged Hadron Multiplicity e^{+}e^{-}");
+	hist_nCh_TES50t->SetName("hist_nCh_TES50t");
+	hist_nCh_TES50t->SetLineColor(kGreen+1);
+	hist_nCh_TES50t->SetMarkerColor(kGreen+1);
+	hist_nCh_TES50t->SetMarkerStyle(kOpenTriangleUp);
+	hist_nCh_TES50t->GetXaxis()->SetTitle("N_{CH}");
+	hist_nCh_TES50t->GetYaxis()->SetTitle("P(N_{CH})");
+	hist_nCh_TES50t->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_nCh_TES50t->GetYaxis()->SetNdivisions(510, kTRUE);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Read Histogram
+	TH1F *hist_Thr_LEP_Z0 = (TH1F*)inputfile_LEP_Z0->Get("hist_ThrustP");
+	// Beautify
+	hist_Thr_LEP_Z0->SetStats(kFALSE);
+	hist_Thr_LEP_Z0->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_LEP_Z0->SetName("hist_Thr_LEP_Z0");
+	hist_Thr_LEP_Z0->SetLineColor(kBlack);
+	hist_Thr_LEP_Z0->SetMarkerColor(kBlack);
+	hist_Thr_LEP_Z0->SetMarkerStyle(kOpenCircle);
+	hist_Thr_LEP_Z0->GetXaxis()->SetTitle("1-T");
+	hist_Thr_LEP_Z0->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_LEP_Z0->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_LEP_Z0->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_Thr_TESLEP = (TH1F*)inputfile_TESLEP->Get("hist_ThrustP");
+	// Beautify
+	hist_Thr_TESLEP->SetStats(kFALSE);
+	hist_Thr_TESLEP->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_TESLEP->SetName("hist_Thr_TESLEP");
+	hist_Thr_TESLEP->SetLineColor(kBlack);
+	hist_Thr_TESLEP->SetMarkerColor(kBlack);
+	hist_Thr_TESLEP->SetMarkerStyle(kOpenCircle);
+	hist_Thr_TESLEP->GetXaxis()->SetTitle("1-T");
+	hist_Thr_TESLEP->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_TESLEP->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_TESLEP->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// Read Histogram
+	TH1F *hist_Thr_TES500 = (TH1F*)inputfile_TES500->Get("hist_ThrustP");
+	// Beautify
+	hist_Thr_TES500->SetStats(kFALSE);
+	hist_Thr_TES500->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_TES500->SetName("hist_Thr_TES500");
+	hist_Thr_TES500->SetLineColor(kBlack);
+	hist_Thr_TES500->SetMarkerColor(kBlack);
+	hist_Thr_TES500->SetMarkerStyle(kOpenSquare);
+	hist_Thr_TES500->GetXaxis()->SetTitle("1-T");
+	hist_Thr_TES500->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_TES500->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_TES500->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// // Read Histogram
+	TH1F *hist_Thr_Exp500 = new TH1F("hist_Thr_Exp500", "Differential Thrust e^{+}e^{-}", 500, 0, 0.4);
+	// Beautify
+	hist_Thr_Exp500->SetStats(kFALSE);
+	hist_Thr_Exp500->SetName("Differential Thrust e^{+}e^{-}");
+	hist_Thr_Exp500->SetName("hist_Thr_Exp500");
+	hist_Thr_Exp500->SetLineColor(kRed+2);
+	hist_Thr_Exp500->SetMarkerColor(kRed+2);
+	hist_Thr_Exp500->SetMarkerStyle(kOpenSquare);
+	hist_Thr_Exp500->GetXaxis()->SetTitle("1-T");
+	hist_Thr_Exp500->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_Exp500->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_Exp500->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
-	ifstream infile_10("EXP_LEP_912_L3_THR_udsc.txt");
+	ifstream infile_10("EXP_TES_500_THR_wot.txt");
 	// Read through TXT
 	while ( !infile_10.eof() ) {
 		// Set reading order
 		infile_10 >> Nch >> Prb >> Err_Nch >> Err_Prb;
 		// Populate histogram
-		hist_ThrustE->SetBinContent(hist_ThrustE->FindBin(Nch), Prb);
+		hist_Thr_Exp500->SetBinContent(hist_Thr_Exp500->FindBin(Nch), Prb);
 		// Populate error bar
-		hist_ThrustE->SetBinError(hist_ThrustE->FindBin(Nch), Err_Prb);
+		hist_Thr_Exp500->SetBinError(hist_Thr_Exp500->FindBin(Nch), Err_Prb);
 	}
 	// Close file
-	infile_10.close();
+	infile_10.close();	
 
 	// Read Histogram
-	TH1F *hist_ThrustP = (TH1F*)input_TES500->Get("hist_ThrustP");
+	TH1F *hist_Thr_TES50t = (TH1F*)inputfile_TES50t->Get("hist_ThrustP");
 	// Beautify
-	// hist_ThrustP->SetStats(kFALSE);
-	hist_ThrustP->SetLineColor(kBlue+1);
-	hist_ThrustP->SetMarkerColor(kBlue+1);
-	hist_ThrustP->SetMarkerStyle(29);
-	hist_ThrustP->SetMarkerSize(1.5);
-	hist_ThrustP->GetXaxis()->SetTitle("Thrust");
-	hist_ThrustP->GetYaxis()->SetTitle("Probability");
-	hist_ThrustP->GetXaxis()->SetNdivisions(515, kTRUE);
-	hist_ThrustP->GetYaxis()->SetNdivisions(515, kTRUE);
+	hist_Thr_TES50t->SetStats(kFALSE);
+	hist_Thr_TES50t->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_TES50t->SetName("hist_Thr_TES50t");
+	hist_Thr_TES50t->SetLineColor(kBlack);
+	hist_Thr_TES50t->SetMarkerColor(kBlack);
+	hist_Thr_TES50t->SetMarkerStyle(kOpenTriangleUp);
+	hist_Thr_TES50t->GetXaxis()->SetTitle("1-T");
+	hist_Thr_TES50t->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_TES50t->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_TES50t->GetYaxis()->SetNdivisions(510, kTRUE);
+
+	// // Read Histogram
+	TH1F *hist_Thr_Exp50t = new TH1F("hist_Thr_Exp50t", "Differential Thrust e^{+}e^{-}", 500, 0, 0.4);
+	// Beautify
+	hist_Thr_Exp50t->SetStats(kFALSE);
+	hist_Thr_Exp50t->SetName("Differential Thrust e^{+}e^{-}");
+	hist_Thr_Exp50t->SetName("hist_Thr_Exp50t");
+	hist_Thr_Exp50t->SetLineColor(kRed+2);
+	hist_Thr_Exp50t->SetMarkerColor(kRed+2);
+	hist_Thr_Exp50t->SetMarkerStyle(kOpenTriangleUp);
+	hist_Thr_Exp50t->GetXaxis()->SetTitle("1-T");
+	hist_Thr_Exp50t->GetYaxis()->SetTitle("P(1-T)");
+	hist_Thr_Exp50t->GetXaxis()->SetNdivisions(510, kTRUE);
+	hist_Thr_Exp50t->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Import data
+	ifstream infile_11("EXP_TES_500_THR_wit.txt");
+	// Read through TXT
+	while ( !infile_11.eof() ) {
+		// Set reading order
+		infile_11 >> Nch >> Prb >> Err_Nch >> Err_Prb;
+		// Populate histogram
+		hist_Thr_Exp50t->SetBinContent(hist_Thr_Exp50t->FindBin(Nch), Prb);
+		// Populate error bar
+		hist_Thr_Exp50t->SetBinError(hist_Thr_Exp50t->FindBin(Nch), Err_Prb);
+	}
+	// Close file
+	infile_11.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Normalising probabilities
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Divide by area under hist
-	hist_nChExLZ->Scale(1.0/hist_nChExLZ->Integral());
-	hist_nChExLW->Scale(1.0/hist_nChExLW->Integral());
-	hist_nChExOZ->Scale(1.0/hist_nChExOZ->Integral());
-	hist_nChExOW->Scale(1.0/hist_nChExOW->Integral());
-	hist_nChPyZ0->Scale(1.0/hist_nChPyZ0->Integral());
-	hist_nChPy2W->Scale(1.0/hist_nChPy2W->Integral());
-
-	hist_nJetsCh->Scale(1.0/hist_nJetsCh->Integral());
-
-	hist_ThrustE->Scale(1.0/hist_ThrustE->Integral());
-	hist_ThrustX->Scale(1.0/hist_ThrustX->Integral());
-	hist_ThrustP->Scale(1.0/hist_ThrustP->Integral());
-
-	hist_nParton->Scale(1.0/hist_nParton->Integral());
-	hist_nPQuark->Scale(1.0/hist_nPQuark->Integral());
-	hist_nPGluon->Scale(1.0/hist_nPGluon->Integral());
+	hist_nCh_LEP_Z0->Scale(1.0/hist_nCh_LEP_Z0->Integral());
+	hist_nCh_TESLEP->Scale(1.0/hist_nCh_TESLEP->Integral());
+	hist_nCh_TES500->Scale(1.0/hist_nCh_TES500->Integral());
+	hist_nCh_TES50t->Scale(1.0/hist_nCh_TES50t->Integral());
+	hist_Thr_LEP_Z0->Scale(1.0/hist_Thr_LEP_Z0->Integral());
+	hist_Thr_TESLEP->Scale(1.0/hist_Thr_TESLEP->Integral());
+	hist_Thr_TES500->Scale(1.0/hist_Thr_TES500->Integral());
+	hist_Thr_TES50t->Scale(1.0/hist_Thr_TES50t->Integral());
+	hist_Thr_Exp500->Scale(1.0/hist_Thr_Exp500->Integral());
+	hist_Thr_Exp50t->Scale(1.0/hist_Thr_Exp50t->Integral());
 
 	// Print check of integrals
-	cout << "Integration : " << hist_nChExLZ->Integral() << endl;
-	cout << "Integration : " << hist_nChExLW->Integral() << endl;
-	cout << "Integration : " << hist_nChExOZ->Integral() << endl;
-	cout << "Integration : " << hist_nChExOW->Integral() << endl;
-	cout << "Integration : " << hist_nChPyZ0->Integral() << endl;
-	cout << "Integration : " << hist_nChPy2W->Integral() << endl;
-
-	cout << "Integration : " << hist_nJetsCh->Integral() << endl;
-
-	cout << "Integration : " << hist_ThrustE->Integral() << endl;
-	cout << "Integration : " << hist_ThrustX->Integral() << endl;
-	cout << "Integration : " << hist_ThrustP->Integral() << endl;
+	cout << "Integration : " << hist_nCh_LEP_Z0->Integral() << endl;
+	cout << "Integration : " << hist_nCh_TESLEP->Integral() << endl;
+	cout << "Integration : " << hist_nCh_TES500->Integral() << endl;
+	cout << "Integration : " << hist_nCh_TES50t->Integral() << endl;
+	cout << "Integration : " << hist_Thr_LEP_Z0->Integral() << endl;
+	cout << "Integration : " << hist_Thr_TESLEP->Integral() << endl;
+	cout << "Integration : " << hist_Thr_TES500->Integral() << endl;
+	cout << "Integration : " << hist_Thr_TES50t->Integral() << endl;
+	cout << "Integration : " << hist_Thr_Exp500->Integral() << endl;
+	cout << "Integration : " << hist_Thr_Exp50t->Integral() << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Plotting Charged Hadronic Multiplicity (Experimental vs Pythia)
+// KNO Scaling
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	// KNO params
+	double histNch=0.0, histMax=0.0, histMin=0.0, histBin=0.0; int numBin=0;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Add legend
-	TLegend *legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	legend->AddEntry(hist_nChPyZ0, "Pythia 8.3 at Z0", "p");
-	legend->AddEntry(hist_nChExLZ, "LEP L3 at Z0", "p");
-	legend->AddEntry(hist_nChExOZ, "LEP OPAL at Z0", "p");
-	legend->AddEntry(hist_nChPy2W, "Pythia 8.3 at 2W", "p");
-	legend->AddEntry(hist_nChExLW, "LEP L3 at 2W", "p");
-	legend->AddEntry(hist_nChExOW, "LEP OPAL at 2W", "p");
-	// legend->AddEntry(fist_nChExpe, "NBD fit for Experimental data", "l");
-	// legend->AddEntry(fist_nChPyth, "NBD fit for Pythia data", "l");
-	// Draw legend
-	legend->Draw("same");
-
-	// Create canvas
-	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
+	// Axes params
+	histNch = hist_nCh_LEP_Z0->GetMean();
+	histMax = hist_nCh_LEP_Z0->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nCh_LEP_Z0->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nCh_LEP_Z0->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nCh_LEP_Z0 = new TH1D("KNOO_nCh_LEP_Z0", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
 	// Beautify
-	// c_nch->SetLogy();
-	// c_nch->SetTickx();
-	// c_nch->SetTicky();
-	// c_nch->SetGridx();
-	// c_nch->SetGridy();
-	// Draw
-	c_nch->Divide(2,1);
-	c_nch->cd(1);
+	KNOO_nCh_LEP_Z0->SetStats(kFALSE);
+	KNOO_nCh_LEP_Z0->SetLineColor(kBlack);
+	KNOO_nCh_LEP_Z0->SetMarkerColor(kBlack);
+	KNOO_nCh_LEP_Z0->SetMarkerStyle(kOpenCircle);
+	KNOO_nCh_LEP_Z0->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nCh_LEP_Z0->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nCh_LEP_Z0->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nCh_LEP_Z0->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nCh_LEP_Z0->GetNbinsX(); ++bin) {
+	double nCh = hist_nCh_LEP_Z0->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nCh_LEP_Z0->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nCh_LEP_Z0->GetBinContent(bin) * histNch;
+	double scaledError = hist_nCh_LEP_Z0->GetBinError(bin) * histNch;
+	KNOO_nCh_LEP_Z0->Fill(scaledNch, scaledContent);
+	KNOO_nCh_LEP_Z0->SetBinError(KNOO_nCh_LEP_Z0->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nCh_TESLEP->GetMean();
+	histMax = hist_nCh_TESLEP->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nCh_TESLEP->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nCh_TESLEP->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nCh_TESLEP = new TH1D("KNOO_nCh_TESLEP", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
+	// Beautify
+	KNOO_nCh_TESLEP->SetStats(kFALSE);
+	KNOO_nCh_TESLEP->SetLineColor(kBlack);
+	KNOO_nCh_TESLEP->SetMarkerColor(kBlack);
+	KNOO_nCh_TESLEP->SetMarkerStyle(kOpenTriangleUp);
+	KNOO_nCh_TESLEP->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nCh_TESLEP->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nCh_TESLEP->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nCh_TESLEP->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nCh_TESLEP->GetNbinsX(); ++bin) {
+	double nCh = hist_nCh_TESLEP->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nCh_TESLEP->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nCh_TESLEP->GetBinContent(bin) * histNch;
+	double scaledError = hist_nCh_TESLEP->GetBinError(bin) * histNch;
+	KNOO_nCh_TESLEP->Fill(scaledNch, scaledContent);
+	KNOO_nCh_TESLEP->SetBinError(KNOO_nCh_TESLEP->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nCh_TES500->GetMean();
+	histMax = hist_nCh_TES500->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nCh_TES500->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nCh_TES500->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nCh_TES500 = new TH1D("KNOO_nCh_TES500", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
+	// Beautify
+	KNOO_nCh_TES500->SetStats(kFALSE);
+	KNOO_nCh_TES500->SetLineColor(kRed+1);
+	KNOO_nCh_TES500->SetMarkerColor(kRed+1);
+	KNOO_nCh_TES500->SetMarkerStyle(kOpenTriangleUp);
+	KNOO_nCh_TES500->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nCh_TES500->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nCh_TES500->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nCh_TES500->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nCh_TES500->GetNbinsX(); ++bin) {
+	double nCh = hist_nCh_TES500->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nCh_TES500->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nCh_TES500->GetBinContent(bin) * histNch;
+	double scaledError = hist_nCh_TES500->GetBinError(bin) * histNch;
+	KNOO_nCh_TES500->Fill(scaledNch, scaledContent);
+	KNOO_nCh_TES500->SetBinError(KNOO_nCh_TES500->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nCh_TES50t->GetMean();
+	histMax = hist_nCh_TES50t->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nCh_TES50t->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nCh_TES50t->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nCh_TES50t = new TH1D("KNOO_nCh_TES50t", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
+	// Beautify
+	KNOO_nCh_TES50t->SetStats(kFALSE);
+	KNOO_nCh_TES50t->SetLineColor(kGreen+1);
+	KNOO_nCh_TES50t->SetMarkerColor(kGreen+1);
+	KNOO_nCh_TES50t->SetMarkerStyle(kOpenTriangleUp);
+	KNOO_nCh_TES50t->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nCh_TES50t->GetYaxis()->SetTitle("P(N_{CH}) x N_{CH}");
+	KNOO_nCh_TES50t->GetXaxis()->SetNdivisions(510, kTRUE);
+	KNOO_nCh_TES50t->GetYaxis()->SetNdivisions(510, kTRUE);
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nCh_TES50t->GetNbinsX(); ++bin) {
+	double nCh = hist_nCh_TES50t->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nCh_TES50t->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nCh_TES50t->GetBinContent(bin) * histNch;
+	double scaledError = hist_nCh_TES50t->GetBinError(bin) * histNch;
+	KNOO_nCh_TES50t->Fill(scaledNch, scaledContent);
+	KNOO_nCh_TES50t->SetBinError(KNOO_nCh_TES50t->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plotting Charged Hadronic Multiplicity
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// // Add legend
+	// TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// leg_nch->AddEntry(hist_nCh_LEP_Z0, "91.2 GeV (LEP)", "p");
+	// leg_nch->AddEntry(hist_nCh_TESLEP, "500. GeV (LEP)", "p");
+	// leg_nch->AddEntry(hist_nCh_TES500, "500. GeV (TESLA)", "p");
+	// leg_nch->AddEntry(hist_nCh_TES50t, "500. GeV (TESLA+top)", "p");
+	// leg_nch->SetTextSize(0.03);
+
+	// // Create canvas
+	// TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
+
+	// // Beautify
+	// c_nch->Divide(2,1);
+	// c_nch->cd(1)->SetLeftMargin(0.15);
 	// c_nch->cd(1)->SetLogy();
-	c_nch->cd(1)->SetTickx();
-	c_nch->cd(1)->SetTicky();
-	c_nch->cd(1)->SetGridx();
-	c_nch->cd(1)->SetGridy();
-	hist_nChPyZ0->Draw("PS");
-	hist_nChExLZ->Draw("same");
-	hist_nChExOZ->Draw("same");
-	hist_nChPy2W->Draw("same");
-	hist_nChExLW->Draw("same");
-	hist_nChExOW->Draw("same");
-	legend->Draw("same");
-	c_nch->cd(2);
+	// c_nch->cd(1)->SetTickx(); c_nch->cd(1)->SetTicky();
+	// c_nch->cd(1)->SetGridx(); c_nch->cd(1)->SetGridy();
+	// c_nch->cd(2)->SetLeftMargin(0.15);
 	// c_nch->cd(2)->SetLogy();
-	c_nch->cd(2)->SetTickx();
-	c_nch->cd(2)->SetTicky();
-	c_nch->cd(2)->SetGridx();
-	c_nch->cd(2)->SetGridy();
-	KNOO_nChPyZ0->Draw("PS");
-	KNOO_nChExLZ->Draw("same");
-	KNOO_nChExOZ->Draw("same");
-	KNOO_nChPy2W->Draw("same");
-	KNOO_nChExLW->Draw("same");
-	KNOO_nChExOW->Draw("same");
-	legend->Draw("same");
-
-	// // Fit Pythia data
-	// TF1 *fist_nChPyth = new TF1("fist_nChPyth", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
-	// // Beautify
-	// fist_nChPyth->SetLineWidth(3);
-	// fist_nChPyth->SetLineColor(kBlue);
-	// fist_nChPyth->SetLineStyle(2);
-	// // Rename fit params
-	// fist_nChPyth->SetParNames("C","K","<N>");
-	// // Input fit params
-	// fist_nChPyth->SetParameter(0,1.88);				// c - normalisation
-	// fist_nChPyth->SetParameter(1,12.5);				// k - shape
-	// fist_nChPyth->SetParameter(2,19);				// n - expected mean
-	// // Perform fit
-	// hist_nChPyZ0->Fit("fist_nChPyth", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
+	// c_nch->cd(2)->SetTickx(); c_nch->cd(2)->SetTicky();
+	// c_nch->cd(2)->SetGridx(); c_nch->cd(2)->SetGridy();
+	
 	// // Draw
-	// fist_nChPyth->Draw("same");
+	// c_nch->cd(1);
+	// hist_nCh_TES500->Draw("PS");
+	// hist_nCh_TES50t->Draw("same");
+	// hist_nCh_TESLEP->Draw("same");
+	// hist_nCh_LEP_Z0->Draw("same");
+	// // leg_nch->Draw("same");
+	// c_nch->cd(2);
+	// KNOO_nCh_TES500->Draw("PS");
+	// KNOO_nCh_TES50t->Draw("same");
+	// KNOO_nCh_TESLEP->Draw("same");
+	// KNOO_nCh_LEP_Z0->Draw("same");
+	// leg_nch->Draw("same");
 
-	// // Fit Experimental data
-	// TF1 *fist_nChExpe = new TF1("fist_nChExpe", "([0]*(TMath::Gamma(x+[1])*TMath::Power(([2]/[1]),x))/(TMath::Gamma(x+1)*TMath::Gamma([1])*TMath::Power((1+([2]/[1])),x+[1])))", 2, 56);
-	// // Beautify
-	// fist_nChExpe->SetLineWidth(3);
-	// fist_nChExpe->SetLineColor(kRed);
-	// fist_nChExpe->SetLineStyle(2);
-	// // Rename fit params
-	// fist_nChExpe->SetParNames("C","K","<N>");
-	// // Input fit params
-	// fist_nChExpe->SetParameter(0,1.88);				// c - normalisation
-	// fist_nChExpe->SetParameter(1,12.5);				// k - shape
-	// fist_nChExpe->SetParameter(2,19);				// n - expected mean
-	// // Perform fit
-	// hist_nChExLZ->Fit("fist_nChExpe", "RME");		// R(range) Q(suppress terminal output) 0(fit display)
-	// // Draw fit
-	// fist_nChExpe->Draw("same");
-
-	// Modify stat-box
-	gStyle->SetOptStat();
-	gStyle->SetErrorX(0.00001);
-	// TPaveStats *ps = (TPaveStats *)c_nch->GetPrimitive("stats");
-	// ps->SetName("mystats");
-	// // Delete existing lines
-	// TList *listOfLines = ps->GetListOfLines();
-	// listOfLines->Remove(ps->GetLineWith("Entries"));
-	// listOfLines->Remove(ps->GetLineWith("Mean"));
-	// listOfLines->Remove(ps->GetLineWith("Std"));
-	// // Add fit params
-	// stringstream buffer;
-	// ps->AddText("NBD Fit (Pythia data)");
-	// buffer << "#chi^{2}/CDF = " << fist_nChPyth->GetChisquare() << " / " << fist_nChPyth->GetNDF();
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "  C = " << fist_nChPyth->GetParameter(0) << " #pm " << fist_nChPyth->GetParError(0);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "  K = " << fist_nChPyth->GetParameter(1) << " #pm " << fist_nChPyth->GetParError(1);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "<N> = " << fist_nChPyth->GetParameter(2) << " #pm " << fist_nChPyth->GetParError(2);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// ps->AddText("NBD Fit (LEP-L3 data)");
-	// buffer << "#chi^{2}/CDF = " << fist_nChExpe->GetChisquare() << " / " << fist_nChExpe->GetNDF();
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "  C = " << fist_nChExpe->GetParameter(0) << " #pm " << fist_nChExpe->GetParError(0);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "  K = " << fist_nChExpe->GetParameter(1) << " #pm " << fist_nChExpe->GetParError(1);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// buffer << "<N> = " << fist_nChExpe->GetParameter(2) << " #pm " << fist_nChExpe->GetParError(2);
-	// ps->AddText(buffer.str().c_str());
-	// buffer.str(std::string());
-	// // Update stat-box
-	// hist_nChPyZ0->SetStats(0);
-	// hist_nChExLZ->SetStats(0);
-	c_nch->Modified();
+	// // Modify stat-box
+	// gStyle->SetOptStat();
+	// c_nch->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Thrust
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Create canvas
-	// TCanvas* c_nct = new TCanvas("c_nct", "Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]", 800, 600);
-	// // Beautify
-	// c_nct->SetTitle("Event Thrust distributions [ LEP E^{+} E^{-} at 91.2 GeV ]");
-	// c_nct->SetLogy();
-	// c_nct->SetTickx();
-	// c_nct->SetTicky();
-	// c_nct->SetGridx();
-	// c_nct->SetGridy();
+	// Add legend
+	TLegend *lg_thr = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// lg_thr->AddEntry(hist_Thr_LEP_Z0, "Pyth | 91.2 GeV (LEP)", "p");
+	lg_thr->AddEntry(hist_Thr_TES500, "Pyth | 500. GeV (TESLA)", "p");
+	lg_thr->AddEntry(hist_Thr_TES50t, "Pyth | 500. GeV (TESLA+top)", "p");
+	lg_thr->AddEntry(hist_Thr_Exp500, "1999 | 500. GeV (TESLA)", "p");
+	lg_thr->AddEntry(hist_Thr_Exp50t, "1999 | 500. GeV (TESLA+top)", "p");
+	lg_thr->SetTextSize(0.03);
 
-	// // Add legend
-	// TLegend* legend = new TLegend(0.4, 0.2, 0.85, 0.4);
-	// legend->AddEntry(hist_ThrustE, "LEP L3 data (udsc)", "p");
-	// legend->AddEntry(hist_ThrustX, "LEP L3 data (b)", "p");
-	// legend->AddEntry(hist_ThrustP, "Pythia data (udscb)", "p");
+	// Create canvas
+	TCanvas* c_thr = new TCanvas("c_thr", "Charged hadron multiplicity distributions", 800, 600);
 
-	// // Draw histogram
-	// c_nct->cd();
-	// hist_ThrustP->Draw("PS");
-	// hist_ThrustE->Draw("sames");
-	// hist_ThrustX->Draw("sames");
-	// legend->Draw("same");
+	// Beautify
+	c_thr->SetLeftMargin(0.15);
+	c_thr->SetLogy();
+	c_thr->SetTickx(); c_thr->SetTicky();
+	c_thr->SetGridx(); c_thr->SetGridy();
+	
+	// Draw
+	hist_Thr_Exp500->Draw("p");
+	hist_Thr_Exp50t->Draw("psame");
+	hist_Thr_TES500->Draw("psame");
+	hist_Thr_TES50t->Draw("psame");
+	// hist_Thr_LEP_Z0->Draw("psame");
+	lg_thr->Draw("same");
+
+	// Modify stat-box
+	gStyle->SetOptStat();
+	c_thr->Modified();
 
 }

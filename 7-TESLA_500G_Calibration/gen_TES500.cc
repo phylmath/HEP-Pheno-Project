@@ -99,13 +99,13 @@ int main(){
 	TH1D *hist_Lineric = new TH1D("hist_Lineric", "Linearised Sphericity distributions", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", 17, 0.575, 1.);
+	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", 50, 0, 0.4);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
 	TH1D *hist_ThMajor = new TH1D("hist_ThMajor", "Thrust Major distributions", 100, 0., 1.);
 	tree->Branch("hist_ThMajor", &hist_ThMajor, "hist_ThMajor");
 
-	TH1D *hist_ThMinor = new TH1D("hist_ThMinor", "Thrust Major distributions", 100, 0., 1.);
+	TH1D *hist_ThMinor = new TH1D("hist_ThMinor", "Thrust Minor distributions", 100, 0., 1.);
 	tree->Branch("hist_ThMinor", &hist_ThMinor, "hist_ThMinor");
 
 	TH1D *hist_Oblatey = new TH1D("hist_Oblatey", "Oblateness distributions", 100, 0., 1.);
@@ -148,42 +148,51 @@ int main(){
 	// Set # of events
 	int nEvent = 1e5;
 
-	// QCD processes
-	pythia.readString("HardQCD:all = off");						// hadronisation
+	// Store masses
+	double mZ = pythia.particleData.m0(23);						// Z0 mass
+	double mW = pythia.particleData.m0(24);						// W+ mass
 
-	// Electroweak processes
-	pythia.readString("WeakZ0:gmZmode = 0");
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
-	// pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
-
-	// Boson hadronic decays
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee->gamma*/Z/W->ff
 	pythia.readString("23:onMode = off");						// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5");				// turn on Z iff (duscb)
-	pythia.readString("24:onMode = off");						// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 15");				// turn on W iff (duscb and τν)
 
-	// Photon processes
-	pythia.readString("PhotonCollision:all = off");
-	pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
-	pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
-	pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
-	pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
-	pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
-	pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
+	// // QCD processes
+	// pythia.readString("HardQCD:all = off");						// QCD master switch
 
-	// ISR processes
-	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
-	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
+	// // Electroweak processes
+	// pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
+	// pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
+	// // pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
+	// pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
+	// pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
+	// pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
+
+	// // Boson hadronic decays
+	// pythia.readString("23:onMode = off");						// turn off Z production
+	// pythia.readString("23:onIfAny = 1 2 3 4 5 6");				// turn on Z iff (duscb)
+	// pythia.readString("24:onMode = off");						// turn off W production
+	// pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");			// turn on W iff (duscb and τν)
+
+	// // Top processes
+	// pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");			// ee'->tt'
+
+	// // Photon processes
+	// pythia.readString("PhotonCollision:all = off");
+	// pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
+	// pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
+	// pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
+	// pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
+	// pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
+	// pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
+
+	// // ISR processes
+	// pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
+	// pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
 
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
 	pythia.readString("Beams:idB = -11"); 						// Beam B energy
-	double mZ = pythia.particleData.m0(23);						// Store Z0 mass
-	double mW = pythia.particleData.m0(24);						// Store W+ mass
-	pythia.settings.parm("Beams:eCM", 500);						// Set centre-of-mass
+	pythia.settings.parm("Beams:eCM", mZ);						// Set centre-of-mass
 	pythia.readString("PDF:lepton = off");						// Disable substructure
 
 	// Suppress event listing
@@ -200,13 +209,16 @@ int main(){
 	// Anti-crash
 	if (!pythia.init()) return 1;
 
-	// Initialise analyses
+	// Define analyses
 	Sphericity sph;
 	Sphericity lin(1.);
 	Thrust thr;
 	ClusterJet lund("Lund");
 	ClusterJet jade("Jade");
 	ClusterJet durham("Durham");
+
+	// Counters
+	double sigmaTotal = 0.0;
 
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
@@ -234,26 +246,26 @@ int main(){
 			// Hadron check
 			if(pythia.event[j].isFinal() && pythia.event[j].isCharged() && pythia.event[j].isHadron()) {
 				
-				////////////////////////// STORING PARTS DATA //////////////////////////
-				eveNum = iEvent;						// Store event number
-				eveSiz = pythia.event.size();			// Store event size
-				parNum = j;								// Store particle number
-				parPdg = pythia.event[j].id();			// Store particle pdg id
-				parMas = pythia.event[j].m();			// Store particle mass
-				parPmx = pythia.event[j].px();			// Store particle momentum-x
-				parPmy = pythia.event[j].py();			// Store particle momentum-y
-				parPmz = pythia.event[j].pz();			// Store particle momentum-z
-				parPmt = pythia.event[j].pT();			// Store particle momentum-t
-				parEta = pythia.event[j].eta();			// Store particle rapidity
-				parPhi = pythia.event[j].phi();			// Store particle azimuthal
+				////////////////////////// STORING PARTICLE PARAMETERS //////////////////////////
+				eveNum = iEvent;														// Store event number
+				eveSiz = pythia.event.size();											// Store event size
+				parNum = j;																// Store particle number
+				parPdg = pythia.event[j].id();											// Store particle pdg id
+				parMas = pythia.event[j].m();											// Store particle mass
+				parPmx = pythia.event[j].px();											// Store particle momentum-x
+				parPmy = pythia.event[j].py();											// Store particle momentum-y
+				parPmz = pythia.event[j].pz();											// Store particle momentum-z
+				parPmt = pythia.event[j].pT();											// Store particle momentum-t
+				parEta = pythia.event[j].eta();											// Store particle rapidity
+				parPhi = pythia.event[j].phi();											// Store particle azimuthal
 
-				////////////////////////// COMPUTING NCH CURVE //////////////////////////
-				nCh++;									// Update counter
+				////////////////////////// COUNTING HADRONIC NCH CURVE //////////////////////////
+				nCh++;																	// Update counter
 
-				////////////////////////// STORING JETS PARAMS //////////////////////////
-				PseudoJet particle(parPmx, parPmy, parPmz, parMas);		// FJ particle vector
-				particle.set_user_index(parPdg);						// Store particle pdg
-				particles.push_back(particle);							// Add particle to event
+				////////////////////////// STORING FASTJETS PARAMETERS //////////////////////////
+				PseudoJet particle(parPmx, parPmy, parPmz, parMas);						// FJ particle vector
+				particle.set_user_index(parPdg);										// Store particle pdg
+				particles.push_back(particle);											// Add particle to event
 
 				////////////////////////// CLUSTERING AND PRINTING JET //////////////////////////
 				double R = 0.4;															// Jet radius
@@ -262,76 +274,61 @@ int main(){
 				ClusterSequence cs(particles, jet_def);									// Run clustering
 				vector<PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store results
 				nJc = jets.size();														// Jet multiplicity
-				
-				// Run through jets
-				for (int i = 0; i < jets.size(); i++) {
-					// Store jet fraction
-					nJf = jets[i].constituents().size();
-					// Count jet particles
-					int n_constituents = jets[i].constituents().size();
-					// Define constituents vector
-					vector<PseudoJet> constituents = jets[i].constituents();
-					// Study jet constituents
-					for (int j = 0; j < constituents.size(); j++) {
-						// Define constituent vector
-						PseudoJet constituent = jets[i].constituents()[j];
-					}
-				}
-			}
-			
-			////////////////////////// COMPUTING PARTON NCH CURVE //////////////////////////
-			// Parton check
-			if(pythia.event[j].isFinal()==false) {
-				// Quark check
-				if(pythia.event[j].id()==1||pythia.event[j].id()==2||pythia.event[j].id()==3||pythia.event[j].id()==4||pythia.event[j].id()==5) {
-					nCp++; nCq++;	// Update counter
-				}
-				// Gluon check
-				if(pythia.event[j].id()==21) {
-					nCp++; nCg++;	// Update counter
-				}
-			}		
-		}
-
-		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
-		// Populate histogram
-		if (sph.analyze( pythia.event )) {
-			
-			hist_Spheric->Fill( sph.sphericity() );				// Sphericity = (sum_i p_i^a p_i^b)/(sum_i p_i^2)
-			hist_sphAxis->Fill( sph.eventAxis(1).pz() );		// Cosθ
-			hist_Aplanar->Fill( sph.aplanarity() );				// Aplanarity
-		}
-		// Populate histogram
-		if (lin.analyze( pythia.event )) {
-			hist_Lineric->Fill( lin.sphericity() );				// Linear.Sph = (sum_i p_i^a p_i^b p_i^{r-2})/(sum_i p_i^r)
-			hist_linAxis->Fill( lin.eventAxis(1).pz() );		// Cosθ
-		}
-		// Populate histogram
-		if (thr.analyze( pythia.event )) {
-			hist_ThrustP->Fill( thr.thrust() );					// Thrust
-			hist_thrAxis->Fill( thr.eventAxis(1).pz() );		// Cosθ
-			hist_ThMajor->Fill( thr.tMajor() );					// Tmajor  
-			hist_ThMinor->Fill( thr.tMinor() );					// Tminor
-			hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
-			}
-
-		// Populate histogram
-		if (lund.analyze( pythia.event, 0.01, 0.)) {
-			hist_nChLund->Fill( lund.size() );
-			for (int k = 0; k < lund.size() - 1; ++k)
-			hist_difLund->Fill( lund.p(k).e() - lund.p(k+1).e() );
-		}
-
-		if (jade.analyze( pythia.event, 0.01, 0.)) {
-			hist_nChJade->Fill( jade.size() );
-			for (int k = 0; k < jade.size() - 1; ++k)
-			hist_difJade->Fill( jade.p(k).e() - jade.p(k+1).e() );
-		}
 		
-		if (durham.analyze( pythia.event, 0.01, 0.)) {
-			hist_nChDurh->Fill( durham.size() );
-			for (int k = 0; k < durham.size() - 1; ++k)
-			hist_difDurh->Fill( durham.p(k).e() - durham.p(k+1).e() );
+				// Run through jets
+				for (int i = 0; i < jets.size(); i++) {				
+					nJf = jets[i].constituents().size();								// Store jet fraction					
+					int n_constituents = jets[i].constituents().size();					// Count jet particles					
+					vector<PseudoJet> constituents = jets[i].constituents();			// Define constituents vector
+					// Run through jet constituents
+					for (int j = 0; j < constituents.size(); j++)
+						PseudoJet constituent = jets[i].constituents()[j];				// Define constituent vector
+				}			
+			}
+		}
+
+		// Hadron check
+		if (nCh != 0) {
+
+			////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////
+			// Populate histogram
+			if (sph.analyze( pythia.event )) {
+				hist_Spheric->Fill( sph.sphericity() );				// Sphericity = (sum_i p_i^a p_i^b)/(sum_i p_i^2)
+				hist_sphAxis->Fill( sph.eventAxis(1).pz() );		// Cosθ
+				hist_Aplanar->Fill( sph.aplanarity() );				// Aplanarity
+			}
+			// Populate histogram
+			if (lin.analyze( pythia.event )) {
+				hist_Lineric->Fill( lin.sphericity() );				// Linear.Sph = (sum_i p_i^a p_i^b p_i^{r-2})/(sum_i p_i^r)
+				hist_linAxis->Fill( lin.eventAxis(1).pz() );		// Cosθ
+			}
+			// Populate histogram
+			if (thr.analyze( pythia.event )) {
+				hist_ThrustP->Fill( 1.0 - thr.thrust() );			// Thrust
+				hist_thrAxis->Fill( thr.eventAxis(1).pz() );		// Cosθ
+				hist_ThMajor->Fill( thr.tMajor() );					// Tmajor  
+				hist_ThMinor->Fill( thr.tMinor() );					// Tminor
+				hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
+				}
+
+			// Populate histogram
+			if (lund.analyze( pythia.event, 0.01, 0.)) {
+				hist_nChLund->Fill( lund.size() );
+				for (int k = 0; k < lund.size() - 1; ++k)
+				hist_difLund->Fill( lund.p(k).e() - lund.p(k+1).e() );
+			}
+
+			if (jade.analyze( pythia.event, 0.01, 0.)) {
+				hist_nChJade->Fill( jade.size() );
+				for (int k = 0; k < jade.size() - 1; ++k)
+				hist_difJade->Fill( jade.p(k).e() - jade.p(k+1).e() );
+			}
+			
+			if (durham.analyze( pythia.event, 0.01, 0.)) {
+				hist_nChDurh->Fill( durham.size() );
+				for (int k = 0; k < durham.size() - 1; ++k)
+				hist_difDurh->Fill( durham.p(k).e() - durham.p(k+1).e() );
+			}
 		}
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////
@@ -344,7 +341,21 @@ int main(){
 
 		////////////////////////// FILLING DATA TO TREEBRANCHES //////////////////////////
 		tree->Fill();
+
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Cross-section checks
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// cout << pythia.info.weightSum() << endl;											// total σ 
+	// cout << pythia.info.sigmaGen() << endl;												// total σ 
+	// cout << pythia.info.nameProc(221) << "\t" << pythia.info.sigmaGen(221) << endl;		// ee'->γ*/Z
+	// cout << pythia.info.nameProc(222) << "\t" << pythia.info.sigmaGen(222) << endl;		// ee'->W
+	// cout << pythia.info.nameProc(231) << "\t" << pythia.info.sigmaGen(231) << endl;		// ee'->γ*Zγ*Z
+	// cout << pythia.info.nameProc(232) << "\t" << pythia.info.sigmaGen(232) << endl;		// ee'->ZW
+	// cout << pythia.info.nameProc(233) << "\t" << pythia.info.sigmaGen(233) << endl;		// ee'->WW
+	// cout << pythia.info.nameProc(604) << "\t" << pythia.info.sigmaGen(604) << endl;		// ee'->tt'
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // File closures
