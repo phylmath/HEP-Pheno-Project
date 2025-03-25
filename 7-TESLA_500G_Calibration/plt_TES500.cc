@@ -142,7 +142,7 @@ void plt_TES500()
 	TH1F *hist_Thr_TES500 = (TH1F*)inputfile_TES500->Get("hist_ThrustP");
 	// Beautify
 	hist_Thr_TES500->SetStats(kFALSE);
-	hist_Thr_TES500->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_TES500->SetTitle("Differential Thrust (without top)");
 	hist_Thr_TES500->SetName("hist_Thr_TES500");
 	hist_Thr_TES500->SetLineColor(kBlack);
 	hist_Thr_TES500->SetMarkerColor(kBlack);
@@ -153,14 +153,14 @@ void plt_TES500()
 	hist_Thr_TES500->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// // Read Histogram
-	TH1F *hist_Thr_Exp500 = new TH1F("hist_Thr_Exp500", "Differential Thrust e^{+}e^{-}", 500, 0, 0.4);
+	TH1F *hist_Thr_Exp500 = new TH1F("hist_Thr_Exp500", "Differential Thrust (without top)", 500, 0, 0.4);
 	// Beautify
 	hist_Thr_Exp500->SetStats(kFALSE);
 	hist_Thr_Exp500->SetName("Differential Thrust e^{+}e^{-}");
 	hist_Thr_Exp500->SetName("hist_Thr_Exp500");
-	hist_Thr_Exp500->SetLineColor(kRed+2);
-	hist_Thr_Exp500->SetMarkerColor(kRed+2);
-	hist_Thr_Exp500->SetMarkerStyle(kOpenSquare);
+	hist_Thr_Exp500->SetLineColor(kBlack);
+	hist_Thr_Exp500->SetMarkerColor(kBlack);
+	hist_Thr_Exp500->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_Exp500->GetXaxis()->SetTitle("1-T");
 	hist_Thr_Exp500->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_Exp500->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -183,24 +183,24 @@ void plt_TES500()
 	TH1F *hist_Thr_TES50t = (TH1F*)inputfile_TES50t->Get("hist_ThrustP");
 	// Beautify
 	hist_Thr_TES50t->SetStats(kFALSE);
-	hist_Thr_TES50t->SetTitle("Differential Thrust e^{+}e^{-}");
+	hist_Thr_TES50t->SetTitle("Differential Thrust (with top)");
 	hist_Thr_TES50t->SetName("hist_Thr_TES50t");
 	hist_Thr_TES50t->SetLineColor(kBlack);
 	hist_Thr_TES50t->SetMarkerColor(kBlack);
-	hist_Thr_TES50t->SetMarkerStyle(kOpenTriangleUp);
+	hist_Thr_TES50t->SetMarkerStyle(kOpenSquare);
 	hist_Thr_TES50t->GetXaxis()->SetTitle("1-T");
 	hist_Thr_TES50t->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_TES50t->GetXaxis()->SetNdivisions(510, kTRUE);
 	hist_Thr_TES50t->GetYaxis()->SetNdivisions(510, kTRUE);
 
 	// // Read Histogram
-	TH1F *hist_Thr_Exp50t = new TH1F("hist_Thr_Exp50t", "Differential Thrust e^{+}e^{-}", 500, 0, 0.4);
+	TH1F *hist_Thr_Exp50t = new TH1F("hist_Thr_Exp50t", "Differential Thrust (with top)", 500, 0, 0.4);
 	// Beautify
 	hist_Thr_Exp50t->SetStats(kFALSE);
 	hist_Thr_Exp50t->SetName("Differential Thrust e^{+}e^{-}");
 	hist_Thr_Exp50t->SetName("hist_Thr_Exp50t");
-	hist_Thr_Exp50t->SetLineColor(kRed+2);
-	hist_Thr_Exp50t->SetMarkerColor(kRed+2);
+	hist_Thr_Exp50t->SetLineColor(kBlack);
+	hist_Thr_Exp50t->SetMarkerColor(kBlack);
 	hist_Thr_Exp50t->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_Exp50t->GetXaxis()->SetTitle("1-T");
 	hist_Thr_Exp50t->GetYaxis()->SetTitle("P(1-T)");
@@ -425,39 +425,45 @@ void plt_TES500()
 
 	// Add legend
 	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3 500 GeV", "p");
-	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Paper 500 GeV", "p");
-	lg_thr1->SetTextSize(0.03);
+	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3", "p");
+	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Study", "p");
+	lg_thr1->SetTextSize(0.04);
 
 	// Add legend
 	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3 500 GeV (top)", "p");
-	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Paper 500 GeV (top)", "p");
-	lg_thr2->SetTextSize(0.03);
+	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3", "p");
+	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Study", "p");
+	lg_thr2->SetTextSize(0.04);
 
 	// Create canvas
 	TCanvas* c_thr = new TCanvas("c_thr", "Charged hadron multiplicity distributions", 800, 600);
 
 	// Beautify
+	gStyle->SetErrorX(0.000000001);
 	c_thr->Divide(2,1);
 	c_thr->cd(1)->SetLeftMargin(0.15);
-	// c_thr->cd(1)->SetLogy();
+	c_thr->cd(1)->SetLogy();
 	c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
 	c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
 	c_thr->cd(2)->SetLeftMargin(0.15);
-	// c_thr->cd(2)->SetLogy();
+	c_thr->cd(2)->SetLogy();
 	c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
 	c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
 	
 	// Draw
 	c_thr->cd(1);
-	hist_Thr_TES500->Draw("p");
-	hist_Thr_Exp500->Draw("psame");
+	hist_Thr_Exp500->Draw("p");
+	hist_Thr_TES500->Draw("psame");
 	lg_thr1->Draw("same");
 	c_thr->cd(2);
-	hist_Thr_TES50t->Draw("p");
-	hist_Thr_Exp50t->Draw("psame");
+	hist_Thr_Exp50t->Draw("p");
+	hist_Thr_TES50t->Draw("psame");
 	lg_thr2->Draw("same");
+
+	hist_Thr_TES500->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_Thr_Exp500->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_Thr_TES50t->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_Thr_Exp50t->GetYaxis()->SetRangeUser(1E-4,1E0);
 
 	// Modify stat-box
 	gStyle->SetOptStat();

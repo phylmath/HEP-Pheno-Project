@@ -41,7 +41,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("out_TES_500.root", "recreate");
+  	TFile *output = new TFile("out_TES500.root", "recreate");
 	// Anti-crash
 	if (!output->IsOpen()) {
 		cerr << "Error opening output file!" << endl;
@@ -99,7 +99,7 @@ int main(){
 	TH1D *hist_Lineric = new TH1D("hist_Lineric", "Linearised Sphericity distributions", 100, 0., 1.);
 	tree->Branch("hist_Lineric", &hist_Lineric, "hist_Lineric");
 
-	float xbin[] = {0.00E+00,1.00E-02,2.00E-02,3.00E-02,4.00E-02,5.00E-02,7.00E-02,9.00E-02,1.20E-01,1.50E-01,2.20E-01,3.00E-01};
+	float xbin[] = {0.00E+00,1.00E-02,2.00E-02,3.00E-02,4.00E-02,5.00E-02,7.00E-02,9.00E-02,1.20E-01,1.50E-01,2.20E-01,3.00E-01,4.00E-01};
 	TH1D *hist_ThrustP = new TH1D("hist_ThrustP", "Thrust distributions", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	tree->Branch("hist_ThrustP", &hist_ThrustP, "hist_ThrustP");
 
@@ -147,31 +147,38 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e5;
+	int nEvent = 1e4;
 
 	// Store masses
 	double mZ = pythia.particleData.m0(23);						// Z0 mass
 	double mW = pythia.particleData.m0(24);						// W+ mass
 
 	// QCD processes
-	pythia.readString("HardQCD:all = off");						// QCD master switch
+	pythia.readString("HardQCD:all = off");						// master
 
-	// Electroweak processes
+	// Electroweak boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
+	pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm) = on");// ee'->qq'
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
-	// pythia.readString("WeakSingleBoson:ffbar2W = on");			// ee'->W
+	// pythia.readString("WeakSingleBoson:ffbar2W = on");		// ee'->W
 	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = on");			// ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");		// ee'->ZW
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
-
-	// Boson hadronic decays
+	// Boson decays
 	pythia.readString("23:onMode = off");						// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 5");				// turn on Z iff (duscb)
+	pythia.readString("23:onIfAny = 1 2 3 4 5 6");				// turn on Z iff (duscbt)
 	pythia.readString("24:onMode = off");						// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 15");				// turn on W iff (duscb and τν)
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");			// turn on W iff (duscbt and τν)
+
+	// Electroweak photon-parton processes
+	pythia.readString("PhotonParton:ggm2qqbar = off");			// gγ->qq' (uds)
+	pythia.readString("PhotonParton:ggm2ccbar = off");			// gγ->cc'
+	pythia.readString("PhotonParton:ggm2bbbar = off");			// gγ->bb'
+	pythia.readString("PhotonParton:qgm2qg = off");				// gγ->qq'
+	pythia.readString("PhotonParton:qgm2qgm = off");			// gγ->qq'
 
 	// Top processes
-	pythia.readString("Top:ffbar2ttbar(s:gmZ) = off");			// ee'->tt'
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");			// ee'->tt'
 
 	// Photon processes
 	pythia.readString("PhotonCollision:all = off");
@@ -345,8 +352,9 @@ int main(){
 // Cross-section checks
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// cout << pythia.info.weightSum() << endl;											// total σ 
-	// cout << pythia.info.sigmaGen() << endl;												// total σ 
+	pythia.stat();
+	// cout << "Total weighted sum:\t" << pythia.info.weightSum() << endl;					// total events 
+	// cout << "Total crosssection:\t" << pythia.info.sigmaGen() << endl;					// total σ 
 	// cout << pythia.info.nameProc(221) << "\t" << pythia.info.sigmaGen(221) << endl;		// ee'->γ*/Z
 	// cout << pythia.info.nameProc(222) << "\t" << pythia.info.sigmaGen(222) << endl;		// ee'->W
 	// cout << pythia.info.nameProc(231) << "\t" << pythia.info.sigmaGen(231) << endl;		// ee'->γ*Zγ*Z
