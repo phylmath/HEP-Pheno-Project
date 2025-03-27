@@ -116,9 +116,9 @@ void plt_TES500()
 	hist_Thr_LEP_Z0->SetStats(kFALSE);
 	hist_Thr_LEP_Z0->SetTitle("Differential Thrust e^{+}e^{-}");
 	hist_Thr_LEP_Z0->SetName("hist_Thr_LEP_Z0");
-	hist_Thr_LEP_Z0->SetLineColor(kBlack);
-	hist_Thr_LEP_Z0->SetMarkerColor(kBlack);
-	hist_Thr_LEP_Z0->SetMarkerStyle(kOpenCircle);
+	hist_Thr_LEP_Z0->SetLineColor(kGreen+2);
+	hist_Thr_LEP_Z0->SetMarkerColor(kGreen+2);
+	hist_Thr_LEP_Z0->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_LEP_Z0->GetXaxis()->SetTitle("1-T");
 	hist_Thr_LEP_Z0->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_LEP_Z0->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -132,7 +132,7 @@ void plt_TES500()
 	hist_Thr_TESLEP->SetName("hist_Thr_TESLEP");
 	hist_Thr_TESLEP->SetLineColor(kBlack);
 	hist_Thr_TESLEP->SetMarkerColor(kBlack);
-	hist_Thr_TESLEP->SetMarkerStyle(kOpenCircle);
+	hist_Thr_TESLEP->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_TESLEP->GetXaxis()->SetTitle("1-T");
 	hist_Thr_TESLEP->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_TESLEP->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -144,9 +144,9 @@ void plt_TES500()
 	hist_Thr_TES500->SetStats(kFALSE);
 	hist_Thr_TES500->SetTitle("Differential Thrust (without top)");
 	hist_Thr_TES500->SetName("hist_Thr_TES500");
-	hist_Thr_TES500->SetLineColor(kBlack);
-	hist_Thr_TES500->SetMarkerColor(kBlack);
-	hist_Thr_TES500->SetMarkerStyle(kOpenSquare);
+	hist_Thr_TES500->SetLineColor(kRed+2);
+	hist_Thr_TES500->SetMarkerColor(kRed+2);
+	hist_Thr_TES500->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_TES500->GetXaxis()->SetTitle("1-T");
 	hist_Thr_TES500->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_TES500->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -185,9 +185,9 @@ void plt_TES500()
 	hist_Thr_TES50t->SetStats(kFALSE);
 	hist_Thr_TES50t->SetTitle("Differential Thrust (with top)");
 	hist_Thr_TES50t->SetName("hist_Thr_TES50t");
-	hist_Thr_TES50t->SetLineColor(kBlack);
-	hist_Thr_TES50t->SetMarkerColor(kBlack);
-	hist_Thr_TES50t->SetMarkerStyle(kOpenSquare);
+	hist_Thr_TES50t->SetLineColor(kRed+2);
+	hist_Thr_TES50t->SetMarkerColor(kRed+2);
+	hist_Thr_TES50t->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr_TES50t->GetXaxis()->SetTitle("1-T");
 	hist_Thr_TES50t->GetYaxis()->SetTitle("P(1-T)");
 	hist_Thr_TES50t->GetXaxis()->SetNdivisions(510, kTRUE);
@@ -425,14 +425,15 @@ void plt_TES500()
 
 	// Add legend
 	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3", "p");
-	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Study", "p");
+	lg_thr1->AddEntry(hist_Thr_LEP_Z0, "Pythia 8.3 LEPZ0", "p");
+	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3 TESLA", "p");
+	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Study TESLA", "p");
 	lg_thr1->SetTextSize(0.04);
 
 	// Add legend
 	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3", "p");
-	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Study", "p");
+	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3 TESLA", "p");
+	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Study TESLA", "p");
 	lg_thr2->SetTextSize(0.04);
 
 	// Create canvas
@@ -454,6 +455,7 @@ void plt_TES500()
 	c_thr->cd(1);
 	hist_Thr_Exp500->Draw("p");
 	hist_Thr_TES500->Draw("psame");
+	hist_Thr_LEP_Z0->Draw("psame");
 	lg_thr1->Draw("same");
 	c_thr->cd(2);
 	hist_Thr_Exp50t->Draw("p");

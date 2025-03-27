@@ -153,12 +153,14 @@ int main(){
 	double mZ = pythia.particleData.m0(23);						// Z0 mass
 	double mW = pythia.particleData.m0(24);						// W+ mass
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// QCD processes
-	pythia.readString("HardQCD:all = off");						// master
+	pythia.readString("HardQCD:all = off");						// master switch
 
 	// Electroweak boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
-	pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm) = on");// ee'->qq'
+	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm));	// ee'->qq'
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
 	// pythia.readString("WeakSingleBoson:ffbar2W = on");		// ee'->W
 	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
@@ -192,6 +194,8 @@ int main(){
 	// ISR processes
 	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
 	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
+	pythia.readString("SpaceShower:QEDshowerByL = on");			// ee->γee
+	pythia.readString("SpaceShower:QEDshowerByQ = off");		// qq->γqq	
 
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
@@ -199,9 +203,31 @@ int main(){
 	pythia.settings.parm("Beams:eCM", 500);						// Set centre-of-mass
 	pythia.readString("PDF:lepton = off");						// Disable substructure
 
-	// Suppress event listing
-	pythia.readString("Init:showProcesses = false"); 
-	pythia.readString("Next:numberShowEvent = 0"); 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// // Define physics
+	// pythia.readString("HardQCD:all = off"); 						// master switch
+	// pythia.readString("WeakSingleBoson:ffbar2gmZ = on");			// ee->gamma*/Z/W->ff
+	// pythia.readString("23:onMode = off");							// turn off Z production
+	// pythia.readString("23:onIfAny = 1 2 3 4 5");					// turn on Z iff (duscb)
+
+	// // Define Beam params
+	// pythia.readString("Beams:idA = 11"); 							// Beam A energy
+	// pythia.readString("Beams:idB = -11"); 							// Beam B energy
+	// pythia.settings.parm("Beams:eCM", mZ);							// Set centre-of-mass
+	// pythia.readString("PDF:lepton = off");							// Disable substructure
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Suppress terminal text
+	pythia.readString("Next:numberCount = 1000");
+	pythia.readString("Next:numberShowProcess = 0");
+	pythia.readString("Init:showMultipartonInteractions = off");
+	pythia.readString("Init:showChangedSettings = off");
+	pythia.readString("Init:showChangedParticleData = off");
+	pythia.readString("Next:numberCount = 0");
+	pythia.readString("Next:numberShowInfo = 0");
+	pythia.readString("Next:numberShowEvent = 0");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Generate Pythia collisions
