@@ -195,7 +195,7 @@ int main(){
 	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
 	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
 	pythia.readString("SpaceShower:QEDshowerByL = on");			// ee->γee
-	pythia.readString("SpaceShower:QEDshowerByQ = off");		// qq->γqq	
+	pythia.readString("SpaceShower:QEDshowerByQ = off");		// qq->γqq
 
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 						// Beam A energy
