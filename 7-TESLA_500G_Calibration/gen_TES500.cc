@@ -82,7 +82,7 @@ int main(){
 
 	// Electroweak boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
-	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm));	// ee'->qq'
+	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm));	// ee'->ff'
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
 	// pythia.readString("WeakSingleBoson:ffbar2W = on");		// ee'->W
 	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
