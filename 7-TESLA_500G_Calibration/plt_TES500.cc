@@ -379,96 +379,96 @@ void plt_TES500()
 // Plotting Charged Hadronic Multiplicity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Add legend
-	// TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
-	// leg_nch->AddEntry(hist_nCh_LEP_Z0, "91.2 GeV (LEP)", "p");
-	// leg_nch->AddEntry(hist_nCh_TESLEP, "500. GeV (LEP)", "p");
-	// leg_nch->AddEntry(hist_nCh_TES500, "500. GeV (TESLA)", "p");
-	// leg_nch->AddEntry(hist_nCh_TES50t, "500. GeV (TESLA+top)", "p");
-	// leg_nch->SetTextSize(0.03);
+	// Add legend
+	TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
+	leg_nch->AddEntry(hist_nCh_LEP_Z0, "91.2 GeV (LEP)", "p");
+	leg_nch->AddEntry(hist_nCh_TESLEP, "500. GeV (LEP)", "p");
+	leg_nch->AddEntry(hist_nCh_TES500, "500. GeV (TESLA)", "p");
+	leg_nch->AddEntry(hist_nCh_TES50t, "500. GeV (TESLA+top)", "p");
+	leg_nch->SetTextSize(0.03);
 
-	// // Create canvas
-	// TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
+	// Create canvas
+	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 
-	// // Beautify
-	// c_nch->Divide(2,1);
-	// c_nch->cd(1)->SetLeftMargin(0.15);
-	// c_nch->cd(1)->SetLogy();
-	// c_nch->cd(1)->SetTickx(); c_nch->cd(1)->SetTicky();
-	// c_nch->cd(1)->SetGridx(); c_nch->cd(1)->SetGridy();
-	// c_nch->cd(2)->SetLeftMargin(0.15);
-	// c_nch->cd(2)->SetLogy();
-	// c_nch->cd(2)->SetTickx(); c_nch->cd(2)->SetTicky();
-	// c_nch->cd(2)->SetGridx(); c_nch->cd(2)->SetGridy();
+	// Beautify
+	c_nch->Divide(2,1);
+	c_nch->cd(1)->SetLeftMargin(0.15);
+	c_nch->cd(1)->SetLogy();
+	c_nch->cd(1)->SetTickx(); c_nch->cd(1)->SetTicky();
+	c_nch->cd(1)->SetGridx(); c_nch->cd(1)->SetGridy();
+	c_nch->cd(2)->SetLeftMargin(0.15);
+	c_nch->cd(2)->SetLogy();
+	c_nch->cd(2)->SetTickx(); c_nch->cd(2)->SetTicky();
+	c_nch->cd(2)->SetGridx(); c_nch->cd(2)->SetGridy();
 	
-	// // Draw
-	// c_nch->cd(1);
-	// hist_nCh_TES500->Draw("PS");
-	// hist_nCh_TES50t->Draw("same");
-	// hist_nCh_TESLEP->Draw("same");
-	// hist_nCh_LEP_Z0->Draw("same");
-	// // leg_nch->Draw("same");
-	// c_nch->cd(2);
-	// KNOO_nCh_TES500->Draw("PS");
-	// KNOO_nCh_TES50t->Draw("same");
-	// KNOO_nCh_TESLEP->Draw("same");
-	// KNOO_nCh_LEP_Z0->Draw("same");
-	// leg_nch->Draw("same");
+	// Draw
+	c_nch->cd(1);
+	hist_nCh_TES500->Draw("PS");
+	hist_nCh_TES50t->Draw("same");
+	hist_nCh_TESLEP->Draw("same");
+	hist_nCh_LEP_Z0->Draw("same");
+	leg_nch->Draw("same");
+	c_nch->cd(2);
+	KNOO_nCh_TES500->Draw("PS");
+	KNOO_nCh_TES50t->Draw("same");
+	KNOO_nCh_TESLEP->Draw("same");
+	KNOO_nCh_LEP_Z0->Draw("same");
+	leg_nch->Draw("same");
 
-	// // Modify stat-box
-	// gStyle->SetOptStat();
-	// c_nch->Modified();
+	// Modify stat-box
+	gStyle->SetOptStat();
+	c_nch->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Thrust
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Add legend
-	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr1->AddEntry(hist_Thr_LEP_Z0, "Pythia 8.3 LEPZ0", "p");
-	lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3 TESLA", "p");
-	lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Study TESLA", "p");
-	lg_thr1->SetTextSize(0.04);
+	// // Add legend
+	// TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// lg_thr1->AddEntry(hist_Thr_LEP_Z0, "Pythia 8.3 LEPZ0", "p");
+	// lg_thr1->AddEntry(hist_Thr_TES500, "Pythia 8.3 TESLA", "p");
+	// lg_thr1->AddEntry(hist_Thr_Exp500, "1999 Study TESLA", "p");
+	// lg_thr1->SetTextSize(0.04);
 
-	// Add legend
-	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3 TESLA", "p");
-	lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Study TESLA", "p");
-	lg_thr2->SetTextSize(0.04);
+	// // Add legend
+	// TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// lg_thr2->AddEntry(hist_Thr_TES50t, "Pythia 8.3 TESLA", "p");
+	// lg_thr2->AddEntry(hist_Thr_Exp50t, "1999 Study TESLA", "p");
+	// lg_thr2->SetTextSize(0.04);
 
-	// Create canvas
-	TCanvas* c_thr = new TCanvas("c_thr", "Charged hadron multiplicity distributions", 800, 600);
+	// // Create canvas
+	// TCanvas* c_thr = new TCanvas("c_thr", "Charged hadron multiplicity distributions", 800, 600);
 
-	// Beautify
-	gStyle->SetErrorX(0.000000001);
-	c_thr->Divide(2,1);
-	c_thr->cd(1)->SetLeftMargin(0.15);
-	c_thr->cd(1)->SetLogy();
-	c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
-	c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
-	c_thr->cd(2)->SetLeftMargin(0.15);
-	c_thr->cd(2)->SetLogy();
-	c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
-	c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
+	// // Beautify
+	// gStyle->SetErrorX(0.000000001);
+	// c_thr->Divide(2,1);
+	// c_thr->cd(1)->SetLeftMargin(0.15);
+	// c_thr->cd(1)->SetLogy();
+	// c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
+	// c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
+	// c_thr->cd(2)->SetLeftMargin(0.15);
+	// c_thr->cd(2)->SetLogy();
+	// c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
+	// c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
 	
-	// Draw
-	c_thr->cd(1);
-	hist_Thr_Exp500->Draw("p");
-	hist_Thr_TES500->Draw("psame");
-	hist_Thr_LEP_Z0->Draw("psame");
-	lg_thr1->Draw("same");
-	c_thr->cd(2);
-	hist_Thr_Exp50t->Draw("p");
-	hist_Thr_TES50t->Draw("psame");
-	lg_thr2->Draw("same");
+	// // Draw
+	// c_thr->cd(1);
+	// hist_Thr_Exp500->Draw("p");
+	// hist_Thr_TES500->Draw("psame");
+	// hist_Thr_LEP_Z0->Draw("psame");
+	// lg_thr1->Draw("same");
+	// c_thr->cd(2);
+	// hist_Thr_Exp50t->Draw("p");
+	// hist_Thr_TES50t->Draw("psame");
+	// lg_thr2->Draw("same");
 
-	hist_Thr_TES500->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_Thr_Exp500->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_Thr_TES50t->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_Thr_Exp50t->GetYaxis()->SetRangeUser(1E-4,1E0);
+	// hist_Thr_TES500->GetYaxis()->SetRangeUser(1E-4,1E0);
+	// hist_Thr_Exp500->GetYaxis()->SetRangeUser(1E-4,1E0);
+	// hist_Thr_TES50t->GetYaxis()->SetRangeUser(1E-4,1E0);
+	// hist_Thr_Exp50t->GetYaxis()->SetRangeUser(1E-4,1E0);
 
-	// Modify stat-box
-	gStyle->SetOptStat();
-	c_thr->Modified();
+	// // Modify stat-box
+	// gStyle->SetOptStat();
+	// c_thr->Modified();
 
 }
