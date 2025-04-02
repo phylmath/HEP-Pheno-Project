@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Code to generate collision events in Pythia and cluster particles with FastJet3
+// Code to generate collision events in Pythia
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Plugins
@@ -11,6 +11,8 @@
 #include "Pythia8/Basics.h"
 // Fastjet
 #include "fjcore.hh"
+#include "fastjet/PseudoJet.hh"
+#include "fastjet/ClusterSequence.hh"
 // ROOT
 #include "TFile.h"
 #include "TTree.h"
@@ -38,30 +40,30 @@ using namespace fjcore;
 int main(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Create output TTree file
+// Create output Tfile
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES500.root", "recreate");
+  	TFile *output = new TFile("gen_TES500.root", "RECREATE");
 	
 	// Define tree
-	TTree *tree = new TTree("tree", "tree");
+	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
-	// Intialise tree branch vars
-	int eveNum=0, eveSiz=0, parNum=0, parPdg=0;
-	double parMas=0.0, parPmx=0.0, parPmy=0.0, parPmz=0.0;
-	bool parFCH=false;
+	// Intialise vecs
+	vector<int> eveNum, eveSiz, parNum, parPdg, parFCH;
+	vector<float> sigmaT, parMas, parPmx, parPmy, parPmz;
 
-	// Define particle branches
-	tree->Branch("eveNum", &eveNum, "eveNum/I");				// Event number
-	tree->Branch("eveSiz", &eveSiz, "eveSiz/I");				// Event size
-	tree->Branch("parNum", &parNum, "parNum/I");				// Particle number
-	tree->Branch("parPdg", &parPdg, "parPdg/I");				// particle id
-	tree->Branch("parMas", &parMas, "parMas/D");				// Particle mass
-	tree->Branch("parPmx", &parPmx, "parPmx/D");				// Particle x-momentum
-	tree->Branch("parPmy", &parPmy, "parPmy/D");				// Particle y-momentum
-	tree->Branch("parPmz", &parPmz, "parPmz/D");				// Particle z-momentum
-	tree->Branch("parFCH", &parFCH, "parFCH/B");				// Final-Charged-Hadron
+	// Define branches
+	tree->Branch("sigmaT", "vector<float>", &sigmaT);					// Total sigma
+	tree->Branch("eveNum", "vector<int>", &eveNum);						// Event number
+	tree->Branch("eveSiz", "vector<int>", &eveSiz);						// Event size
+	tree->Branch("parNum", "vector<int>", &parNum);						// Parts number
+	tree->Branch("parPdg", "vector<int>", &parPdg);						// Parts pdg id
+	tree->Branch("parMas", "vector<float>", &parMas);					// Parts mass
+	tree->Branch("parPmx", "vector<float>", &parPmx);					// Parts mom-x
+	tree->Branch("parPmy", "vector<float>", &parPmy);					// Parts mom-y
+	tree->Branch("parPmz", "vector<float>", &parPmz);					// Parts mom-z
+	tree->Branch("parFCH", "vector<int>", &parFCH);						// FCH flag
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
@@ -74,66 +76,64 @@ int main(){
 	int nEvent = 1e4;
 
 	// Store masses
-	double mZ = pythia.particleData.m0(23);						// Z0 mass
-	double mW = pythia.particleData.m0(24);						// W+ mass
+	float mZ = pythia.particleData.m0(23);								// Z0 mass
+	float mW = pythia.particleData.m0(24);								// W+ mass
 
 	// QCD processes
-	pythia.readString("HardQCD:all = off");						// master switch
+	pythia.readString("HardQCD:all = off");								// master switch
 
-	// Electroweak boson processes
-	pythia.readString("WeakZ0:gmZmode = 0");					// allow γ* or Z channels
-	// pythia.readString("WeakSingleBoson:ffbar2ffbar(s:gm));	// ee'->ff'
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");		// ee'->γ*/Z
-	// pythia.readString("WeakSingleBoson:ffbar2W = on");		// ee'->W
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");		// ee'->γ*γ*ZZ
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");		// ee'->ZW
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");			// ee'->WW
-	// Boson decays
-	pythia.readString("23:onMode = off");						// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 5 6");				// turn on Z iff (duscbt)
-	pythia.readString("24:onMode = off");						// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");			// turn on W iff (duscbt and τν)
+	// EW boson processes
+	pythia.readString("WeakZ0:gmZmode = 0");							// allow γ* or Z channels
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");				// ee'->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");				// ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");				// ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");					// ee'->WW
+	
+	// EW boson decays
+	pythia.readString("23:onMode = off");								// turn off Z production
+	pythia.readString("23:onIfAny = 1 2 3 4 5 6");						// turn on Z iff (duscbt)
+	pythia.readString("24:onMode = off");								// turn off W production
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");					// turn on W iff (duscbt and τν)
 
-	// Electroweak photon-parton processes
-	pythia.readString("PhotonParton:ggm2qqbar = off");			// gγ->qq' (uds)
-	pythia.readString("PhotonParton:ggm2ccbar = off");			// gγ->cc'
-	pythia.readString("PhotonParton:ggm2bbbar = off");			// gγ->bb'
-	pythia.readString("PhotonParton:qgm2qg = off");				// gγ->qq'
-	pythia.readString("PhotonParton:qgm2qgm = off");			// gγ->qq'
+	// EW photon-parton processes
+	pythia.readString("PhotonParton:ggm2qqbar = off");					// gγ->qq' (uds)
+	pythia.readString("PhotonParton:ggm2ccbar = off");					// gγ->cc'
+	pythia.readString("PhotonParton:ggm2bbbar = off");					// gγ->bb'
+	pythia.readString("PhotonParton:qgm2qg = off");						// gγ->qq'
+	pythia.readString("PhotonParton:qgm2qgm = off");					// gγ->qq'
 
 	// Top processes
-	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");			// ee'->tt'
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");					// ee'->tt'
 
 	// Photon processes
 	pythia.readString("PhotonCollision:all = off");
-	pythia.readString("PhotonCollision:gmgm2qqbar = off");		// γγ->qq'
-	pythia.readString("PhotonCollision:gmgm2ccbar = off");		// γγ->cc'
-	pythia.readString("PhotonCollision:gmgm2bbbar = off");		// γγ->bb'
-	pythia.readString("PhotonCollision:gmgm2ee = off");			// γγ->ee'
-	pythia.readString("PhotonCollision:gmgm2mumu = off");		// γγ->μμ'
-	pythia.readString("PhotonCollision:gmgm2tautau = off");		// γγ->ττ'
+	pythia.readString("PhotonCollision:gmgm2qqbar = off");				// γγ->qq'
+	pythia.readString("PhotonCollision:gmgm2ccbar = off");				// γγ->cc'
+	pythia.readString("PhotonCollision:gmgm2bbbar = off");				// γγ->bb'
+	pythia.readString("PhotonCollision:gmgm2ee = off");					// γγ->ee'
+	pythia.readString("PhotonCollision:gmgm2mumu = off");				// γγ->μμ'
+	pythia.readString("PhotonCollision:gmgm2tautau = off");				// γγ->ττ'
 
 	// ISR processes
-	pythia.readString("TimeShower:QEDshowerByL = on");			// ee->γee
-	pythia.readString("TimeShower:QEDshowerByQ = off");			// qq->γqq
-	pythia.readString("SpaceShower:QEDshowerByL = on");			// ee->γee
-	pythia.readString("SpaceShower:QEDshowerByQ = off");		// qq->γqq
+	pythia.readString("TimeShower:QEDshowerByL = on");					// ee->γee
+	pythia.readString("TimeShower:QEDshowerByQ = off");					// qq->γqq
+	pythia.readString("SpaceShower:QEDshowerByL = on");					// ee->γee
+	pythia.readString("SpaceShower:QEDshowerByQ = off");				// qq->γqq
 
 	// Define Beam params
-	pythia.readString("Beams:idA = 11"); 						// Beam A energy
-	pythia.readString("Beams:idB = -11"); 						// Beam B energy
-	pythia.settings.parm("Beams:eCM", 500);						// Set centre-of-mass
-	pythia.readString("PDF:lepton = off");						// Disable substructure
+	pythia.readString("Beams:idA = 11"); 								// Beam A energy
+	pythia.readString("Beams:idB = -11"); 								// Beam B energy
+	pythia.settings.parm("Beams:eCM", 500);								// CM energy
+	pythia.readString("PDF:lepton = off");								// Disable substructure
 
 	// Suppress terminal text
-	pythia.readString("Next:numberCount = 1000");
-	pythia.readString("Next:numberShowProcess = 0");
-	pythia.readString("Init:showMultipartonInteractions = off");
-	pythia.readString("Init:showChangedSettings = off");
-	pythia.readString("Init:showChangedParticleData = off");
-	pythia.readString("Next:numberCount = 0");
-	pythia.readString("Next:numberShowInfo = 0");
-	pythia.readString("Next:numberShowEvent = 0");
+	pythia.readString("Next:numberCount = 1000");						//
+	pythia.readString("Next:numberShowProcess = 0");					//
+	pythia.readString("Next:numberShowInfo = 0");						//
+	pythia.readString("Next:numberShowEvent = 0");						//
+	pythia.readString("Init:showMultipartonInteractions = off");		//
+	pythia.readString("Init:showChangedSettings = off");				//
+	pythia.readString("Init:showChangedParticleData = off");			//
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Generate Pythia collisions
@@ -142,42 +142,53 @@ int main(){
 	// Initialise PYTHIA
 	pythia.init();
 
-	// Counters
-	double sigmaTotal = 0.0;
-
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
 
 		// Anti-crash
 		if(!pythia.next()) continue;
 
+		// Update
+		sigmaT.push_back(pythia.info.sigmaGen());
+
+		// Reset
+		eveNum.clear(); 
+		eveSiz.clear();
+		parNum.clear();
+		parPdg.clear();
+		parMas.clear();
+		parPmx.clear();
+		parPmy.clear();
+		parPmz.clear();
+		parFCH.clear();
+
 		// Run through particles
-		for(int j = 0; j < pythia.event.size(); j++) {
-			
-			// Store vars
-			eveNum = iEvent;									// Store event number
-			eveSiz = pythia.event.size();						// Store event size
-			parNum = j;											// Store particle number
-			parPdg = pythia.event[j].id();						// Store particle pdg id
-			parMas = pythia.event[j].m();						// Store particle mass
-			parPmx = pythia.event[j].px();						// Store particle momentum-x
-			parPmy = pythia.event[j].py();						// Store particle momentum-y
-			parPmz = pythia.event[j].pz();						// Store particle momentum-z
+		for(int jParts = 0; jParts < pythia.event.size(); jParts++) {
 
 			// FCH check
-			if(pythia.event[j].isFinal())
-				if(pythia.event[j].isCharged())
-					if(pythia.event[j].isHadron())
-						parFCH = true;
+			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged()) {
+
+				// Update
+				eveNum.push_back(iEvent);										// Add event number
+				eveSiz.push_back(pythia.event.size());							// Add event size
+				parNum.push_back(jParts);										// Add particle number
+				parPdg.push_back(pythia.event[jParts].id());					// Add particle pdg id
+				parMas.push_back(pythia.event[jParts].m());						// Add particle mass
+				parPmx.push_back(pythia.event[jParts].px());					// Add particle mom-x
+				parPmy.push_back(pythia.event[jParts].py());					// Add particle mom-y
+				parPmz.push_back(pythia.event[jParts].pz());					// Add particle mom-z
+				if(pythia.event[jParts].isHadron()) parFCH.push_back(1);  		// Add positive FCH flag	
+				else parFCH.push_back(0);										// Add negative FCH flag
+			}
 		}
 
-		// Fill branches
+		// Populate
 		tree->Fill();
 
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Cross-section checks
+// Check cross-sections
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	pythia.stat();
@@ -194,7 +205,6 @@ int main(){
 // File closures
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Write file
 	output->Write();
 	output->Close();
 	delete output;
