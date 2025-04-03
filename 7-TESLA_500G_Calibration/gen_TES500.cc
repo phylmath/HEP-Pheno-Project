@@ -51,15 +51,18 @@ int main(){
 
 	// Intialise vecs
 	vector<int> eveNum, eveSiz, parNum, parPdg, parFCH;
-	vector<float> sigmaT, parMas, parPmx, parPmy, parPmz;
+	vector<float> eveThr, eveTax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);					// Total sigma
 	tree->Branch("eveNum", "vector<int>", &eveNum);						// Event number
 	tree->Branch("eveSiz", "vector<int>", &eveSiz);						// Event size
+	tree->Branch("eveThr", "vector<float>", &eveThr);					// Event thrust
+	tree->Branch("eveTax", "vector<float>", &eveTax);					// Event thraxis
 	tree->Branch("parNum", "vector<int>", &parNum);						// Parts number
 	tree->Branch("parPdg", "vector<int>", &parPdg);						// Parts pdg id
-	tree->Branch("parMas", "vector<float>", &parMas);					// Parts mass
+	tree->Branch("parEto", "vector<float>", &parEto);					// Parts energy
+	tree->Branch("parEtt", "vector<float>", &parEtt);					// Parts energy
 	tree->Branch("parPmx", "vector<float>", &parPmx);					// Parts mom-x
 	tree->Branch("parPmy", "vector<float>", &parPmy);					// Parts mom-y
 	tree->Branch("parPmz", "vector<float>", &parPmz);					// Parts mom-z
@@ -73,7 +76,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e4;
+	int nEvent = 1e3;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);								// Z0 mass
@@ -88,7 +91,7 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");				// ee'->γ*γ*ZZ
 	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");				// ee'->ZW
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");					// ee'->WW
-	
+
 	// EW boson decays
 	pythia.readString("23:onMode = off");								// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5 6");						// turn on Z iff (duscbt)
@@ -121,10 +124,10 @@ int main(){
 	pythia.readString("SpaceShower:QEDshowerByQ = off");				// qq->γqq
 
 	// Define Beam params
-	pythia.readString("Beams:idA = 11"); 								// Beam A energy
-	pythia.readString("Beams:idB = -11"); 								// Beam B energy
-	pythia.settings.parm("Beams:eCM", 500);								// CM energy
-	pythia.readString("PDF:lepton = off");								// Disable substructure
+	pythia.readString("Beams:idA = 11"); 								// beam energy
+	pythia.readString("Beams:idB = -11"); 								// beam energy
+	pythia.settings.parm("Beams:eCM", 500);								// c-om energy
+	pythia.readString("PDF:lepton = off");								// disable substructure
 
 	// Suppress terminal text
 	pythia.readString("Next:numberCount = 1000");						//
@@ -142,6 +145,9 @@ int main(){
 	// Initialise PYTHIA
 	pythia.init();
 
+	// Analyses
+	Thrust thr;
+
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
 
@@ -152,34 +158,34 @@ int main(){
 		sigmaT.push_back(pythia.info.sigmaGen());
 
 		// Reset
-		eveNum.clear(); 
-		eveSiz.clear();
-		parNum.clear();
-		parPdg.clear();
-		parMas.clear();
-		parPmx.clear();
-		parPmy.clear();
-		parPmz.clear();
-		parFCH.clear();
+		// eveNum.clear(); eveSiz.clear();	eveThr.clear();	eveTax.clear();	parNum.clear();	parPdg.clear();
+		// parEto.clear();	parEtt.clear();	parPmx.clear();	parPmy.clear(); parPmz.clear();	parFCH.clear();
 
 		// Run through particles
 		for(int jParts = 0; jParts < pythia.event.size(); jParts++) {
 
-			// FCH check
+			//Store
 			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged()) {
+		
+				eveNum.push_back(iEvent);													// Add event number
+				eveSiz.push_back(pythia.event.size());										// Add event size
+				parNum.push_back(jParts);													// Add particle number
+				parPdg.push_back(pythia.event[jParts].id());								// Add particle pdg id
+				parEto.push_back(pythia.event[jParts].e());									// Add particle energy
+				parEtt.push_back(pythia.event[jParts].eT());								// Add particle energy
+				parPmx.push_back(pythia.event[jParts].px());								// Add particle mom-x
+				parPmy.push_back(pythia.event[jParts].py());								// Add particle mom-y
+				parPmz.push_back(pythia.event[jParts].pz());								// Add particle mom-z
+				if(pythia.event[jParts].isHadron()) parFCH.push_back(1);  					// Add positive FCH flag	
+				else parFCH.push_back(0);													// Add negative FCH flag
 
-				// Update
-				eveNum.push_back(iEvent);										// Add event number
-				eveSiz.push_back(pythia.event.size());							// Add event size
-				parNum.push_back(jParts);										// Add particle number
-				parPdg.push_back(pythia.event[jParts].id());					// Add particle pdg id
-				parMas.push_back(pythia.event[jParts].m());						// Add particle mass
-				parPmx.push_back(pythia.event[jParts].px());					// Add particle mom-x
-				parPmy.push_back(pythia.event[jParts].py());					// Add particle mom-y
-				parPmz.push_back(pythia.event[jParts].pz());					// Add particle mom-z
-				if(pythia.event[jParts].isHadron()) parFCH.push_back(1);  		// Add positive FCH flag	
-				else parFCH.push_back(0);										// Add negative FCH flag
 			}
+		}
+
+		// Compute
+		if (thr.analyze( pythia.event )) {
+			eveThr.push_back(1.0-thr.thrust());												// Thrust
+			eveTax.push_back(thr.eventAxis(1).pz());										// Cosθ
 		}
 
 		// Populate
