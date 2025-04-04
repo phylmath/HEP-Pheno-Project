@@ -11,8 +11,6 @@
 #include "Pythia8/Basics.h"
 #include "Pythia8/Event.h"
 // Fastjet
-#include "fjcore.hh"
-#include "fastjet/PseudoJet.hh"
 #include "fastjet/ClusterSequence.hh"
 // ROOT
 #include "TFile.h"
@@ -35,7 +33,6 @@
 using namespace Pythia8;
 using namespace std;
 using namespace fastjet;
-using namespace fjcore;
 // Extras
 
 // Code
@@ -61,36 +58,48 @@ int main(){
 	 *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
 
 	// Set branches
-	itree->SetBranchAddress("sigmaT", &sigmaT);				// Total sigma
-	itree->SetBranchAddress("eveNum", &eveNum);				// Event number
-	itree->SetBranchAddress("eveSiz", &eveSiz);				// Event size
-	itree->SetBranchAddress("eveThr", &eveThr);				// Event thrust
-	itree->SetBranchAddress("eveTax", &eveTax);				// Event thraxis
-	itree->SetBranchAddress("parNum", &parNum);				// Parts number
-	itree->SetBranchAddress("parPdg", &parPdg);				// Parts pdg id
-	itree->SetBranchAddress("parEto", &parEto);				// Parts energy
-	itree->SetBranchAddress("parEtt", &parEtt);				// Parts energy
-	itree->SetBranchAddress("parPmx", &parPmx);				// Parts mom-x
-	itree->SetBranchAddress("parPmy", &parPmy);				// Parts mom-y
-	itree->SetBranchAddress("parPmz", &parPmz);				// Parts mom-z
-	itree->SetBranchAddress("parFCH", &parFCH);				// FCH flag
+	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
+	itree->SetBranchAddress("eveNum", &eveNum);											// Event number
+	itree->SetBranchAddress("eveSiz", &eveSiz);											// Event size
+	itree->SetBranchAddress("eveThr", &eveThr);											// Event thrust
+	itree->SetBranchAddress("eveTax", &eveTax);											// Event thraxis
+	itree->SetBranchAddress("parNum", &parNum);											// Parts number
+	itree->SetBranchAddress("parPdg", &parPdg);											// Parts pdg id
+	itree->SetBranchAddress("parEto", &parEto);											// Parts energy
+	itree->SetBranchAddress("parEtt", &parEtt);											// Parts energy
+	itree->SetBranchAddress("parPmx", &parPmx);											// Parts mom-x
+	itree->SetBranchAddress("parPmy", &parPmy);											// Parts mom-y
+	itree->SetBranchAddress("parPmz", &parPmz);											// Parts mom-z
+	itree->SetBranchAddress("parFCH", &parFCH);											// FCH flag
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1D *hist_nParton = new TH1D("hist_nParton", "Charged Multiplicity distribution", 50, 1, 101);
+	TH1F *hist_nParton = new TH1F("hist_nParton", "Charged Multiplicity", 50, 1, 101);
+	hist_nParton->GetXaxis()->SetTitle("N_{CH}>");
+	hist_nParton->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
 
-	TH1D *hist_nHadron = new TH1D("hist_nHadron", "Charged Hadron Multiplicity distribution", 50, 1, 101);
+	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 50, 1, 101);
+	hist_nHadron->GetXaxis()->SetTitle("N_{CH}>");
+	hist_nHadron->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron", &hist_nHadron, "hist_nHadron");
 
-	// float xbin[] = {0.00E+00,1.00E-02,2.00E-02,3.00E-02,4.00E-02,5.00E-02,7.00E-02,9.00E-02,1.20E-01,1.50E-01,2.20E-01,3.00E-01,4.00E-01};
-	// TH1D *hist_ThrPyth = new TH1D("hist_ThrPyth", "Thrust distribution", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1D *hist_ThrPyth = new TH1D("hist_ThrPyth", "Thrust distribution", 100, 0, 0.4);
+	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, 0, 11);
+	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}>");
+	hist_nJetTot->GetYaxis()->SetTitle("P(N_{JETS})");
+	otree->Branch("hist_nJetTot", &hist_nJetTot, "hist_nJetTot");
+
+	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
+	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)>");
+	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
-	TH1D *hist_TaxPyth = new TH1D("hist_TaxPyth", "Thrust axis distribution", 100, -1., 1.);
+	TH1F *hist_TaxPyth = new TH1F("hist_TaxPyth", "Thrust axis", 100, -1., 1.);
+	hist_TaxPyth->GetXaxis()->SetTitle("(1-T)>");
+	hist_TaxPyth->GetYaxis()->SetTitle("cosΘ_{Thrust}");
 	otree->Branch("hist_TaxPyth", &hist_TaxPyth, "hist_TaxPyth");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,57 +107,144 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define
-	int nCh = 0, nCp = 0, Pdg;
+	int nCh=0, nCp=0, nCj=0, nParts=0, Pdg;
 	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax;
+	
+	Pythia8::Thrust thr;
+	Pythia8::Event event;
 
+	// FastJet params
+	double R = 0.6, ptmin = 5.0;
+	vector<fastjet::PseudoJet> particles;
+	
 	// Run through events
-	for(int iEvent = 0; iEvent < itree->GetEntries(); iEvent++ ) {
+	for(int iEvent = 0; iEvent < 3; iEvent++ ) {
 
 		// Access
 		itree->GetEntry(iEvent);
 
 		// Reset
-		nCh=0; nCp=0;
+		event.init(); event.clear();
 
 		// Run through particles
-		for(int jParts = 0; jParts < eveSiz->size(); jParts++) {
+		for(int jParts = 0; jParts < (*eveSiz)[iEvent]; jParts++) {
 			
-			// Read
-			Pdg = (*parPdg)[jParts];
-			Eto = (*parEto)[jParts];
-			Ett = (*parEtt)[jParts];
-			Pmx = (*parPmx)[jParts];
-			Pmy = (*parPmy)[jParts];
-			Pmz = (*parPmz)[jParts];
+			////////////////////////// READING PARTS DATA ///////////////////////////////////////////////////
+			Pdg = (*parPdg)[jParts]; Eto = (*parEto)[jParts]; Ett = (*parEtt)[jParts];
+			Pmx = (*parPmx)[jParts]; Pmy = (*parPmy)[jParts]; Pmz = (*parPmz)[jParts];
+			/////////////////////////////////////////////////////////////////////////////////////////////////
 			
-			// Define
 			Pythia8::Vec4 Pm4(Pmx, Pmy, Pmz, Eto);
+ 			event.append(Pdg, 1, 0, 0, Pm4);
 
-			// Count
-			nCp++;
+			////////////////////////// STORING JETS PARAMS //////////////////////////////////////////////////
+			
+			fastjet::PseudoJet particle(Pmx,Pmy,Pmz,Eto);								// Particle vector
+			particle.set_user_index(Pdg);												// Set particle id
+			particles.push_back(particle);												// Add to particles
+			/////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			////////////////////////// COMPUTING NCH CURVE //////////////////////////////////////////////////
+			nCp++;																		// Charged particles
+			if((*parFCH)[jParts] == 1) nCh++;											// Charged hadrons
+			/////////////////////////////////////////////////////////////////////////////////////////////////
 
-			// FCH flag
-			if((*parFCH)[jParts] == 1) nCh++;
+		}
+		
+		////////////////////////// CLUSTERING JET PARTICLES /////////////////////////////////////////////////
+		fastjet::JetDefinition jet_def(antikt_algorithm, R);							// Jet definition
+		fastjet::ClusterSequence cs(particles, jet_def);								// Run clustering
+		vector<fastjet::PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store jets
+		nCj = jets.size();																// Jet multiplicity
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		////////////////////////// PRINTING CLUSTERED INFO //////////////////////////////////////////////////
 
-		}	
-	
-		// Read
+		cout << "Event " << iEvent << " has " << particles.size() << " particles" << " / " << jets.size() << " jets" << endl;
+
+		// Run through jets
+		for (int iJet = 0; iJet < jets.size(); iJet++) {
+			
+			vector<fastjet::PseudoJet> constituents = jets[iJet].constituents();		// Jet constituents		
+			// cout << "Jet#" << iJet << " has " << constituents.size() << endl;			// Print info
+
+			// Run through constituents
+			for (int jJet = 0; jJet < constituents.size(); jJet++) {
+				
+				fastjet::PseudoJet constituent = jets[iJet].constituents()[jJet];		// Jet constituent
+				// cout << jJet << "\t" << constituents[jJet].user_index() << endl;		// Print info
+
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
+		
 		Thr = (*eveThr)[iEvent];
 		Tax = (*eveTax)[iEvent];
+		// hist_ThrPyth->Fill( Thr );
+		// hist_TaxPyth->Fill( Tax );
 
-		// Histogram
-		hist_ThrPyth->Fill( Thr );
-		hist_TaxPyth->Fill( Tax );
+		thr.analyze(event);
+		hist_ThrPyth->Fill( 1.0-thr.thrust() );
+		hist_TaxPyth->Fill( thr.eventAxis(1).pz() );
+
+		cout << Thr << " " << 1.0-thr.thrust() << endl;
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////////////////////////
 		hist_nHadron->Fill( nCh );
 		hist_nParton->Fill( nCp );
+		hist_nJetTot->Fill( nCj );
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		////////////////////////// CLEARING VALUES OF TEMP VARS /////////////////////////////////////////////
+		nCh=0; nCp=0;
+		particles.clear(); jets.clear();
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// KNO Scaling
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	// KNO params
+	double histNch=0.0, histMax=0.0, histMin=0.0, histBin=0.0; int numBin=0;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nHadron->GetMean();
+	histMax = hist_nHadron->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
+	// Beautify
+	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH}) x <N_{CH}>");
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nHadron->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nHadron->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron->GetBinError(bin) * histNch;
+	KNOO_nHadron->Fill(scaledNch, scaledContent);
+	KNOO_nHadron->SetBinError(KNOO_nHadron->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // File closures
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Write file
 	output->Write();
 	output->Close();
 	input->Close();
@@ -158,116 +254,9 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Terminate
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	return 0;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// // Run through events
-	// for(int iEvent = 0; iEvent < itree->GetEntries(); iEvent++ ) {
-
-	// 	// Initiate
-	// 	event.clear();
-	// 	event.init();
-
-	// 	// Access
-	// 	itree->GetEntry(iEvent);
-
-	// 	// Reset
-	// 	nCh = 0;
-	// 	nCp = 0;
-
-	// 	// Run through particles
-	// 	for(int jParts = 0; jParts < eveSiz->size(); jParts++) {
-			
-	// 		// Define
-	// 		Pdg = (*parPdg)[jParts];
-	// 		Egg = (*parEgg)[jParts];
-	// 		Ett = (*parEtt)[jParts];
-	// 		Mas = (*parMas)[jParts];
-	// 		Pmx = (*parPmx)[jParts];
-	// 		Pmy = (*parPmy)[jParts];
-	// 		Pmz = (*parPmz)[jParts];
-			
-	// 		// Add event
-	// 		Pythia8::Vec4 Pm4(Pmx, Pmy, Pmz, Egg);
-	// 		event.append(Pdg, 1, 0, 0, Pm4, Mas);
-
-	// 		// Check
-	// 		cout << jParts \
-	// 		<< "\t" << Pdg \
-	// 		<< "\t" << Egg \
-	// 		<< "\t" << Ett \
-	// 		<< "\t" << Mas \
-	// 		<< "\t" << Pmx \
-	// 		<< "\t" << Pmy \
-	// 		<< "\t" << Pmz \
-	// 		<< endl;
-
-	// 		cout << jParts \
-	// 		<< "\t" << event[jParts].id() \
-	// 		<< "\t" << event[jParts].e() \
-	// 		<< "\t" << event[jParts].eT() \
-	// 		<< "\t" << event[jParts].m() \
-	// 		<< "\t" << event[jParts].px() \
-	// 		<< "\t" << event[jParts].py() \
-	// 		<< "\t" << event[jParts].pz() \
-	// 		<< "\t" << event.size() \
-	// 		<< endl;
-
-	// 		cout << " " << endl;
-
-	// 		// Count
-	// 		nCp++;
-
-	// 		// FCH flag
-	// 		if((*parFCH)[jParts] == 1) {
-
-	// 			// Count
-	// 			nCh++;
-
-	// 		}
-	// 	}	
-		
-	// 	// Thrust analysis
-	// 	thr.analyze(event);
-
-	// 	// if (thr.analyze( pythia.event )) {
-	// 	// 	hist_ThrustP->Fill( thr.thrust() );					// Thrust
-	// 	// 	hist_thrAxis->Fill( thr.eventAxis(1).pz() );		// Cosθ
-	// 	// 	hist_ThMajor->Fill( thr.tMajor() );					// Tmajor  
-	// 	// 	hist_ThMinor->Fill( thr.tMinor() );					// Tminor
-	// 	// 	hist_Oblatey->Fill( thr.oblateness() );				// Oblateness
-	// 	// 	}
-
-	// 	// Check
-	// 	cout << " " << endl;
-	// 	cout << "Event " << iEvent << " has " << event.size() << " particles before thrust analysis." << endl;
-	// 	cout << iEvent << "\tTHRUST\t" << "\t" << thr.analyze(event) << "\t" << thr.thrust() << "\t" << thr.eventAxis(1).pz() << "\t" << thr.tMajor() << endl;
-	// 	cout << " " << endl;
-
-	// 	// Populate histogram
-	// 	hist_nHadron->Fill( nCh );
-	// 	hist_nParton->Fill( nCp );
-
-	// }

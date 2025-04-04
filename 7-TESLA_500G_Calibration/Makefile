@@ -28,8 +28,8 @@ cut%: cut%.cc
 #	compile script
 	g++ -O $@.cc -o $@ \
 	-I/home/pmathew/0-software/pythia8313/include `root-config --cflags` \
-	-I/home/pmathew/0-software/fjcore-3.4.3/ \
 	-lpythia8 -L/home/pmathew/0-software/pythia8313/lib `root-config --glibs` \
+	-I/home/pmathew/0-software/fjcore-3.4.3/ \
 	`/home/pmathew/0-software/fastjet-install/bin/fastjet-config --cxxflags --libs --plugins` \
 	-lLHAPDF -L/home/pmathew/0-software/lhapdf-install-6.5.0/lib
 #	execute script
