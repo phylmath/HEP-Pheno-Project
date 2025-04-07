@@ -50,7 +50,7 @@ int main(){
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
 	// Intialise vecs
-	vector<int> eveNum, eveSiz, parNum, parPdg, parFCH;
+	vector<int> eveNum, eveSiz, parNum, parPdg;
 	vector<float> eveThr, eveTax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
@@ -66,7 +66,6 @@ int main(){
 	tree->Branch("parPmx", "vector<float>", &parPmx);					// Parts mom-x
 	tree->Branch("parPmy", "vector<float>", &parPmy);					// Parts mom-y
 	tree->Branch("parPmz", "vector<float>", &parPmz);					// Parts mom-z
-	tree->Branch("parFCH", "vector<int>", &parFCH);						// FCH flag
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
@@ -76,7 +75,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e4;
+	int nEvent = 5e4;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);								// Z0 mass
@@ -159,7 +158,7 @@ int main(){
 
 	// Analyses
 	Thrust thr;
-	Event event;
+	Event event_fch;
 	
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
@@ -170,11 +169,17 @@ int main(){
 		// Counter
 		int nCh = 0;
 
+		// Reset
+		event_fch.init(); event_fch.clear();
+		eveNum.clear(); parNum.clear(); parPdg.clear(); parEto.clear(); 
+		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
+		eveThr.clear(); eveTax.clear(); eveSiz.clear(); sigmaT.clear();
+
 		// Run through particles
 		for(int jParts = 0; jParts < pythia.event.size(); jParts++) {
 
 			//Store
-			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged()) {
+			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
 		
 				nCh++;																		// Count FC particles
 				eveNum.push_back(iEvent);													// Add event number
@@ -185,21 +190,18 @@ int main(){
 				parPmx.push_back(pythia.event[jParts].px());								// Add particle mom-x
 				parPmy.push_back(pythia.event[jParts].py());								// Add particle mom-y
 				parPmz.push_back(pythia.event[jParts].pz());								// Add particle mom-z
-				if(pythia.event[jParts].isHadron()) parFCH.push_back(1);  					// Add positive FCH flag	
-				else parFCH.push_back(0);													// Add negative FCH flag
+				event_fch.append(pythia.event[jParts]);										// Update event vector
 
 			}
 		}
 
-		// Update
-		sigmaT.push_back(pythia.info.sigmaGen());
-		eveSiz.push_back(nCh);
-
 		// Compute
-		// if (thr.analyze( pythia.event )) {
-		// 	eveThr.push_back(1.0-thr.thrust());												// Thrust
-		// 	eveTax.push_back(thr.eventAxis(1).pz());										// Cosθ
-		// }
+		if (nCh != 0) if (thr.analyze( event_fch )) {
+			eveThr.push_back(1.0-thr.thrust());												// Add event thrust
+			eveTax.push_back(thr.eventAxis(1).pz());										// Add event Cosθ
+			sigmaT.push_back(pythia.info.sigmaGen());										// Add event sigma
+			eveSiz.push_back(nCh);															// Add event size
+		}
 
 		// Populate
 		tree->Fill();

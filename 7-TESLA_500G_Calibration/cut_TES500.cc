@@ -43,17 +43,17 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile *input = new TFile("gen_TES500.root", "READ");
+	TFile *input = new TFile("gen_TES500_woT.root", "READ");
 	// Read TTree
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	TFile *output = new TFile("cut_TES500.root", "RECREATE");
+	TFile *output = new TFile("cut_TES500_woT.root", "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
 	// Intialise vecs
-	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *parNum=nullptr, *parPdg=nullptr, *parFCH=nullptr;
+	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *parNum=nullptr, *parPdg=nullptr;
 	vector<float> *eveThr=nullptr, *eveTax=nullptr, *sigmaT=nullptr, \
 	 *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
 
@@ -70,16 +70,10 @@ int main(){
 	itree->SetBranchAddress("parPmx", &parPmx);											// Parts mom-x
 	itree->SetBranchAddress("parPmy", &parPmy);											// Parts mom-y
 	itree->SetBranchAddress("parPmz", &parPmz);											// Parts mom-z
-	itree->SetBranchAddress("parFCH", &parFCH);											// FCH flag
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	TH1F *hist_nParton = new TH1F("hist_nParton", "Charged Multiplicity", 50, 1, 101);
-	hist_nParton->GetXaxis()->SetTitle("N_{CH}>");
-	hist_nParton->GetYaxis()->SetTitle("P(N_{CH})");
-	otree->Branch("hist_nParton", &hist_nParton, "hist_nParton");
 
 	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 50, 1, 101);
 	hist_nHadron->GetXaxis()->SetTitle("N_{CH}>");
@@ -107,7 +101,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define
-	int nCh=0, nCp=0, nCj=0, nParts=0, Pdg;
+	int nCh=0, nCj=0, nParts=0, Pdg;
 	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax;
 	
 	Pythia8::Thrust thr;
@@ -118,7 +112,7 @@ int main(){
 	vector<fastjet::PseudoJet> particles;
 	
 	// Run through events
-	for(int iEvent = 0; iEvent < 3; iEvent++ ) {
+	for(int iEvent = 0; iEvent < itree->GetEntries(); iEvent++ ) {
 
 		// Access
 		itree->GetEntry(iEvent);
@@ -127,7 +121,7 @@ int main(){
 		event.init(); event.clear();
 
 		// Run through particles
-		for(int jParts = 0; jParts < (*eveSiz)[iEvent]; jParts++) {
+		for(int jParts = 0; jParts < (*eveSiz)[0]; jParts++) {
 			
 			////////////////////////// READING PARTS DATA ///////////////////////////////////////////////////
 			Pdg = (*parPdg)[jParts]; Eto = (*parEto)[jParts]; Ett = (*parEtt)[jParts];
@@ -145,8 +139,7 @@ int main(){
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			////////////////////////// COMPUTING NCH CURVE //////////////////////////////////////////////////
-			nCp++;																		// Charged particles
-			if((*parFCH)[jParts] == 1) nCh++;											// Charged hadrons
+			nCh++;																		// Charged hadrons
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 
 		}
@@ -180,29 +173,27 @@ int main(){
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 		
-		Thr = (*eveThr)[iEvent];
-		Tax = (*eveTax)[iEvent];
-		// hist_ThrPyth->Fill( Thr );
-		// hist_TaxPyth->Fill( Tax );
+		Thr = (*eveThr)[0];
+		Tax = (*eveTax)[0];
+		hist_ThrPyth->Fill( Thr );
+		hist_TaxPyth->Fill( Tax );
 
-		thr.analyze(event);
-		hist_ThrPyth->Fill( 1.0-thr.thrust() );
-		hist_TaxPyth->Fill( thr.eventAxis(1).pz() );
+		// thr.analyze(event);
+		// hist_ThrPyth->Fill( 1.0-thr.thrust() );
+		// hist_TaxPyth->Fill( thr.eventAxis(1).pz() );
 
-		cout << Thr << " " << 1.0-thr.thrust() << endl;
+		// cout << Thr << " " << 1.0-thr.thrust() << endl;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////////////////////////
 		hist_nHadron->Fill( nCh );
-		hist_nParton->Fill( nCp );
 		hist_nJetTot->Fill( nCj );
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// CLEARING VALUES OF TEMP VARS /////////////////////////////////////////////
-		nCh=0; nCp=0;
-		particles.clear(); jets.clear();
+		nCh=0; particles.clear(); jets.clear();
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
@@ -224,7 +215,7 @@ int main(){
 	histBin = hist_nHadron->GetBinWidth(10)/histNch;
 	numBin = static_cast<int>(ceil(histMax/histBin));
 	// KNO histogram
-	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity e^{+}e^{-}", numBin, 0, histMax);
+	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
 	// Beautify
 	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
 	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH}) x <N_{CH}>");
