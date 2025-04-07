@@ -76,13 +76,13 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e3;
+	int nEvent = 1e4;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);								// Z0 mass
 	float mW = pythia.particleData.m0(24);								// W+ mass
 
-///////////////////////////////PHYSICIS SWITCHES FOR TESLA 500 GeV //////////////////////////////////////////
+///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
 	// QCD processes
 	pythia.readString("HardQCD:all = off");								// master switch
@@ -135,7 +135,7 @@ int main(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////PHYSICIS SWITCHES FOR LEP 91.2 GeV ///////////////////////////////////////////
+///////////////////////////////PHYSICS SWITCHES FOR LEP 91.2 GeV ////////////////////////////////////////////
 
 	// pythia.readString("HardQCD:all = off"); 							// master switch
 	// pythia.readString("WeakSingleBoson:ffbar2gmZ = on");				// ee'->γ*/Z
@@ -159,8 +159,8 @@ int main(){
 
 	// Analyses
 	Thrust thr;
-	eveSiz.clear();
-
+	Event event;
+	
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
 
@@ -196,10 +196,10 @@ int main(){
 		eveSiz.push_back(nCh);
 
 		// Compute
-		if (thr.analyze( pythia.event )) {
-			eveThr.push_back(1.0-thr.thrust());												// Thrust
-			eveTax.push_back(thr.eventAxis(1).pz());										// Cosθ
-		}
+		// if (thr.analyze( pythia.event )) {
+		// 	eveThr.push_back(1.0-thr.thrust());												// Thrust
+		// 	eveTax.push_back(thr.eventAxis(1).pz());										// Cosθ
+		// }
 
 		// Populate
 		tree->Fill();
