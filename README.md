@@ -1,2 +1,2 @@
-# QCD physics in the FCCee
-This repo tracks the progress of my research project studying QCD physics in 500 GeV electron-positron collisions in the FCCee. The analyses are coded in C++ using the Pythia 8.312, ROOT 6.32.08, and FastJet 3.4.3 frameworks.
+# QCD @ FCCee
+This repo tracks the progress of my research project studying QCD physics in 500 GeV electron-positron collisions in the FCCee. The analyses are mainly in C++ using the Pythia 8.312, ROOT 6.32.08, and FastJet 3.4.3 frameworks.
