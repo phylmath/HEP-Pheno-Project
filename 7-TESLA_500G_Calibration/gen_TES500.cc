@@ -51,12 +51,13 @@ int main(){
 
 	// Intialise vecs
 	vector<int> eveNum, eveSiz, parNum, parPdg;
-	vector<float> eveThr, eveTax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
+	vector<float> eveThr, eveTax, eveSpr, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);					// Total sigma
 	tree->Branch("eveNum", "vector<int>", &eveNum);						// Event number
 	tree->Branch("eveSiz", "vector<int>", &eveSiz);						// Event size
+	tree->Branch("eveSpr", "vector<float>", &eveSpr);					// Event √s'
 	tree->Branch("eveThr", "vector<float>", &eveThr);					// Event thrust
 	tree->Branch("eveTax", "vector<float>", &eveTax);					// Event thraxis
 	tree->Branch("parNum", "vector<int>", &parNum);						// Parts number
@@ -75,7 +76,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 5e4;
+	int nEvent = 1e6;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);								// Z0 mass
@@ -113,6 +114,7 @@ int main(){
 	pythia.readString("PhotonCollision:gmgm2mumu = off");				// γγ->μμ'
 	pythia.readString("PhotonCollision:gmgm2tautau = off");				// γγ->ττ'
 	// ISR processes
+	pythia.readString("PartonLevel:ISR = on");
 	pythia.readString("TimeShower:QEDshowerByL = on");					// ee->γee
 	pythia.readString("TimeShower:QEDshowerByQ = off");					// qq->γqq
 	pythia.readString("SpaceShower:QEDshowerByL = on");					// ee->γee
@@ -159,6 +161,8 @@ int main(){
 	// Analyses
 	Thrust thr;
 	Event event_fch;
+	float sigmaE=0.0;
+	int nCh=0, epluss=0, eminus=0;
 	
 	// Run through events
 	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
@@ -166,19 +170,27 @@ int main(){
 		// Anti-crash
 		if(!pythia.next()) continue;
 
-		// Counter
-		int nCh = 0;
+		// Initial partons
+		epluss = pythia.event[1].id();
+		eminus = pythia.event[2].id();
 
-		// Reset
-		event_fch.init(); event_fch.clear();
-		eveNum.clear(); parNum.clear(); parPdg.clear(); parEto.clear(); 
+		// Counter
+		nCh=0; sigmaE=0.0;
+
+		// Reset event vectors
+		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
+		eveSpr.clear(); eveThr.clear(); eveTax.clear(); eveSiz.clear();
+		// Reset part vectors
+		parNum.clear(); parPdg.clear(); parEto.clear(); 
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
-		eveThr.clear(); eveTax.clear(); eveSiz.clear(); sigmaT.clear();
 
 		// Run through particles
 		for(int jParts = 0; jParts < pythia.event.size(); jParts++) {
 
-			//Store
+			// Compute √s'
+			if(pythia.event[jParts].isFinal() && pythia.event[jParts].id()!=22) sigmaE+=pythia.event[jParts].e();
+
+			// Store particle info
 			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
 		
 				nCh++;																		// Count FC particles
@@ -193,16 +205,18 @@ int main(){
 				event_fch.append(pythia.event[jParts]);										// Update event vector
 
 			}
+
 		}
 
-		// Compute
-		if (nCh != 0) if (thr.analyze( event_fch )) {
+		// Store event info
+		if (nCh!=0) if (thr.analyze(event_fch)) {
 			eveThr.push_back(1.0-thr.thrust());												// Add event thrust
 			eveTax.push_back(thr.eventAxis(1).pz());										// Add event Cosθ
 			sigmaT.push_back(pythia.info.sigmaGen());										// Add event sigma
 			eveSiz.push_back(nCh);															// Add event size
+			eveSpr.push_back(sigmaE);
 		}
-
+		
 		// Populate
 		tree->Fill();
 

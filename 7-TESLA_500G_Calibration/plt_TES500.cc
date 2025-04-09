@@ -264,15 +264,9 @@ void plt_TES500()
 	// Add legend
 	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
 	lg_thr1->AddEntry(hist_ThrPyth_TES500, "Pythia 8.3 500 GeV", "p");
-	lg_thr1->AddEntry(hist_ThrPyth_LEP912, "Pythia 8.3 91.2 GeV", "p");
+	// lg_thr1->AddEntry(hist_ThrPyth_LEP912, "Pythia 8.3 91.2 GeV", "p");
 	lg_thr1->AddEntry(hist_Thr1999, "1999 TESLA study", "p");
 	lg_thr1->SetTextSize(0.04);
-
-	// Add legend
-	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr2->AddEntry(hist_ThrPyth_TES50t, "Pythia 8.3 500 GeV", "p");
-	lg_thr2->AddEntry(hist_Thr199T, "1999 TESLA study", "p");
-	lg_thr2->SetTextSize(0.04);
 
 	// Create canvas
 	TCanvas* c_thr = new TCanvas("c_thr", "Inverse Thrust distributions", 800, 600);
@@ -296,12 +290,12 @@ void plt_TES500()
 	c_thr->cd(1);
 	hist_Thr1999->Draw("P");
 	hist_ThrPyth_TES500->Draw("PSAME");
-	hist_ThrPyth_LEP912->Draw("PSAME");
+	// hist_ThrPyth_LEP912->Draw("PSAME");
 	lg_thr1->Draw("SAME");
 	c_thr->cd(2);
 	hist_Thr199T->Draw("P");
 	hist_ThrPyth_TES50t->Draw("PSAME");
-	hist_ThrPyth_LEP912->Draw("PSAME");
+	// hist_ThrPyth_LEP912->Draw("PSAME");
 	lg_thr1->Draw("SAME");
 
 

@@ -43,24 +43,25 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile *input = new TFile("gen_TES500_woT.root", "READ");
+	TFile *input = new TFile("gen_TES500.root", "READ");
 	// Read TTree
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	TFile *output = new TFile("cut_TES500_woT.root", "RECREATE");
+	TFile *output = new TFile("cut_TES500_wiT.root", "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
 	// Intialise vecs
 	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *parNum=nullptr, *parPdg=nullptr;
-	vector<float> *eveThr=nullptr, *eveTax=nullptr, *sigmaT=nullptr, \
+	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSpr=nullptr, *sigmaT=nullptr, \
 	 *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
 
 	// Set branches
 	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
 	itree->SetBranchAddress("eveNum", &eveNum);											// Event number
 	itree->SetBranchAddress("eveSiz", &eveSiz);											// Event size
+	itree->SetBranchAddress("eveSpr", &eveSpr);											// Event √s'
 	itree->SetBranchAddress("eveThr", &eveThr);											// Event thrust
 	itree->SetBranchAddress("eveTax", &eveTax);											// Event thraxis
 	itree->SetBranchAddress("parNum", &parNum);											// Parts number
@@ -173,10 +174,12 @@ int main(){
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 		
-		Thr = (*eveThr)[0];
-		Tax = (*eveTax)[0];
-		hist_ThrPyth->Fill( Thr );
-		hist_TaxPyth->Fill( Tax );
+		if ((*eveSpr)[0] >= 425){
+			Thr = (*eveThr)[0];
+			Tax = (*eveTax)[0];
+			hist_ThrPyth->Fill( Thr );
+			hist_TaxPyth->Fill( Tax );
+		}
 
 		// thr.analyze(event);
 		// hist_ThrPyth->Fill( 1.0-thr.thrust() );
