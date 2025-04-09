@@ -160,7 +160,7 @@ int main(){
 		for (int iJet = 0; iJet < jets.size(); iJet++) {
 			
 			vector<fastjet::PseudoJet> constituents = jets[iJet].constituents();		// Jet constituents		
-			// cout << "Jet#" << iJet << " has " << constituents.size() << endl;			// Print info
+			// cout << "Jet#" << iJet << " has " << constituents.size() << endl;		// Print info
 
 			// Run through constituents
 			for (int jJet = 0; jJet < constituents.size(); jJet++) {
