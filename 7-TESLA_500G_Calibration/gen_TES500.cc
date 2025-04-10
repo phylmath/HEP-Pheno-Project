@@ -125,14 +125,14 @@ int main(){
 	pythia.settings.parm("Beams:eCM", 500);								// c-om energy
 	pythia.readString("PDF:lepton = off");								// disable substructure
 
-	// Suppress terminal text
-	pythia.readString("Next:numberCount = 1000");						//
-	pythia.readString("Next:numberShowProcess = 0");					//
-	pythia.readString("Next:numberShowInfo = 0");						//
-	pythia.readString("Next:numberShowEvent = 0");						//
-	pythia.readString("Init:showMultipartonInteractions = off");		//
-	pythia.readString("Init:showChangedSettings = off");				//
-	pythia.readString("Init:showChangedParticleData = off");			//
+	// // Suppress terminal text
+	// pythia.readString("Next:numberCount = 1000");						//
+	// pythia.readString("Next:numberShowProcess = 0");					//
+	// pythia.readString("Next:numberShowInfo = 0");						//
+	// pythia.readString("Next:numberShowEvent = 0");						//
+	// pythia.readString("Init:showMultipartonInteractions = off");		//
+	// pythia.readString("Init:showChangedSettings = off");				//
+	// pythia.readString("Init:showChangedParticleData = off");			//
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -161,21 +161,22 @@ int main(){
 	// Analyses
 	Thrust thr;
 	Event event_fch;
-	float sigmaE=0.0;
-	int nCh=0, epluss=0, eminus=0;
+	float sigISR=0.0;
+	int nCh=0, epluss=0, eminus=0, nISR=0;
+	bool isrcheck=true;
 	
 	// Run through events
-	for(int iEvent = 0; iEvent < nEvent; iEvent++ ) {
+	for (int iEvent=0; iEvent<nEvent; iEvent++ ) {
 
 		// Anti-crash
-		if(!pythia.next()) continue;
+		if (!pythia.next()) continue;
 
 		// Initial partons
 		epluss = pythia.event[1].id();
 		eminus = pythia.event[2].id();
 
 		// Counter
-		nCh=0; sigmaE=0.0;
+		nCh=0; sigISR=0.0; isrcheck=true;
 
 		// Reset event vectors
 		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
@@ -185,13 +186,10 @@ int main(){
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
 
 		// Run through particles
-		for(int jParts = 0; jParts < pythia.event.size(); jParts++) {
-
-			// Compute √s'
-			if(pythia.event[jParts].isFinal() && pythia.event[jParts].id()!=22) sigmaE+=pythia.event[jParts].e();
+		for (int jParts=0; jParts<pythia.event.size(); jParts++) {
 
 			// Store particle info
-			if(pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
+			if (pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
 		
 				nCh++;																		// Count FC particles
 				eveNum.push_back(iEvent);													// Add event number
@@ -206,7 +204,44 @@ int main(){
 
 			}
 
+			// Search ISR photon
+			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22 && pythia.event[jParts].e()>5) {
+	
+				// Run through particles to compare
+				for(int isrcount=0; isrcount<pythia.event.size(); isrcount++) {
+
+					// Check energy of compared particle
+					if (pythia.event[isrcount].isFinal() && pythia.event[isrcount].e()>0.250) {
+
+						// Neglect itself
+						if ( isrcount==jParts ) continue;
+
+						// Compute ΔR
+						float deltaEta = pythia.event[isrcount].eta()-pythia.event[jParts].eta();
+						float deltaPhi = pythia.event[isrcount].phi()-pythia.event[jParts].phi();
+						float deltaR = sqrt( deltaEta*deltaEta + deltaPhi*deltaPhi ) * 180/M_PI;
+						
+						// cout << pythia.event[isrcount].e() << "\t" << deltaR << endl;
+						
+						// Check isolated
+						if ( deltaR<10.0 ) {
+							isrcheck = false;
+							break;
+						}						
+					}
+				}
+
+				// ISR photon found!
+				if (isrcheck==true) {
+					// cout << "ISR photon found at: " << jParts << endl;
+					sigISR+=pythia.event[jParts].e();
+				}
+
+			}
 		}
+
+		// Compute √s'
+		sigISR = 500*sqrt(1-(2*sigISR)/500);
 
 		// Store event info
 		if (nCh!=0) if (thr.analyze(event_fch)) {
@@ -214,9 +249,12 @@ int main(){
 			eveTax.push_back(thr.eventAxis(1).pz());										// Add event Cosθ
 			sigmaT.push_back(pythia.info.sigmaGen());										// Add event sigma
 			eveSiz.push_back(nCh);															// Add event size
-			eveSpr.push_back(sigmaE);
+			eveSpr.push_back(sigISR);														// Add ISR energy
 		}
-		
+
+		// Radiative events
+		if (nCh!=0 && sigISR<425) nISR++;
+
 		// Populate
 		tree->Fill();
 
@@ -226,6 +264,7 @@ int main(){
 // Check cross-sections
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	cout << nISR << endl;
 	pythia.stat();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////

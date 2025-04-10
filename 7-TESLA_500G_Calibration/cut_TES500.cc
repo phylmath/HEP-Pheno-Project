@@ -88,12 +88,12 @@ int main(){
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
 	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)>");
+	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
 	TH1F *hist_TaxPyth = new TH1F("hist_TaxPyth", "Thrust axis", 100, -1., 1.);
-	hist_TaxPyth->GetXaxis()->SetTitle("(1-T)>");
+	hist_TaxPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_TaxPyth->GetYaxis()->SetTitle("cosΘ_{Thrust}");
 	otree->Branch("hist_TaxPyth", &hist_TaxPyth, "hist_TaxPyth");
 
@@ -174,7 +174,7 @@ int main(){
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 		
-		if ((*eveSpr)[0] >= 425){
+		if ((*eveSpr)[0] >= 480){
 			Thr = (*eveThr)[0];
 			Tax = (*eveTax)[0];
 			hist_ThrPyth->Fill( Thr );
@@ -189,7 +189,7 @@ int main(){
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		////////////////////////// POPULATING HISTOS WITH DATA //////////////////////////////////////////////
+		////////////////////////// POPULATING MULTIPLICITY HISTOS ///////////////////////////////////////////
 		hist_nHadron->Fill( nCh );
 		hist_nJetTot->Fill( nCj );
 
@@ -200,7 +200,6 @@ int main(){
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // KNO Scaling
@@ -221,7 +220,7 @@ int main(){
 	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
 	// Beautify
 	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH}) x <N_{CH}>");
+	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH})×<N_{CH}>");
 	// Fill histogram
 	for (int bin = 1; bin <= hist_nHadron->GetNbinsX(); ++bin) {
 	double nCh = hist_nHadron->GetXaxis()->GetBinCenter(bin);
