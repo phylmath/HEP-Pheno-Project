@@ -54,19 +54,19 @@ int main(){
 	vector<float> eveThr, eveTax, eveSpr, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
-	tree->Branch("sigmaT", "vector<float>", &sigmaT);					// Total sigma
-	tree->Branch("eveNum", "vector<int>", &eveNum);						// Event number
-	tree->Branch("eveSiz", "vector<int>", &eveSiz);						// Event size
-	tree->Branch("eveSpr", "vector<float>", &eveSpr);					// Event √s'
-	tree->Branch("eveThr", "vector<float>", &eveThr);					// Event thrust
-	tree->Branch("eveTax", "vector<float>", &eveTax);					// Event thraxis
-	tree->Branch("parNum", "vector<int>", &parNum);						// Parts number
-	tree->Branch("parPdg", "vector<int>", &parPdg);						// Parts pdg id
-	tree->Branch("parEto", "vector<float>", &parEto);					// Parts energy
-	tree->Branch("parEtt", "vector<float>", &parEtt);					// Parts energy
-	tree->Branch("parPmx", "vector<float>", &parPmx);					// Parts mom-x
-	tree->Branch("parPmy", "vector<float>", &parPmy);					// Parts mom-y
-	tree->Branch("parPmz", "vector<float>", &parPmz);					// Parts mom-z
+	tree->Branch("sigmaT", "vector<float>", &sigmaT);										// Total sigma
+	tree->Branch("eveNum", "vector<int>", &eveNum);											// Event number
+	tree->Branch("eveSiz", "vector<int>", &eveSiz);											// Event size
+	tree->Branch("eveSpr", "vector<float>", &eveSpr);										// Event √s'
+	tree->Branch("eveThr", "vector<float>", &eveThr);										// Event thrust
+	tree->Branch("eveTax", "vector<float>", &eveTax);										// Event thraxis
+	tree->Branch("parNum", "vector<int>", &parNum);											// Parts number
+	tree->Branch("parPdg", "vector<int>", &parPdg);											// Parts pdg id
+	tree->Branch("parEto", "vector<float>", &parEto);										// Parts energy
+	tree->Branch("parEtt", "vector<float>", &parEtt);										// Parts energy
+	tree->Branch("parPmx", "vector<float>", &parPmx);										// Parts mom-x
+	tree->Branch("parPmy", "vector<float>", &parPmy);										// Parts mom-y
+	tree->Branch("parPmz", "vector<float>", &parPmz);										// Parts mom-z
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define Pythia params
@@ -76,78 +76,66 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e6;
+	int nEvent = 2;
 
 	// Store masses
-	float mZ = pythia.particleData.m0(23);								// Z0 mass
-	float mW = pythia.particleData.m0(24);								// W+ mass
+	float mZ = pythia.particleData.m0(23);													// Z0 mass
+	float mW = pythia.particleData.m0(24);													// W+ mass
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
 	// QCD processes
-	pythia.readString("HardQCD:all = off");								// master switch
+	pythia.readString("HardQCD:all = off");													// master switch
 	// EW boson processes
-	pythia.readString("WeakZ0:gmZmode = 0");							// allow γ* or Z channels
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");				// ee'->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");				// ee'->γ*γ*ZZ
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");				// ee'->ZW
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");					// ee'->WW
+	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// ee'->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// ee'->WW
 	// EW boson decays
-	pythia.readString("23:onMode = off");								// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 5 6");						// turn on Z iff (duscbt)
-	pythia.readString("24:onMode = off");								// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");					// turn on W iff (duscbt and τν)
+	pythia.readString("23:onMode = off");													// turn off Z production
+	pythia.readString("23:onIfAny = 1 2 3 4 6 5");											// turn on Z iff (duscbt)
+	pythia.readString("24:onMode = off");													// turn off W production
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff (duscbt and τν)
 	// EW photon-parton processes
-	pythia.readString("PhotonParton:ggm2qqbar = off");					// gγ->qq' (uds)
-	pythia.readString("PhotonParton:ggm2ccbar = off");					// gγ->cc'
-	pythia.readString("PhotonParton:ggm2bbbar = off");					// gγ->bb'
-	pythia.readString("PhotonParton:qgm2qg = off");						// gγ->qq'
-	pythia.readString("PhotonParton:qgm2qgm = off");					// gγ->qq'
+	pythia.readString("PhotonParton:ggm2qqbar = off");										// gγ->qq' (uds)
+	pythia.readString("PhotonParton:ggm2ccbar = off");										// gγ->cc'
+	pythia.readString("PhotonParton:ggm2bbbar = off");										// gγ->bb'
+	pythia.readString("PhotonParton:qgm2qg = off");											// gγ->qq'
+	pythia.readString("PhotonParton:qgm2qgm = off");										// gγ->qq'
 	// Top processes
-	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");					// ee'->tt'
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// ee'->tt'
 	// Photon processes
 	pythia.readString("PhotonCollision:all = off");
-	pythia.readString("PhotonCollision:gmgm2qqbar = off");				// γγ->qq'
-	pythia.readString("PhotonCollision:gmgm2ccbar = off");				// γγ->cc'
-	pythia.readString("PhotonCollision:gmgm2bbbar = off");				// γγ->bb'
-	pythia.readString("PhotonCollision:gmgm2ee = off");					// γγ->ee'
-	pythia.readString("PhotonCollision:gmgm2mumu = off");				// γγ->μμ'
-	pythia.readString("PhotonCollision:gmgm2tautau = off");				// γγ->ττ'
+	pythia.readString("PhotonCollision:gmgm2qqbar = off");									// γγ->qq'
+	pythia.readString("PhotonCollision:gmgm2ccbar = off");									// γγ->cc'
+	pythia.readString("PhotonCollision:gmgm2bbbar = off");									// γγ->bb'
+	pythia.readString("PhotonCollision:gmgm2ee = off");										// γγ->ee'
+	pythia.readString("PhotonCollision:gmgm2mumu = off");									// γγ->μμ'
+	pythia.readString("PhotonCollision:gmgm2tautau = off");									// γγ->ττ'
 	// ISR processes
 	pythia.readString("PartonLevel:ISR = on");
-	pythia.readString("TimeShower:QEDshowerByL = on");					// ee->γee
-	pythia.readString("TimeShower:QEDshowerByQ = off");					// qq->γqq
-	pythia.readString("SpaceShower:QEDshowerByL = on");					// ee->γee
-	pythia.readString("SpaceShower:QEDshowerByQ = off");				// qq->γqq
+	pythia.readString("SpaceShower:QEDshowerByL = on");										// ee->γee
+	pythia.readString("SpaceShower:QEDshowerByQ = off");									// qq->γqq
+	// FSR processes
+	pythia.readString("PartonLevel:FSR = on");
+	pythia.readString("TimeShower:QEDshowerByL = on");										// ee->γee
+	pythia.readString("TimeShower:QEDshowerByQ = off");										// qq->γqq
 	// Define Beam params
-	pythia.readString("Beams:idA = 11"); 								// beam energy
-	pythia.readString("Beams:idB = -11"); 								// beam energy
-	pythia.settings.parm("Beams:eCM", 500);								// c-om energy
-	pythia.readString("PDF:lepton = off");								// disable substructure
+	pythia.readString("Beams:idA = 11"); 													// beam energy
+	pythia.readString("Beams:idB = -11"); 													// beam energy
+	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
+	// pythia.readString("PDF:lepton = off");												// disable ISR
 
-	// // Suppress terminal text
-	// pythia.readString("Next:numberCount = 1000");						//
-	// pythia.readString("Next:numberShowProcess = 0");					//
-	// pythia.readString("Next:numberShowInfo = 0");						//
-	// pythia.readString("Next:numberShowEvent = 0");						//
-	// pythia.readString("Init:showMultipartonInteractions = off");		//
-	// pythia.readString("Init:showChangedSettings = off");				//
-	// pythia.readString("Init:showChangedParticleData = off");			//
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////PHYSICS SWITCHES FOR LEP 91.2 GeV ////////////////////////////////////////////
-
-	// pythia.readString("HardQCD:all = off"); 							// master switch
-	// pythia.readString("WeakSingleBoson:ffbar2gmZ = on");				// ee'->γ*/Z
-	// pythia.readString("23:onMode = off");								// turn off Z production
-	// pythia.readString("23:onIfAny = 1 2 3 4 5");						// turn on Z iff (duscb)
-
-	// // Define Beam params
-	// pythia.readString("Beams:idA = 11"); 								// beam energy
-	// pythia.readString("Beams:idB = -11"); 								// beam energyy
-	// pythia.settings.parm("Beams:eCM", mZ);								// c-om energy
-	// pythia.readString("PDF:lepton = off");								// disable substructure
+	// Suppress terminal text
+	pythia.readString("Print:quiet = on");
+	pythia.readString("Next:numberCount = 1000");											//
+	pythia.readString("Next:numberShowProcess = 0");										//
+	pythia.readString("Next:numberShowInfo = 0");											//
+	pythia.readString("Next:numberShowEvent = 0");											//
+	pythia.readString("Init:showMultipartonInteractions = off");							//
+	pythia.readString("Init:showChangedSettings = off");									//
+	pythia.readString("Init:showChangedParticleData = off");								//
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -161,9 +149,8 @@ int main(){
 	// Analyses
 	Thrust thr;
 	Event event_fch;
-	float sigISR=0.0;
-	int nCh=0, epluss=0, eminus=0, nISR=0;
-	bool isrcheck=true;
+	float sigISR=0.0, sigmaE=0.0;
+	int nCh=0, nISR=0;
 	
 	// Run through events
 	for (int iEvent=0; iEvent<nEvent; iEvent++ ) {
@@ -171,12 +158,8 @@ int main(){
 		// Anti-crash
 		if (!pythia.next()) continue;
 
-		// Initial partons
-		epluss = pythia.event[1].id();
-		eminus = pythia.event[2].id();
-
 		// Counter
-		nCh=0; sigISR=0.0; isrcheck=true;
+		nCh=0; sigISR=0.0; sigmaE=0.0;
 
 		// Reset event vectors
 		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
@@ -187,6 +170,9 @@ int main(){
 
 		// Run through particles
 		for (int jParts=0; jParts<pythia.event.size(); jParts++) {
+
+			// Sum final energies
+			if (pythia.event[jParts].isFinal()) sigmaE+=pythia.event[jParts].e();
 
 			// Store particle info
 			if (pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
@@ -205,43 +191,27 @@ int main(){
 			}
 
 			// Search ISR photon
-			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22 && pythia.event[jParts].e()>5) {
+			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22) {
 	
-				// Run through particles to compare
-				for(int isrcount=0; isrcount<pythia.event.size(); isrcount++) {
+				// Store origins
+				int idmom1 = pythia.event[jParts].mother1();
+				int idmom2 = pythia.event[jParts].mother2();
 
-					// Check energy of compared particle
-					if (pythia.event[isrcount].isFinal() && pythia.event[isrcount].e()>0.250) {
-
-						// Neglect itself
-						if ( isrcount==jParts ) continue;
-
-						// Compute ΔR
-						float deltaEta = pythia.event[isrcount].eta()-pythia.event[jParts].eta();
-						float deltaPhi = pythia.event[isrcount].phi()-pythia.event[jParts].phi();
-						float deltaR = sqrt( deltaEta*deltaEta + deltaPhi*deltaPhi ) * 180/M_PI;
-						
-						// cout << pythia.event[isrcount].e() << "\t" << deltaR << endl;
-						
-						// Check isolated
-						if ( deltaR<10.0 ) {
-							isrcheck = false;
-							break;
-						}						
+				// ISR found
+				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) && pythia.event[jParts].e()>0.001 ) {
+					
+					if (pythia.event[jParts].e() > sigISR) {
+						cout << "ISR photon energy = " << pythia.event[jParts].e() << " with status " << pythia.event[jParts].status() << " and mother energy = " << pythia.event[idmom1].e() << " with status " << pythia.event[idmom1].status() << endl;
+						sigISR=pythia.event[jParts].e();
 					}
 				}
 
-				// ISR photon found!
-				if (isrcheck==true) {
-					// cout << "ISR photon found at: " << jParts << endl;
-					sigISR+=pythia.event[jParts].e();
-				}
-
 			}
+
 		}
 
 		// Compute √s'
-		sigISR = 500*sqrt(1-(2*sigISR)/500);
+		sigISR = 500.0*sqrt(1.0-(2.0*sigISR)/500.0);
 
 		// Store event info
 		if (nCh!=0) if (thr.analyze(event_fch)) {
@@ -253,7 +223,7 @@ int main(){
 		}
 
 		// Radiative events
-		if (nCh!=0 && sigISR<425) nISR++;
+		if (nCh!=0 && sigISR<500.0) nISR++;
 
 		// Populate
 		tree->Fill();
@@ -261,10 +231,10 @@ int main(){
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Check cross-sections
+// Cross-sections
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	cout << nISR << endl;
+	cout << "Total radiative events : " << nISR << " out of " << nEvent << endl;
 	pythia.stat();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,3 +252,44 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
+
+
+
+
+
+
+			// // Search ISR photon
+			// if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22 && pythia.event[jParts].e()>5) {
+				
+			// 	// Run through particles to compare
+			// 	for(int isrcount=0; isrcount<pythia.event.size(); isrcount++) {
+
+			// 		// Check energy of compared particle
+			// 		if (pythia.event[isrcount].isFinal() && pythia.event[isrcount].e()>0.250) {
+
+			// 			// Neglect itself
+			// 			if ( isrcount==jParts ) continue;
+
+			// 			// Compute ΔR
+			// 			float deltaEta = pythia.event[isrcount].eta()-pythia.event[jParts].eta();
+			// 			float deltaPhi = pythia.event[isrcount].phi()-pythia.event[jParts].phi();
+			// 			float deltaR = sqrt( deltaEta*deltaEta + deltaPhi*deltaPhi ) * 180/M_PI;
+						
+			// 			// cout << pythia.event[jParts].e() << "\t" << pythia.event[isrcount].e() << "\t" << deltaR << endl;
+						
+			// 			// Check isolated
+			// 			if ( deltaR<15.0 ) {
+			// 				isrcheck = false;
+			// 				break;
+			// 			}
+						
+			// 		}
+			// 	}
+
+			// 	// ISR photon found!
+			// 	if (isrcheck==true) {
+			// 		// cout << "ISR photon found at: " << jParts << endl;
+			// 		sigISR+=pythia.event[jParts].e();
+			// 	}
+
+			// }

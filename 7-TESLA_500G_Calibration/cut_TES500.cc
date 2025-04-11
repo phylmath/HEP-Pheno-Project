@@ -48,7 +48,7 @@ int main(){
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	TFile *output = new TFile("cut_TES500_wiT.root", "RECREATE");
+	TFile *output = new TFile("cut_TES500.root", "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
@@ -75,6 +75,11 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_Esprime = new TH1F("hist_Esprime", "Reduced centre-of-mass", 525, -1, 526);
+	hist_Esprime->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime", &hist_Esprime, "hist_Esprime");
 
 	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 50, 1, 101);
 	hist_nHadron->GetXaxis()->SetTitle("N_{CH}>");
@@ -103,7 +108,7 @@ int main(){
 
 	// Define
 	int nCh=0, nCj=0, nParts=0, Pdg;
-	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax;
+	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Spr;
 	
 	Pythia8::Thrust thr;
 	Pythia8::Event event;
@@ -133,7 +138,6 @@ int main(){
  			event.append(Pdg, 1, 0, 0, Pm4);
 
 			////////////////////////// STORING JETS PARAMS //////////////////////////////////////////////////
-			
 			fastjet::PseudoJet particle(Pmx,Pmy,Pmz,Eto);								// Particle vector
 			particle.set_user_index(Pdg);												// Set particle id
 			particles.push_back(particle);												// Add to particles
@@ -174,24 +178,18 @@ int main(){
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 		
-		if ((*eveSpr)[0] >= 480){
+		// Cut on √s'
+		if ((*eveSpr)[0] >= 0){
 			Thr = (*eveThr)[0];
 			Tax = (*eveTax)[0];
 			hist_ThrPyth->Fill( Thr );
 			hist_TaxPyth->Fill( Tax );
+			hist_nHadron->Fill( nCh );
+			hist_nJetTot->Fill( nCj );
 		}
 
-		// thr.analyze(event);
-		// hist_ThrPyth->Fill( 1.0-thr.thrust() );
-		// hist_TaxPyth->Fill( thr.eventAxis(1).pz() );
-
-		// cout << Thr << " " << 1.0-thr.thrust() << endl;
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		////////////////////////// POPULATING MULTIPLICITY HISTOS ///////////////////////////////////////////
-		hist_nHadron->Fill( nCh );
-		hist_nJetTot->Fill( nCj );
+		Spr = (*eveSpr)[0];
+		hist_Esprime->Fill( Spr );
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 

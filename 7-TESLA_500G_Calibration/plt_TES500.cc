@@ -290,12 +290,12 @@ void plt_TES500()
 	c_thr->cd(1);
 	hist_Thr1999->Draw("P");
 	hist_ThrPyth_TES500->Draw("PSAME");
-	// hist_ThrPyth_LEP912->Draw("PSAME");
+	hist_ThrPyth_LEP912->Draw("PSAME");
 	lg_thr1->Draw("SAME");
 	c_thr->cd(2);
 	hist_Thr199T->Draw("P");
 	hist_ThrPyth_TES50t->Draw("PSAME");
-	// hist_ThrPyth_LEP912->Draw("PSAME");
+	hist_ThrPyth_LEP912->Draw("PSAME");
 	lg_thr1->Draw("SAME");
 
 
