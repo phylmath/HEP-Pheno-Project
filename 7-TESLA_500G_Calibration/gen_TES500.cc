@@ -88,41 +88,28 @@ int main(){
 	pythia.readString("HardQCD:all = off");													// master switch
 	// EW boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// ee'->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// ee'->γ*γ*ZZ
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// ee'->ZW
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// ee'->WW
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (222) ee'->WW
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// (232) ee'->ZW
 	// EW boson decays
 	pythia.readString("23:onMode = off");													// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 6 5");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
 	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff duscbt/τν
-	// EW photon-parton processes
-	pythia.readString("PhotonParton:ggm2qqbar = off");										// gγ->qq' (uds)
-	pythia.readString("PhotonParton:ggm2ccbar = off");										// gγ->cc'
-	pythia.readString("PhotonParton:ggm2bbbar = off");										// gγ->bb'
-	pythia.readString("PhotonParton:qgm2qg = off");											// gγ->qq'
-	pythia.readString("PhotonParton:qgm2qgm = off");										// gγ->qq'
 	// Top processes
-	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// ee'->tt'
+	pythia.readString("Top:all = off");														// master switch
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
 	// Higgs processes
 	pythia.readString("HiggsSM:all = off");													// master switch
-	pythia.readString("HiggsSM:gg2H = off");												// gluon fusion
-	pythia.readString("HiggsSM:gmgm2H = off");												// gamma fusion
-	pythia.readString("HiggsSM:ffbar2HZ = off");											// higgsstrahlung
-	pythia.readString("HiggsSM:ffbar2HW = off");											// higgsstrahlung
-	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = off");										// ZZ fusion
-	pythia.readString("HiggsSM:ff2Hff(t:WW) = off");										// WW fusion
-	pythia.readString("HiggsSM:gg2Httbar = off");											// gg->Htt'
-	pythia.readString("HiggsSM:qqbar2Httbar = off");										// qq->Htt'
-	// Photon processes
-	pythia.readString("PhotonCollision:all = off");
-	pythia.readString("PhotonCollision:gmgm2qqbar = off");									// γγ->qq'
-	pythia.readString("PhotonCollision:gmgm2ccbar = off");									// γγ->cc'
-	pythia.readString("PhotonCollision:gmgm2bbbar = off");									// γγ->bb'
-	pythia.readString("PhotonCollision:gmgm2ee = off");										// γγ->ee'
-	pythia.readString("PhotonCollision:gmgm2mumu = off");									// γγ->μμ'
-	pythia.readString("PhotonCollision:gmgm2tautau = off");									// γγ->ττ'
+	pythia.readString("HiggsSM:gg2H = off");												// (902) gluon fusion
+	pythia.readString("HiggsSM:gmgm2H = off");												// (903) gamma fusion
+	pythia.readString("HiggsSM:ffbar2HZ = off");											// (904) higgsstrahlung
+	pythia.readString("HiggsSM:ffbar2HW = off");											// (905) higgsstrahlung
+	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = off");										// (906) ZZ fusion
+	pythia.readString("HiggsSM:ff2Hff(t:WW) = off");										// (907) WW fusion
+	pythia.readString("HiggsSM:gg2Httbar = off");											// (908) gg->Htt'
+	pythia.readString("HiggsSM:qqbar2Httbar = off");										// (909) qq->Htt'
 	// ISR processes
 	pythia.readString("PartonLevel:ISR = on");
 	pythia.readString("SpaceShower:QEDshowerByL = on");										// ee->γee
@@ -211,7 +198,7 @@ int main(){
 				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) && pythia.event[jParts].e()>0.001 ) {
 					
 					if (pythia.event[jParts].e() > sigISR) {
-						cout << "ISR photon energy = " << pythia.event[jParts].e() << " with status " << pythia.event[jParts].status() << " and mother energy = " << pythia.event[idmom1].e() << " with status " << pythia.event[idmom1].status() << endl;
+						// cout << "ISR photon energy = " << pythia.event[jParts].e() << " with status " << pythia.event[jParts].status() << " and mother energy = " << pythia.event[idmom1].e() << " with status " << pythia.event[idmom1].status() << endl;
 						sigISR=pythia.event[jParts].e();
 					}
 				}

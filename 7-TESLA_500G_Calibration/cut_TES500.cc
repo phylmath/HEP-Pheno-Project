@@ -48,7 +48,7 @@ int main(){
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	TFile *output = new TFile("cut_TES500.root", "RECREATE");
+	TFile *output = new TFile("cut_TES500_wiT.root", "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
