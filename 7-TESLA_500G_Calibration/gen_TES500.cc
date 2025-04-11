@@ -76,7 +76,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 2;
+	int nEvent = 1e5;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
@@ -94,9 +94,9 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// ee'->WW
 	// EW boson decays
 	pythia.readString("23:onMode = off");													// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 6 5");											// turn on Z iff (duscbt)
+	pythia.readString("23:onIfAny = 1 2 3 4 6 5");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff (duscbt and τν)
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff duscbt/τν
 	// EW photon-parton processes
 	pythia.readString("PhotonParton:ggm2qqbar = off");										// gγ->qq' (uds)
 	pythia.readString("PhotonParton:ggm2ccbar = off");										// gγ->cc'
@@ -105,6 +105,16 @@ int main(){
 	pythia.readString("PhotonParton:qgm2qgm = off");										// gγ->qq'
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// ee'->tt'
+	// Higgs processes
+	pythia.readString("HiggsSM:all = off");													// master switch
+	pythia.readString("HiggsSM:gg2H = off");												// gluon fusion
+	pythia.readString("HiggsSM:gmgm2H = off");												// gamma fusion
+	pythia.readString("HiggsSM:ffbar2HZ = off");											// higgsstrahlung
+	pythia.readString("HiggsSM:ffbar2HW = off");											// higgsstrahlung
+	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = off");										// ZZ fusion
+	pythia.readString("HiggsSM:ff2Hff(t:WW) = off");										// WW fusion
+	pythia.readString("HiggsSM:gg2Httbar = off");											// gg->Htt'
+	pythia.readString("HiggsSM:qqbar2Httbar = off");										// qq->Htt'
 	// Photon processes
 	pythia.readString("PhotonCollision:all = off");
 	pythia.readString("PhotonCollision:gmgm2qqbar = off");									// γγ->qq'
