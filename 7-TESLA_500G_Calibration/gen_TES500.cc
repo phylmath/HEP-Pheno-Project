@@ -44,20 +44,22 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES500.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
 	// Intialise vecs
 	vector<int> eveNum, eveSiz, parNum, parPdg;
-	vector<float> eveThr, eveTax, eveSpr, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
+	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);										// Total sigma
 	tree->Branch("eveNum", "vector<int>", &eveNum);											// Event number
 	tree->Branch("eveSiz", "vector<int>", &eveSiz);											// Event size
 	tree->Branch("eveSpr", "vector<float>", &eveSpr);										// Event √s'
+	tree->Branch("eveSph", "vector<float>", &eveSph);										// Event spheric
+	tree->Branch("eveSax", "vector<float>", &eveSax);										// Event sphaxis
 	tree->Branch("eveThr", "vector<float>", &eveThr);										// Event thrust
 	tree->Branch("eveTax", "vector<float>", &eveTax);										// Event thraxis
 	tree->Branch("parNum", "vector<int>", &parNum);											// Parts number
@@ -84,6 +86,11 @@ int main(){
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
+	// Define Beam params
+	pythia.readString("Beams:idA = 11"); 													// beam energy
+	pythia.readString("Beams:idB = -11"); 													// beam energy
+	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
+	pythia.readString("PDF:lepton = on");													// toggle ISR
 	// QCD processes
 	pythia.readString("HardQCD:all = off");													// master switch
 	// EW boson processes
@@ -94,11 +101,10 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// (232) ee'->ZW
 	// EW boson decays
 	pythia.readString("23:onMode = off");													// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 6 5");											// turn on Z iff duscbt
+	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
 	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff duscbt/τν
 	// Top processes
-	pythia.readString("Top:all = off");														// master switch
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
 	// Higgs processes
 	pythia.readString("HiggsSM:all = off");													// master switch
@@ -110,22 +116,9 @@ int main(){
 	pythia.readString("HiggsSM:ff2Hff(t:WW) = off");										// (907) WW fusion
 	pythia.readString("HiggsSM:gg2Httbar = off");											// (908) gg->Htt'
 	pythia.readString("HiggsSM:qqbar2Httbar = off");										// (909) qq->Htt'
-	// ISR processes
-	pythia.readString("PartonLevel:ISR = on");
-	pythia.readString("SpaceShower:QEDshowerByL = on");										// ee->γee
-	pythia.readString("SpaceShower:QEDshowerByQ = off");									// qq->γqq
-	// FSR processes
-	pythia.readString("PartonLevel:FSR = on");
-	pythia.readString("TimeShower:QEDshowerByL = on");										// ee->γee
-	pythia.readString("TimeShower:QEDshowerByQ = off");										// qq->γqq
-	// Define Beam params
-	pythia.readString("Beams:idA = 11"); 													// beam energy
-	pythia.readString("Beams:idB = -11"); 													// beam energy
-	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	// pythia.readString("PDF:lepton = off");												// disable ISR
 
 	// Suppress terminal text
-	pythia.readString("Print:quiet = on");
+	pythia.readString("Print:quiet = on");													// 
 	pythia.readString("Next:numberCount = 1000");											//
 	pythia.readString("Next:numberShowProcess = 0");										//
 	pythia.readString("Next:numberShowInfo = 0");											//
@@ -145,6 +138,7 @@ int main(){
 
 	// Analyses
 	Thrust thr;
+	Sphericity sph;
 	Event event_fch;
 	float sigISR=0.0, sigmaE=0.0;
 	int nCh=0, nISR=0;
@@ -161,6 +155,7 @@ int main(){
 		// Reset event vectors
 		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
 		eveSpr.clear(); eveThr.clear(); eveTax.clear(); eveSiz.clear();
+		eveSph.clear(); eveSax.clear();
 		// Reset part vectors
 		parNum.clear(); parPdg.clear(); parEto.clear(); 
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
@@ -202,21 +197,29 @@ int main(){
 						sigISR=pythia.event[jParts].e();
 					}
 				}
-
 			}
-
 		}
 
 		// Compute √s'
 		sigISR = 500.0*sqrt(1.0-(2.0*sigISR)/500.0);
 
 		// Store event info
-		if (nCh!=0) if (thr.analyze(event_fch)) {
-			eveThr.push_back(1.0-thr.thrust());												// Add event thrust
-			eveTax.push_back(thr.eventAxis(1).pz());										// Add event Cosθ
+		if (nCh!=0) {
 			sigmaT.push_back(pythia.info.sigmaGen());										// Add event sigma
 			eveSiz.push_back(nCh);															// Add event size
 			eveSpr.push_back(sigISR);														// Add ISR energy
+		}
+
+		// Store thrust data
+		if (nCh!=0) if (thr.analyze(event_fch)) {
+			eveThr.push_back(1.0-thr.thrust());												// Add event thrust
+			eveTax.push_back(thr.eventAxis(1).pz());										// Add event thrθ
+		}
+
+		// Store spheric data
+		if (nCh!=0) if (sph.analyze(event_fch)) {
+			eveSph.push_back(sph.sphericity());												// Add event spheric
+			eveSax.push_back(sph.eventAxis(1).pz());										// Add event sphθ
 		}
 
 		// Radiative events

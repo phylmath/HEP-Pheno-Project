@@ -43,25 +43,37 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile *input = new TFile("gen_TES500.root", "READ");
+	// TFile *input = new TFile("gen_TES500_noR.root", "READ");
+	// TFile *input = new TFile("gen_TES500_wiR.root", "READ");
+	// TFile *input = new TFile("gen_TES50t_noR.root", "READ");
+	TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
+	// TFile *input = new TFile("gen_LEP912_noR.root", "READ");
+	// TFile *input = new TFile("gen_LEP912_wiR.root", "READ");
 	// Read TTree
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	TFile *output = new TFile("cut_TES500_wiT.root", "RECREATE");
+	// TFile *output = new TFile("cut_TES500_noR.root", "RECREATE");
+	// TFile *output = new TFile("cut_TES500_wiR.root", "RECREATE");
+	// TFile *output = new TFile("cut_TES50t_noR.root", "RECREATE");
+	TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
+	// TFile *output = new TFile("cut_LEP912_noR.root", "RECREATE");
+	// TFile *output = new TFile("cut_LEP912_wiR.root", "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
 	// Intialise vecs
 	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *parNum=nullptr, *parPdg=nullptr;
-	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSpr=nullptr, *sigmaT=nullptr, \
-	 *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
+	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSph=nullptr, *eveSax=nullptr, *eveSpr=nullptr, \
+	 *sigmaT=nullptr, *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
 
 	// Set branches
 	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
 	itree->SetBranchAddress("eveNum", &eveNum);											// Event number
 	itree->SetBranchAddress("eveSiz", &eveSiz);											// Event size
 	itree->SetBranchAddress("eveSpr", &eveSpr);											// Event √s'
+	itree->SetBranchAddress("eveSph", &eveSph);											// Event spheric
+	itree->SetBranchAddress("eveSax", &eveSax);											// Event sphaxis
 	itree->SetBranchAddress("eveThr", &eveThr);											// Event thrust
 	itree->SetBranchAddress("eveTax", &eveTax);											// Event thraxis
 	itree->SetBranchAddress("parNum", &parNum);											// Parts number
@@ -82,7 +94,7 @@ int main(){
 	otree->Branch("hist_Esprime", &hist_Esprime, "hist_Esprime");
 
 	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 50, 1, 101);
-	hist_nHadron->GetXaxis()->SetTitle("N_{CH}>");
+	hist_nHadron->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron", &hist_nHadron, "hist_nHadron");
 
@@ -93,14 +105,25 @@ int main(){
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
 	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
 	TH1F *hist_TaxPyth = new TH1F("hist_TaxPyth", "Thrust axis", 100, -1., 1.);
-	hist_TaxPyth->GetXaxis()->SetTitle("(1-T)");
-	hist_TaxPyth->GetYaxis()->SetTitle("cosΘ_{Thrust}");
+	hist_TaxPyth->GetXaxis()->SetTitle("cosΘ_{Thrust}");
+	hist_TaxPyth->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_TaxPyth", &hist_TaxPyth, "hist_TaxPyth");
+
+	TH1F *hist_SphPyth = new TH1F("hist_SphPyth", "Sphericity", 100, 0, 1.0);
+	hist_SphPyth->GetXaxis()->SetTitle("S");
+	hist_SphPyth->GetYaxis()->SetTitle("P(S)");
+	otree->Branch("hist_SphPyth", &hist_SphPyth, "hist_SphPyth");
+
+	TH1F *hist_SaxPyth = new TH1F("hist_SaxPyth", "Thrust axis", 100, -1., 1.);
+	hist_SaxPyth->GetXaxis()->SetTitle("cosΘ_{Sphericity}");
+	hist_SaxPyth->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_SaxPyth", &hist_SaxPyth, "hist_SaxPyth");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Perform cuts, Populate histograms
@@ -108,7 +131,7 @@ int main(){
 
 	// Define
 	int nCh=0, nCj=0, nParts=0, Pdg;
-	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Spr;
+	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr;
 	
 	Pythia8::Thrust thr;
 	Pythia8::Event event;
@@ -182,18 +205,20 @@ int main(){
 		if ((*eveSpr)[0] >= 0){
 			Thr = (*eveThr)[0];
 			Tax = (*eveTax)[0];
-			hist_ThrPyth->Fill( Thr );
-			hist_TaxPyth->Fill( Tax );
-			hist_nHadron->Fill( nCh );
-			hist_nJetTot->Fill( nCj );
+			hist_ThrPyth->Fill(Thr);
+			hist_TaxPyth->Fill(Tax);
+			Sph = (*eveSph)[0];
+			Sax = (*eveSax)[0];
+			hist_SphPyth->Fill(Sph);
+			hist_SaxPyth->Fill(Sax);
+			hist_nHadron->Fill(nCh);
+			hist_nJetTot->Fill(nCj);
 		}
 
 		Spr = (*eveSpr)[0];
-		hist_Esprime->Fill( Spr );
+		hist_Esprime->Fill(Spr);
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		////////////////////////// CLEARING VALUES OF TEMP VARS /////////////////////////////////////////////
+		// Reset
 		nCh=0; particles.clear(); jets.clear();
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -218,7 +243,7 @@ int main(){
 	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
 	// Beautify
 	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH})×<N_{CH}>");
+	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
 	// Fill histogram
 	for (int bin = 1; bin <= hist_nHadron->GetNbinsX(); ++bin) {
 	double nCh = hist_nHadron->GetXaxis()->GetBinCenter(bin);

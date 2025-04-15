@@ -34,92 +34,84 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	TFile* input_TES50t = new TFile("cut_TES500_wiT.root", "READ");
-	TFile* input_TES500 = new TFile("cut_TES500_woT.root", "READ");
-	TFile* input_LEP912 = new TFile("cut_LEP912.root", "READ");
+	TFile* input_TES50t_noR = new TFile("cut_TES50t_noR.root", "READ");
+	TFile* input_TES500_noR = new TFile("cut_TES500_noR.root", "READ");
+	TFile* input_TES50t_wiR = new TFile("cut_TES50t_wiR.root", "READ");
+	TFile* input_TES500_wiR = new TFile("cut_TES500_wiR.root", "READ");
+	TFile* input_LEP912_noR = new TFile("cut_LEP912_noR.root", "READ");
+	TFile* input_LEP912_wiR = new TFile("cut_LEP912_wiR.root", "READ");
 	
 	// Read TTree
-	TTree* trees_TES50t = (TTree*)input_TES50t->Get("tree_cut");
-	TTree* trees_TES500 = (TTree*)input_TES500->Get("tree_cut");
-	TTree* trees_LEP912 = (TTree*)input_LEP912->Get("tree_cut");
+	TTree* trees_TES50t_noR = (TTree*)input_TES50t_noR->Get("tree_cut");
+	TTree* trees_TES500_noR = (TTree*)input_TES500_noR->Get("tree_cut");
+	TTree* trees_TES50t_wiR = (TTree*)input_TES50t_wiR->Get("tree_cut");
+	TTree* trees_TES500_wiR = (TTree*)input_TES500_wiR->Get("tree_cut");
+	TTree* trees_LEP912_noR = (TTree*)input_LEP912_noR->Get("tree_cut");
+	TTree* trees_LEP912_wiR = (TTree*)input_LEP912_wiR->Get("tree_cut");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Reading histograms
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// Read Histogram
-	TH1F *hist_nHadron_TES50t = (TH1F*)input_TES50t->Get("hist_nHadron");
-	// Beautify
-	hist_nHadron_TES50t->SetStats(kFALSE);
-	hist_nHadron_TES50t->SetLineColor(kBlue+2);
-	hist_nHadron_TES50t->SetMarkerColor(kBlue+2);
-	hist_nHadron_TES50t->SetMarkerStyle(kOpenCircle);
+	TH1F *hist_nHadron_TES500_noR = (TH1F*)input_TES500_noR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_TES500_noR = (TH1F*)input_TES500_noR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_TES500_noR = (TH1F*)input_TES500_noR->Get("hist_ThrPyth");
 
-	// Read Histogram
-	TH1F *KNOO_nHadron_TES50t = (TH1F*)input_TES50t->Get("KNOO_nHadron");
-	// Beautify
-	KNOO_nHadron_TES50t->SetStats(kFALSE);
-	KNOO_nHadron_TES50t->SetLineColor(kBlue+2);
-	KNOO_nHadron_TES50t->SetMarkerColor(kBlue+2);
-	KNOO_nHadron_TES50t->SetMarkerStyle(kOpenCircle);
+	TH1F *hist_nHadron_TES50t_noR = (TH1F*)input_TES50t_noR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_TES50t_noR = (TH1F*)input_TES50t_noR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_TES50t_noR = (TH1F*)input_TES50t_noR->Get("hist_ThrPyth");
 
-	// Read Histogram
-	TH1F *hist_ThrPyth_TES50t = (TH1F*)input_TES50t->Get("hist_ThrPyth");
-	// Beautify
-	hist_ThrPyth_TES50t->SetStats(kFALSE);
-	hist_ThrPyth_TES50t->SetLineColor(kBlack);
-	hist_ThrPyth_TES50t->SetMarkerColor(kBlack);
-	hist_ThrPyth_TES50t->SetMarkerStyle(kOpenTriangleUp);
+	TH1F *hist_nHadron_TES50t_wiR = (TH1F*)input_TES50t_wiR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_TES50t_wiR = (TH1F*)input_TES50t_wiR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_TES50t_wiR = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth");
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	TH1F *hist_nHadron_TES500_wiR = (TH1F*)input_TES500_wiR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_TES500_wiR = (TH1F*)input_TES500_wiR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_TES500_wiR = (TH1F*)input_TES500_wiR->Get("hist_ThrPyth");
 
-	// Read Histogram
-	TH1F *hist_nHadron_TES500 = (TH1F*)input_TES500->Get("hist_nHadron");
-	// Beautify
-	hist_nHadron_TES500->SetStats(kFALSE);
-	hist_nHadron_TES500->SetLineColor(kBlack);
-	hist_nHadron_TES500->SetMarkerColor(kBlack);
-	hist_nHadron_TES500->SetMarkerStyle(kOpenCircle);
+	TH1F *hist_nHadron_LEP912_noR = (TH1F*)input_LEP912_noR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_LEP912_noR = (TH1F*)input_LEP912_noR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_LEP912_noR = (TH1F*)input_LEP912_noR->Get("hist_ThrPyth");
 
-	// Read Histogram
-	TH1F *KNOO_nHadron_TES500 = (TH1F*)input_TES500->Get("KNOO_nHadron");
-	// Beautify
-	KNOO_nHadron_TES500->SetStats(kFALSE);
-	KNOO_nHadron_TES500->SetLineColor(kBlack);
-	KNOO_nHadron_TES500->SetMarkerColor(kBlack);
-	KNOO_nHadron_TES500->SetMarkerStyle(kOpenCircle);
-
-	// Read Histogram
-	TH1F *hist_ThrPyth_TES500 = (TH1F*)input_TES500->Get("hist_ThrPyth");
-	// Beautify
-	hist_ThrPyth_TES500->SetStats(kFALSE);
-	hist_ThrPyth_TES500->SetLineColor(kBlack);
-	hist_ThrPyth_TES500->SetMarkerColor(kBlack);
-	hist_ThrPyth_TES500->SetMarkerStyle(kOpenTriangleUp);
+	TH1F *hist_nHadron_LEP912_wiR = (TH1F*)input_LEP912_wiR->Get("hist_nHadron");
+	TH1F *KNOO_nHadron_LEP912_wiR = (TH1F*)input_LEP912_wiR->Get("KNOO_nHadron");
+	TH1F *hist_ThrPyth_LEP912_wiR = (TH1F*)input_LEP912_wiR->Get("hist_ThrPyth");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Beautify histograms
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// Read Histogram
-	TH1F *hist_nHadron_LEP912 = (TH1F*)input_LEP912->Get("hist_nHadron");
-	// Beautify
-	hist_nHadron_LEP912->SetStats(kFALSE);
-	hist_nHadron_LEP912->SetLineColor(kGreen+2);
-	hist_nHadron_LEP912->SetMarkerColor(kGreen+2);
-	hist_nHadron_LEP912->SetMarkerStyle(kOpenCircle);
+	hist_nHadron_TES500_noR->SetLineColor(kRed+2); hist_nHadron_TES500_noR->SetMarkerColor(kRed+2); hist_nHadron_TES500_noR->SetMarkerStyle(kOpenCircle);
+	hist_nHadron_TES500_wiR->SetLineColor(kRed+2); hist_nHadron_TES500_wiR->SetMarkerColor(kRed+2); hist_nHadron_TES500_wiR->SetMarkerStyle(kStar);
+	hist_nHadron_TES50t_noR->SetLineColor(kYellow+2); hist_nHadron_TES50t_noR->SetMarkerColor(kYellow+2); hist_nHadron_TES50t_noR->SetMarkerStyle(kStar);
+	hist_nHadron_TES50t_wiR->SetLineColor(kBlue+2); hist_nHadron_TES50t_wiR->SetMarkerColor(kBlue+2); hist_nHadron_TES50t_wiR->SetMarkerStyle(kStar);
+	hist_nHadron_LEP912_noR->SetLineColor(kGreen+2); hist_nHadron_LEP912_noR->SetMarkerColor(kGreen+2); hist_nHadron_LEP912_noR->SetMarkerStyle(kOpenCircle);
+	hist_nHadron_LEP912_wiR->SetLineColor(kGreen+2); hist_nHadron_LEP912_wiR->SetMarkerColor(kGreen+2); hist_nHadron_LEP912_wiR->SetMarkerStyle(kStar);
 
-	// Read Histogram
-	TH1F *KNOO_nHadron_LEP912 = (TH1F*)input_LEP912->Get("KNOO_nHadron");
-	// Beautify
-	KNOO_nHadron_LEP912->SetStats(kFALSE);
-	KNOO_nHadron_LEP912->SetLineColor(kGreen+2);
-	KNOO_nHadron_LEP912->SetMarkerColor(kGreen+2);
-	KNOO_nHadron_LEP912->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_TES500_noR->SetLineColor(kMagenta+1); KNOO_nHadron_TES500_noR->SetMarkerColor(kMagenta+1); KNOO_nHadron_TES500_noR->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_TES500_wiR->SetLineColor(kRed+2); KNOO_nHadron_TES500_wiR->SetMarkerColor(kRed+2); KNOO_nHadron_TES500_wiR->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_TES50t_noR->SetLineColor(kYellow+2); KNOO_nHadron_TES50t_noR->SetMarkerColor(kYellow+2); KNOO_nHadron_TES50t_noR->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_TES50t_wiR->SetLineColor(kBlue+2); KNOO_nHadron_TES50t_wiR->SetMarkerColor(kBlue+2); KNOO_nHadron_TES50t_wiR->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_LEP912_noR->SetLineColor(kGreen+3); KNOO_nHadron_LEP912_noR->SetMarkerColor(kGreen+3); KNOO_nHadron_LEP912_noR->SetMarkerStyle(kOpenCircle);
+	KNOO_nHadron_LEP912_wiR->SetLineColor(kGreen); KNOO_nHadron_LEP912_wiR->SetMarkerColor(kGreen); KNOO_nHadron_LEP912_wiR->SetMarkerStyle(kOpenCircle);
 
-	// Read Histogram
-	TH1F *hist_ThrPyth_LEP912 = (TH1F*)input_LEP912->Get("hist_ThrPyth");
-	// Beautify
-	hist_ThrPyth_LEP912->SetStats(kFALSE);
-	hist_ThrPyth_LEP912->SetLineColor(kGreen+2);
-	hist_ThrPyth_LEP912->SetMarkerColor(kGreen+2);
-	hist_ThrPyth_LEP912->SetMarkerStyle(kOpenTriangleUp);
+	hist_ThrPyth_TES500_noR->SetLineColor(kYellow+2); hist_ThrPyth_TES500_noR->SetMarkerColor(kYellow+2); hist_ThrPyth_TES500_noR->SetMarkerStyle(kStar);
+	hist_ThrPyth_TES500_wiR->SetLineColor(kBlue+2); hist_ThrPyth_TES500_wiR->SetMarkerColor(kBlue+2); hist_ThrPyth_TES500_wiR->SetMarkerStyle(kStar);
+	hist_ThrPyth_TES50t_noR->SetLineColor(kYellow+2); hist_ThrPyth_TES50t_noR->SetMarkerColor(kYellow+2); hist_ThrPyth_TES50t_noR->SetMarkerStyle(kStar);
+	hist_ThrPyth_TES50t_wiR->SetLineColor(kBlue+2); hist_ThrPyth_TES50t_wiR->SetMarkerColor(kBlue+2); hist_ThrPyth_TES50t_wiR->SetMarkerStyle(kStar);
+	hist_ThrPyth_LEP912_noR->SetLineColor(kGreen+3); hist_ThrPyth_LEP912_noR->SetMarkerColor(kGreen+3); hist_ThrPyth_LEP912_noR->SetMarkerStyle(kStar);
+	hist_ThrPyth_LEP912_wiR->SetLineColor(kGreen); hist_ThrPyth_LEP912_wiR->SetMarkerColor(kGreen); hist_ThrPyth_LEP912_wiR->SetMarkerStyle(kStar);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Disable statboxes
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	hist_nHadron_TES500_noR->SetStats(kFALSE); KNOO_nHadron_TES500_noR->SetStats(kFALSE); hist_ThrPyth_TES500_noR->SetStats(kFALSE);
+	hist_nHadron_TES50t_noR->SetStats(kFALSE); KNOO_nHadron_TES50t_noR->SetStats(kFALSE); hist_ThrPyth_TES50t_noR->SetStats(kFALSE);
+	hist_nHadron_TES50t_wiR->SetStats(kFALSE); KNOO_nHadron_TES50t_wiR->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR->SetStats(kFALSE);
+	hist_nHadron_TES500_wiR->SetStats(kFALSE); KNOO_nHadron_TES500_wiR->SetStats(kFALSE); hist_ThrPyth_TES500_wiR->SetStats(kFALSE);
+	hist_nHadron_LEP912_noR->SetStats(kFALSE); KNOO_nHadron_LEP912_noR->SetStats(kFALSE); hist_ThrPyth_LEP912_noR->SetStats(kFALSE);
+	hist_nHadron_LEP912_wiR->SetStats(kFALSE); KNOO_nHadron_LEP912_wiR->SetStats(kFALSE); hist_ThrPyth_LEP912_wiR->SetStats(kFALSE);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Importing raw TEXT data
@@ -133,18 +125,16 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// // Read Histogram
-	TH1F *hist_Thr1999 = new TH1F("hist_Thr1999", "Differential Thrust (without top)", 500, 0, 0.4);
+	TH1F *hist_Thr1999 = new TH1F("hist_Thr1999", "Inverse Thrust (wo top)", 500, 0, 0.4);
 	// Beautify
 	hist_Thr1999->SetStats(kFALSE);
-	hist_Thr1999->SetName("Differential Thrust e^{+}e^{-}");
+	hist_Thr1999->SetName("Thrust");
 	hist_Thr1999->SetName("hist_Thr1999");
-	hist_Thr1999->SetLineColor(kRed+2);
-	hist_Thr1999->SetMarkerColor(kRed+2);
+	hist_Thr1999->SetLineColor(kBlack);
+	hist_Thr1999->SetMarkerColor(kBlack);
 	hist_Thr1999->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr1999->GetXaxis()->SetTitle("1-T");
 	hist_Thr1999->GetYaxis()->SetTitle("P(1-T)");
-	hist_Thr1999->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Thr1999->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
 	ifstream infile_10("EXP_TES_500_THR_wot.txt");
 	// Read through TXT
@@ -160,18 +150,16 @@ void plt_TES500()
 	infile_10.close();	
 
 	// // Read Histogram
-	TH1F *hist_Thr199T = new TH1F("hist_Thr199T", "Differential Thrust (with top)", 500, 0, 0.4);
+	TH1F *hist_Thr199T = new TH1F("hist_Thr199T", "Inverse Thrust (wi top)", 500, 0, 0.4);
 	// Beautify
 	hist_Thr199T->SetStats(kFALSE);
-	hist_Thr199T->SetName("Differential Thrust e^{+}e^{-}");
+	hist_Thr199T->SetName("Thrust");
 	hist_Thr199T->SetName("hist_Thr199T");
-	hist_Thr199T->SetLineColor(kRed+2);
-	hist_Thr199T->SetMarkerColor(kRed+2);
+	hist_Thr199T->SetLineColor(kBlack);
+	hist_Thr199T->SetMarkerColor(kBlack);
 	hist_Thr199T->SetMarkerStyle(kOpenTriangleUp);
 	hist_Thr199T->GetXaxis()->SetTitle("1-T");
 	hist_Thr199T->GetYaxis()->SetTitle("P(1-T)");
-	hist_Thr199T->GetXaxis()->SetNdivisions(510, kTRUE);
-	hist_Thr199T->GetYaxis()->SetNdivisions(510, kTRUE);
 	// Import data
 	ifstream infile_11("EXP_TES_500_THR_wit.txt");
 	// Read through TXT
@@ -191,18 +179,30 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Divide by area under hist
-	hist_nHadron_LEP912->Scale(1.0/hist_nHadron_LEP912->Integral());
-	hist_nHadron_TES500->Scale(1.0/hist_nHadron_TES500->Integral());
-	hist_nHadron_TES50t->Scale(1.0/hist_nHadron_TES50t->Integral());
+	hist_nHadron_LEP912_noR->Scale(1.0/hist_nHadron_LEP912_noR->Integral());
+	hist_nHadron_LEP912_wiR->Scale(1.0/hist_nHadron_LEP912_wiR->Integral());
+	hist_nHadron_TES500_noR->Scale(1.0/hist_nHadron_TES500_noR->Integral());
+	hist_nHadron_TES50t_noR->Scale(1.0/hist_nHadron_TES50t_noR->Integral());
+	hist_nHadron_TES500_wiR->Scale(1.0/hist_nHadron_TES500_wiR->Integral());
+	hist_nHadron_TES50t_wiR->Scale(1.0/hist_nHadron_TES50t_wiR->Integral());
 
-	KNOO_nHadron_LEP912->Scale(1.0/KNOO_nHadron_LEP912->Integral());
-	KNOO_nHadron_TES500->Scale(1.0/KNOO_nHadron_TES500->Integral());
-	KNOO_nHadron_TES50t->Scale(1.0/KNOO_nHadron_TES50t->Integral());
+	// Divide by area under hist
+	KNOO_nHadron_LEP912_noR->Scale(1.0/KNOO_nHadron_LEP912_noR->Integral());
+	KNOO_nHadron_LEP912_wiR->Scale(1.0/KNOO_nHadron_LEP912_wiR->Integral());
+	KNOO_nHadron_TES500_noR->Scale(1.0/KNOO_nHadron_TES500_noR->Integral());
+	KNOO_nHadron_TES50t_noR->Scale(1.0/KNOO_nHadron_TES50t_noR->Integral());
+	KNOO_nHadron_TES500_wiR->Scale(1.0/KNOO_nHadron_TES500_wiR->Integral());
+	KNOO_nHadron_TES50t_wiR->Scale(1.0/KNOO_nHadron_TES50t_wiR->Integral());
 
-	hist_ThrPyth_LEP912->Scale(1.0/hist_ThrPyth_LEP912->Integral());
-	hist_ThrPyth_TES500->Scale(1.0/hist_ThrPyth_TES500->Integral());
-	hist_ThrPyth_TES50t->Scale(1.0/hist_ThrPyth_TES50t->Integral());
+	// Divide by area under hist
+	hist_ThrPyth_LEP912_noR->Scale(1.0/hist_ThrPyth_LEP912_noR->Integral());
+	hist_ThrPyth_LEP912_wiR->Scale(1.0/hist_ThrPyth_LEP912_wiR->Integral());
+	hist_ThrPyth_TES500_noR->Scale(1.0/hist_ThrPyth_TES500_noR->Integral());
+	hist_ThrPyth_TES50t_noR->Scale(1.0/hist_ThrPyth_TES50t_noR->Integral());
+	hist_ThrPyth_TES500_wiR->Scale(1.0/hist_ThrPyth_TES500_wiR->Integral());
+	hist_ThrPyth_TES50t_wiR->Scale(1.0/hist_ThrPyth_TES50t_wiR->Integral());
 	
+	// Divide by area under hist
 	hist_Thr1999->Scale(1.0/hist_Thr1999->Integral());
 	hist_Thr199T->Scale(1.0/hist_Thr199T->Integral());
 
@@ -219,9 +219,12 @@ void plt_TES500()
 
 	// Add legend
 	TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
-	leg_nch->AddEntry(hist_nHadron_TES50t, "500 GeV (wi top)", "p");
-	leg_nch->AddEntry(hist_nHadron_TES500, "500 GeV (wo top)", "p");
-	leg_nch->AddEntry(hist_nHadron_LEP912, "91.2 GeV (LEP)", "p");
+	leg_nch->AddEntry(hist_nHadron_TES50t_wiR, "500 GeV (wi top wi ISR)", "p");
+	leg_nch->AddEntry(hist_nHadron_TES500_wiR, "500 GeV (wo top wi ISR)", "p");
+	leg_nch->AddEntry(hist_nHadron_TES50t_noR, "500 GeV (wi top wo ISR)", "p");
+	leg_nch->AddEntry(hist_nHadron_TES500_noR, "500 GeV (wo top wo ISR)", "p");
+	leg_nch->AddEntry(hist_nHadron_LEP912_noR, "91.2 GeV (wo ISR)", "p");
+	leg_nch->AddEntry(hist_nHadron_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
 	leg_nch->SetTextSize(0.03);
 
 	// Create canvas
@@ -240,18 +243,24 @@ void plt_TES500()
 	
 	// Draw
 	c_nch->cd(1);
-	hist_nHadron_TES50t->Draw("P");
-	hist_nHadron_TES500->Draw("PSAME");
-	hist_nHadron_LEP912->Draw("PSAME");
+	hist_nHadron_TES50t_wiR->Draw("P");
+	hist_nHadron_TES500_wiR->Draw("PSAME");
+	hist_nHadron_TES50t_noR->Draw("PSAME");
+	hist_nHadron_TES500_noR->Draw("PSAME");
+	hist_nHadron_LEP912_noR->Draw("PSAME");
+	hist_nHadron_LEP912_wiR->Draw("PSAME");
 	leg_nch->Draw("SAME");
 	c_nch->cd(2);
-	KNOO_nHadron_TES50t->Draw("P");
-	KNOO_nHadron_TES500->Draw("PSAME");
-	KNOO_nHadron_LEP912->Draw("PSAME");
+	KNOO_nHadron_TES50t_wiR->Draw("P");
+	KNOO_nHadron_TES500_wiR->Draw("PSAME");
+	KNOO_nHadron_TES50t_noR->Draw("PSAME");
+	KNOO_nHadron_TES500_noR->Draw("PSAME");
+	KNOO_nHadron_LEP912_noR->Draw("PSAME");
+	KNOO_nHadron_LEP912_wiR->Draw("PSAME");
 	leg_nch->Draw("SAME");
 
-	hist_nHadron_TES50t->GetYaxis()->SetRangeUser(1E-5,1E0);
-	KNOO_nHadron_TES50t->GetYaxis()->SetRangeUser(1E-5,1E0);
+	hist_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
+	KNOO_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
 
 	// Modify stat-box
 	gStyle->SetOptStat();
@@ -262,11 +271,13 @@ void plt_TES500()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Add legend
-	TLegend *lg_thr1 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr1->AddEntry(hist_ThrPyth_TES500, "Pythia 8.3 500 GeV", "p");
-	// lg_thr1->AddEntry(hist_ThrPyth_LEP912, "Pythia 8.3 91.2 GeV", "p");
-	lg_thr1->AddEntry(hist_Thr1999, "1999 TESLA study", "p");
-	lg_thr1->SetTextSize(0.04);
+	TLegend *lg_thr = new TLegend(0.4, 0.2, 0.85, 0.4);
+	lg_thr->AddEntry(hist_ThrPyth_TES50t_noR, "500 GeV (wo ISR)", "p");
+	lg_thr->AddEntry(hist_ThrPyth_TES500_wiR, "500 GeV (wi ISR)", "p");
+	lg_thr->AddEntry(hist_ThrPyth_LEP912_noR, "91.2 GeV (wo ISR)", "p");
+	// lg_thr->AddEntry(hist_ThrPyth_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
+	lg_thr->AddEntry(hist_Thr1999, "1999 TESLA study", "p");
+	lg_thr->SetTextSize(0.04);
 
 	// Create canvas
 	TCanvas* c_thr = new TCanvas("c_thr", "Inverse Thrust distributions", 800, 600);
@@ -289,18 +300,20 @@ void plt_TES500()
 	// Draw
 	c_thr->cd(1);
 	hist_Thr1999->Draw("P");
-	hist_ThrPyth_TES500->Draw("PSAME");
-	hist_ThrPyth_LEP912->Draw("PSAME");
-	lg_thr1->Draw("SAME");
+	hist_ThrPyth_TES500_wiR->Draw("PSAME");
+	hist_ThrPyth_TES500_noR->Draw("PSAME");
+	hist_ThrPyth_LEP912_noR->Draw("PSAME");
+	// hist_ThrPyth_LEP912_wiR->Draw("PSAME");
+	lg_thr->Draw("SAME");
 	c_thr->cd(2);
 	hist_Thr199T->Draw("P");
-	hist_ThrPyth_TES50t->Draw("PSAME");
-	hist_ThrPyth_LEP912->Draw("PSAME");
-	lg_thr1->Draw("SAME");
+	hist_ThrPyth_TES50t_wiR->Draw("PSAME");
+	hist_ThrPyth_TES50t_noR->Draw("PSAME");
+	hist_ThrPyth_LEP912_noR->Draw("PSAME");
+	// hist_ThrPyth_LEP912_wiR->Draw("PSAME");
+	lg_thr->Draw("SAME");
 
-
-
-	// Modify stat-box
+// Modify stat-box
 	gStyle->SetOptStat();
 	c_thr->Modified();
 
