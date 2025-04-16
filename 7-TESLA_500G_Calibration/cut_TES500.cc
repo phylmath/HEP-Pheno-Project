@@ -46,7 +46,7 @@ int main(){
 	// TFile *input = new TFile("gen_TES500_noR.root", "READ");
 	// TFile *input = new TFile("gen_TES500_wiR.root", "READ");
 	// TFile *input = new TFile("gen_TES50t_noR.root", "READ");
-	TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
+	// TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_noR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_wiR.root", "READ");
 	// Read TTree
@@ -56,7 +56,7 @@ int main(){
 	// TFile *output = new TFile("cut_TES500_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES500_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES50t_noR.root", "RECREATE");
-	TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
+	// TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_wiR.root", "RECREATE");
 	// Define tree

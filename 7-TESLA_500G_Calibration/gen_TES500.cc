@@ -90,7 +90,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	pythia.readString("PDF:lepton = on");													// toggle ISR
+	// pythia.readString("PDF:lepton = off");													// toggle ISR
 	// QCD processes
 	pythia.readString("HardQCD:all = off");													// master switch
 	// EW boson processes
