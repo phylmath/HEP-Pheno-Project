@@ -46,7 +46,7 @@ int main(){
 	// TFile *input = new TFile("gen_TES500_noR.root", "READ");
 	// TFile *input = new TFile("gen_TES500_wiR.root", "READ");
 	// TFile *input = new TFile("gen_TES50t_noR.root", "READ");
-	// TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
+	TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_noR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_wiR.root", "READ");
 	// Read TTree
@@ -56,7 +56,7 @@ int main(){
 	// TFile *output = new TFile("cut_TES500_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES500_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES50t_noR.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
+	TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_wiR.root", "RECREATE");
 	// Define tree
@@ -98,17 +98,57 @@ int main(){
 	hist_nHadron->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron", &hist_nHadron, "hist_nHadron");
 
+	TH1F *hist_nHadron_000 = new TH1F("hist_nHadron_000", "Charged Hadron Multiplicity", 50, 1, 101);
+	hist_nHadron_000->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_000->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_000", &hist_nHadron_000, "hist_nHadron_000");
+
+	TH1F *hist_nHadron_300 = new TH1F("hist_nHadron_300", "Charged Hadron Multiplicity", 50, 1, 101);
+	hist_nHadron_300->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_300->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_300", &hist_nHadron_300, "hist_nHadron_300");
+
+	TH1F *hist_nHadron_425 = new TH1F("hist_nHadron_425", "Charged Hadron Multiplicity", 50, 1, 101);
+	hist_nHadron_425->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_425->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_425", &hist_nHadron_425, "hist_nHadron_425");
+
+	TH1F *hist_nHadron_500 = new TH1F("hist_nHadron_500", "Charged Hadron Multiplicity", 50, 1, 101);
+	hist_nHadron_500->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_500->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_500", &hist_nHadron_500, "hist_nHadron_500");
+
 	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, 0, 11);
 	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}>");
 	hist_nJetTot->GetYaxis()->SetTitle("P(N_{JETS})");
 	otree->Branch("hist_nJetTot", &hist_nJetTot, "hist_nJetTot");
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
-	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
+
+	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_000->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_000->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_000", &hist_ThrPyth_000, "hist_ThrPyth_000");
+
+	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "vThrust", 100, 0, 0.4);
+	hist_ThrPyth_300->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_300->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_300", &hist_ThrPyth_300, "hist_ThrPyth_300");
+
+	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_425->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_425->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_425", &hist_ThrPyth_425, "hist_ThrPyth_425");
+
+	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_500->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_500->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_500", &hist_ThrPyth_500, "hist_ThrPyth_500");
 
 	TH1F *hist_TaxPyth = new TH1F("hist_TaxPyth", "Thrust axis", 100, -1., 1.);
 	hist_TaxPyth->GetXaxis()->SetTitle("cosΘ_{Thrust}");
@@ -200,19 +240,37 @@ int main(){
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
-		
+	
+		// Read data
+		Thr = (*eveThr)[0];
+		Tax = (*eveTax)[0];
+		Sph = (*eveSph)[0];
+		Sax = (*eveSax)[0];
+
 		// Cut on √s'
 		if ((*eveSpr)[0] >= 0){
-			Thr = (*eveThr)[0];
-			Tax = (*eveTax)[0];
 			hist_ThrPyth->Fill(Thr);
 			hist_TaxPyth->Fill(Tax);
-			Sph = (*eveSph)[0];
-			Sax = (*eveSax)[0];
 			hist_SphPyth->Fill(Sph);
 			hist_SaxPyth->Fill(Sax);
 			hist_nHadron->Fill(nCh);
 			hist_nJetTot->Fill(nCj);
+		}
+		if ((*eveSpr)[0] >= 0) {
+			hist_ThrPyth_000->Fill(Thr);
+			hist_nHadron_000->Fill(nCh);
+		}		
+		if ((*eveSpr)[0] >= 300) {
+			hist_ThrPyth_300->Fill(Thr);
+			hist_nHadron_300->Fill(nCh);
+		}	
+		if ((*eveSpr)[0] >= 425) {
+			hist_ThrPyth_425->Fill(Thr);
+			hist_nHadron_425->Fill(nCh);
+		}	
+		if ((*eveSpr)[0] >= 500) {
+			hist_ThrPyth_500->Fill(Thr);
+			hist_nHadron_500->Fill(nCh);
 		}
 
 		Spr = (*eveSpr)[0];

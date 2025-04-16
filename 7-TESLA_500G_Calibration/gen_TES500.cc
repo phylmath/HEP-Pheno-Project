@@ -44,7 +44,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES500.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
