@@ -90,7 +90,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	pythia.readString("PDF:lepton = on");													// toggle ISR
+	pythia.readString("PDF:lepton = on");													// ISR toggle
 	
 	// QCD processes
 	// pythia.readString("PhaseSpace:pTHatMin = 5.");										// invariant pT
@@ -99,9 +99,8 @@ int main(){
 	// EW boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (222) ee'->WW
 	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->(γ*/Z)(γ*/Z)
-	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// (232) ee'->ZW
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (222) ee'->WW
 	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
@@ -121,7 +120,7 @@ int main(){
 	pythia.readString("23:onMode = off");													// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16 17 18");								// turn on W iff duscbt/τν
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
 	
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing
@@ -132,7 +131,7 @@ int main(){
 	pythia.readString("Init:showMultipartonInteractions = off");							// print intilialisation
 	pythia.readString("Init:showChangedSettings = off");									// print edited flags
 	pythia.readString("Init:showChangedParticleData = off");								// print edited particles
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +146,7 @@ int main(){
 	Sphericity sph;
 	Event event_fch;
 	float sigISR=0.0, sigmaE=0.0;
-	int nCh=0, nISR=0;
+	int nCh=0, nISR=0, nC_ZZ=0, nC_WW=0;
 	
 	// Run through events
 	for (int iEvent=0; iEvent<nEvent; iEvent++ ) {
@@ -173,7 +172,7 @@ int main(){
 			if (pythia.event[jParts].isFinal()) sigmaE+=pythia.event[jParts].e();
 
 			// Store particle info
-			if (pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged() && pythia.event[jParts].isHadron()) {
+			if (pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged()) {
 		
 				nCh++;																		// Count FC particles
 				eveNum.push_back(iEvent);													// Add event number
@@ -205,6 +204,11 @@ int main(){
 				}
 			}
 		}
+
+		// Split by process type.
+		// int code = pythia.info.code();
+		// if      (code == 233) multS.fill( nCharged );
+		// else if (code == 903) multG.fill( nCharged );
 
 		// Compute √s'
 		sigISR = 500.0*sqrt(1.0-(2.0*sigISR)/500.0);

@@ -93,27 +93,27 @@ int main(){
 	hist_Esprime->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime", &hist_Esprime, "hist_Esprime");
 
-	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 50, 1, 101);
+	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron", &hist_nHadron, "hist_nHadron");
 
-	TH1F *hist_nHadron_000 = new TH1F("hist_nHadron_000", "Charged Hadron Multiplicity", 50, 1, 101);
+	TH1F *hist_nHadron_000 = new TH1F("hist_nHadron_000", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron_000->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron_000->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_000", &hist_nHadron_000, "hist_nHadron_000");
 
-	TH1F *hist_nHadron_300 = new TH1F("hist_nHadron_300", "Charged Hadron Multiplicity", 50, 1, 101);
+	TH1F *hist_nHadron_300 = new TH1F("hist_nHadron_300", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron_300->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron_300->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_300", &hist_nHadron_300, "hist_nHadron_300");
 
-	TH1F *hist_nHadron_425 = new TH1F("hist_nHadron_425", "Charged Hadron Multiplicity", 50, 1, 101);
+	TH1F *hist_nHadron_425 = new TH1F("hist_nHadron_425", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron_425->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron_425->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_425", &hist_nHadron_425, "hist_nHadron_425");
 
-	TH1F *hist_nHadron_500 = new TH1F("hist_nHadron_500", "Charged Hadron Multiplicity", 50, 1, 101);
+	TH1F *hist_nHadron_500 = new TH1F("hist_nHadron_500", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron_500->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron_500->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_500", &hist_nHadron_500, "hist_nHadron_500");
