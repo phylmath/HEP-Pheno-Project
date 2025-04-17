@@ -124,14 +124,14 @@ int main(){
 	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16 17 18");								// turn on W iff duscbt/τν
 	
 	// Suppress terminal text
-	pythia.readString("Print:quiet = on");													// 
-	pythia.readString("Next:numberCount = 1000");											//
-	pythia.readString("Next:numberShowProcess = 0");										//
-	pythia.readString("Next:numberShowInfo = 0");											//
-	pythia.readString("Next:numberShowEvent = 0");											//
-	pythia.readString("Init:showMultipartonInteractions = off");							//
-	pythia.readString("Init:showChangedSettings = off");									//
-	pythia.readString("Init:showChangedParticleData = off");								//
+	pythia.readString("Print:quiet = on");													// print nothing
+	pythia.readString("Next:numberCount = 1000");											// print #events updates
+	pythia.readString("Next:numberShowInfo = 0");											// print info record
+	pythia.readString("Next:numberShowProcess = 0");										// print process record
+	pythia.readString("Next:numberShowEvent = 0");											// print event record
+	pythia.readString("Init:showMultipartonInteractions = off");							// print intilialisation
+	pythia.readString("Init:showChangedSettings = off");									// print edited flags
+	pythia.readString("Init:showChangedParticleData = off");								// print edited particles
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
