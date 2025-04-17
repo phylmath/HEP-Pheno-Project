@@ -88,7 +88,7 @@ int main(){
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_Esprime = new TH1F("hist_Esprime", "Reduced centre-of-mass", 525, -1, 526);
+	TH1F *hist_Esprime = new TH1F("hist_Esprime", "Reduced centre-of-mass", 525, 0, 526);
 	hist_Esprime->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime", &hist_Esprime, "hist_Esprime");

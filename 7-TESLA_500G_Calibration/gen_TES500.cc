@@ -44,7 +44,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES500.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -90,22 +90,22 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	// pythia.readString("PDF:lepton = off");													// toggle ISR
+	pythia.readString("PDF:lepton = on");													// toggle ISR
+	
 	// QCD processes
+	// pythia.readString("PhaseSpace:pTHatMin = 5.");										// invariant pT
 	pythia.readString("HardQCD:all = off");													// master switch
+	
 	// EW boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
 	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (222) ee'->WW
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->γ*γ*ZZ
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->(γ*/Z)(γ*/Z)
 	pythia.readString("WeakDoubleBoson:ffbar2ZW = off");									// (232) ee'->ZW
-	// EW boson decays
-	pythia.readString("23:onMode = off");													// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
-	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15");										// turn on W iff duscbt/τν
+	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
+
 	// Higgs processes
 	pythia.readString("HiggsSM:all = off");													// master switch
 	pythia.readString("HiggsSM:gg2H = off");												// (902) gluon fusion
@@ -117,6 +117,12 @@ int main(){
 	pythia.readString("HiggsSM:gg2Httbar = off");											// (908) gg->Htt'
 	pythia.readString("HiggsSM:qqbar2Httbar = off");										// (909) qq->Htt'
 
+	// Constrain decays
+	pythia.readString("23:onMode = off");													// turn off Z production
+	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
+	pythia.readString("24:onMode = off");													// turn off W production
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16 17 18");								// turn on W iff duscbt/τν
+	
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// 
 	pythia.readString("Next:numberCount = 1000");											//
