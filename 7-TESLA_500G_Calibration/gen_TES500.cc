@@ -44,7 +44,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES500_WWW.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -98,29 +98,18 @@ int main(){
 	
 	// EW boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->(γ*/Z)(γ*/Z)
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = off");									// (221) ee'->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = off");									// (231) ee'->(γ*/Z)(γ*/Z)
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (222) ee'->WW
 	
 	// Top processes
-	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
-
-	// Higgs processes
-	pythia.readString("HiggsSM:all = off");													// master switch
-	pythia.readString("HiggsSM:gg2H = off");												// (902) gluon fusion
-	pythia.readString("HiggsSM:gmgm2H = off");												// (903) gamma fusion
-	pythia.readString("HiggsSM:ffbar2HZ = off");											// (904) higgsstrahlung
-	pythia.readString("HiggsSM:ffbar2HW = off");											// (905) higgsstrahlung
-	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = off");										// (906) ZZ fusion
-	pythia.readString("HiggsSM:ff2Hff(t:WW) = off");										// (907) WW fusion
-	pythia.readString("HiggsSM:gg2Httbar = off");											// (908) gg->Htt'
-	pythia.readString("HiggsSM:qqbar2Httbar = off");										// (909) qq->Htt'
+	pythia.readString("Top:ffbar2ttbar(s:gmZ) = off");										// (604) ee'->tt'
 
 	// Constrain decays
-	pythia.readString("23:onMode = off");													// turn off Z production
-	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
+	// pythia.readString("23:onMode = off");													// turn off Z production
+	// pythia.readString("23:onIfAny = 1 2 3 4 5");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
+	pythia.readString("24:onIfAny = 1 2 3 4 5");											// turn on W iff duscbt
 	
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing

@@ -217,180 +217,284 @@ void plt_TES500()
 // Plotting Charged Hadronic Multiplicity
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Add legend
-	TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
-	leg_nch->AddEntry(hist_nHadron_TES50t_wiR, "500 GeV (wi top wi ISR)", "p");
-	leg_nch->AddEntry(hist_nHadron_TES50t_noR, "500 GeV (wi top wo ISR)", "p");
-	leg_nch->AddEntry(hist_nHadron_TES500_wiR, "500 GeV (wo top wi ISR)", "p");
-	leg_nch->AddEntry(hist_nHadron_TES500_noR, "500 GeV (wo top wo ISR)", "p");
-	leg_nch->AddEntry(hist_nHadron_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
-	leg_nch->AddEntry(hist_nHadron_LEP912_noR, "91.2 GeV (wo ISR)", "p");
-	leg_nch->SetTextSize(0.03);
+	// // Add legend
+	// TLegend *leg_nch = new TLegend(0.4, 0.2, 0.85, 0.4);
+	// leg_nch->AddEntry(hist_nHadron_TES50t_wiR, "500 GeV (wi top wi ISR)", "p");
+	// leg_nch->AddEntry(hist_nHadron_TES50t_noR, "500 GeV (wi top wo ISR)", "p");
+	// leg_nch->AddEntry(hist_nHadron_TES500_wiR, "500 GeV (wo top wi ISR)", "p");
+	// leg_nch->AddEntry(hist_nHadron_TES500_noR, "500 GeV (wo top wo ISR)", "p");
+	// leg_nch->AddEntry(hist_nHadron_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
+	// leg_nch->AddEntry(hist_nHadron_LEP912_noR, "91.2 GeV (wo ISR)", "p");
+	// leg_nch->SetTextSize(0.03);
 
-	// Create canvas
-	TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
+	// // Create canvas
+	// TCanvas* c_nch = new TCanvas("c_nch", "Charged hadron multiplicity distributions", 800, 600);
 
-	// Beautify
-	c_nch->Divide(2,1);
-	c_nch->cd(1)->SetLeftMargin(0.15);
-	c_nch->cd(1)->SetLogy();
-	c_nch->cd(1)->SetTickx(); c_nch->cd(1)->SetTicky();
-	c_nch->cd(1)->SetGridx(); c_nch->cd(1)->SetGridy();
-	c_nch->cd(2)->SetLeftMargin(0.15);
-	c_nch->cd(2)->SetLogy();
-	c_nch->cd(2)->SetTickx(); c_nch->cd(2)->SetTicky();
-	c_nch->cd(2)->SetGridx(); c_nch->cd(2)->SetGridy();
+	// // Beautify
+	// c_nch->Divide(2,1);
+	// c_nch->cd(1)->SetLeftMargin(0.15);
+	// c_nch->cd(1)->SetLogy();
+	// c_nch->cd(1)->SetTickx(); c_nch->cd(1)->SetTicky();
+	// c_nch->cd(1)->SetGridx(); c_nch->cd(1)->SetGridy();
+	// c_nch->cd(2)->SetLeftMargin(0.15);
+	// c_nch->cd(2)->SetLogy();
+	// c_nch->cd(2)->SetTickx(); c_nch->cd(2)->SetTicky();
+	// c_nch->cd(2)->SetGridx(); c_nch->cd(2)->SetGridy();
 	
-	// Draw
-	c_nch->cd(1);
-	hist_nHadron_TES50t_wiR->Draw("P");
-	hist_nHadron_TES500_wiR->Draw("PSAME");
-	hist_nHadron_TES50t_noR->Draw("PSAME");
-	hist_nHadron_TES500_noR->Draw("PSAME");
-	hist_nHadron_LEP912_noR->Draw("PSAME");
-	hist_nHadron_LEP912_wiR->Draw("PSAME");
-	leg_nch->Draw("SAME");
-	c_nch->cd(2);
-	KNOO_nHadron_TES50t_wiR->Draw("P");
-	KNOO_nHadron_TES500_wiR->Draw("PSAME");
-	KNOO_nHadron_TES50t_noR->Draw("PSAME");
-	KNOO_nHadron_TES500_noR->Draw("PSAME");
-	KNOO_nHadron_LEP912_noR->Draw("PSAME");
-	KNOO_nHadron_LEP912_wiR->Draw("PSAME");
-	leg_nch->Draw("SAME");
+	// // Draw
+	// c_nch->cd(1);
+	// hist_nHadron_TES50t_wiR->Draw("P");
+	// hist_nHadron_TES500_wiR->Draw("PSAME");
+	// hist_nHadron_TES50t_noR->Draw("PSAME");
+	// hist_nHadron_TES500_noR->Draw("PSAME");
+	// hist_nHadron_LEP912_noR->Draw("PSAME");
+	// hist_nHadron_LEP912_wiR->Draw("PSAME");
+	// leg_nch->Draw("SAME");
+	// c_nch->cd(2);
+	// KNOO_nHadron_TES50t_wiR->Draw("P");
+	// KNOO_nHadron_TES500_wiR->Draw("PSAME");
+	// KNOO_nHadron_TES50t_noR->Draw("PSAME");
+	// KNOO_nHadron_TES500_noR->Draw("PSAME");
+	// KNOO_nHadron_LEP912_noR->Draw("PSAME");
+	// KNOO_nHadron_LEP912_wiR->Draw("PSAME");
+	// leg_nch->Draw("SAME");
 
-	hist_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
-	KNOO_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
+	// hist_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
+	// KNOO_nHadron_TES50t_wiR->GetYaxis()->SetRangeUser(1E-5,1E0);
 
-	// Modify stat-box
-	gStyle->SetOptStat();
-	c_nch->Modified();
+	// // Modify stat-box
+	// gStyle->SetOptStat();
+	// c_nch->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Thrust (impact of ISR/top)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Add legend
-	TLegend *lg_thr = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr->AddEntry(hist_ThrPyth_TES50t_noR, "500 GeV (wo ISR)", "p");
-	lg_thr->AddEntry(hist_ThrPyth_TES500_wiR, "500 GeV (wi ISR)", "p");
-	lg_thr->AddEntry(hist_ThrPyth_LEP912_noR, "91.2 GeV (wo ISR)", "p");
-	lg_thr->AddEntry(hist_ThrPyth_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
-	lg_thr->AddEntry(hist_Thr1999, "1999 TESLA study", "p");
-	lg_thr->SetTextSize(0.04);
+// 	// Add legend
+// 	TLegend *lg_thr = new TLegend(0.4, 0.2, 0.85, 0.4);
+// 	lg_thr->AddEntry(hist_ThrPyth_TES50t_noR, "500 GeV (wo ISR)", "p");
+// 	lg_thr->AddEntry(hist_ThrPyth_TES500_wiR, "500 GeV (wi ISR)", "p");
+// 	lg_thr->AddEntry(hist_ThrPyth_LEP912_noR, "91.2 GeV (wo ISR)", "p");
+// 	lg_thr->AddEntry(hist_ThrPyth_LEP912_wiR, "91.2 GeV (wi ISR)", "p");
+// 	lg_thr->AddEntry(hist_Thr1999, "1999 TESLA study", "p");
+// 	lg_thr->SetTextSize(0.04);
 
-	// Create canvas
-	TCanvas* c_thr = new TCanvas("c_thr", "Inverse Thrust distributions", 800, 600);
+// 	// Create canvas
+// 	TCanvas* c_thr = new TCanvas("c_thr", "Inverse Thrust distributions", 800, 600);
 
-	// Beautify
-	gStyle->SetErrorX(0.000000001);
-	c_thr->Divide(2,1);
-	c_thr->cd(1)->SetLeftMargin(0.15);
-	c_thr->cd(1)->SetLogy();
-	c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
-	c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
-	c_thr->cd(2)->SetLeftMargin(0.15);
-	c_thr->cd(2)->SetLogy();
-	c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
-	c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
+// 	// Beautify
+// 	gStyle->SetErrorX(0.000000001);
+// 	c_thr->Divide(2,1);
+// 	c_thr->cd(1)->SetLeftMargin(0.15);
+// 	c_thr->cd(1)->SetLogy();
+// 	c_thr->cd(1)->SetTickx(); c_thr->cd(1)->SetTicky();
+// 	c_thr->cd(1)->SetGridx(); c_thr->cd(1)->SetGridy();
+// 	c_thr->cd(2)->SetLeftMargin(0.15);
+// 	c_thr->cd(2)->SetLogy();
+// 	c_thr->cd(2)->SetTickx(); c_thr->cd(2)->SetTicky();
+// 	c_thr->cd(2)->SetGridx(); c_thr->cd(2)->SetGridy();
 	
-	hist_Thr1999->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_Thr199T->GetYaxis()->SetRangeUser(1E-4,1E0);
+// 	hist_Thr1999->GetYaxis()->SetRangeUser(1E-4,1E0);
+// 	hist_Thr199T->GetYaxis()->SetRangeUser(1E-4,1E0);
 
-	// Draw
-	c_thr->cd(1);
-	hist_Thr1999->Draw("P");
-	hist_ThrPyth_TES500_wiR->Draw("PSAME");
-	hist_ThrPyth_TES500_noR->Draw("PSAME");
-	hist_ThrPyth_LEP912_wiR->Draw("PSAME");
-	hist_ThrPyth_LEP912_noR->Draw("PSAME");
-	lg_thr->Draw("SAME");
-	c_thr->cd(2);
-	hist_Thr199T->Draw("P");
-	hist_ThrPyth_TES50t_wiR->Draw("PSAME");
-	hist_ThrPyth_TES50t_noR->Draw("PSAME");
-	hist_ThrPyth_LEP912_wiR->Draw("PSAME");
-	hist_ThrPyth_LEP912_noR->Draw("PSAME");
-	lg_thr->Draw("SAME");
+// 	// Draw
+// 	c_thr->cd(1);
+// 	hist_Thr1999->Draw("P");
+// 	hist_ThrPyth_TES500_wiR->Draw("PSAME");
+// 	hist_ThrPyth_TES500_noR->Draw("PSAME");
+// 	hist_ThrPyth_LEP912_wiR->Draw("PSAME");
+// 	hist_ThrPyth_LEP912_noR->Draw("PSAME");
+// 	lg_thr->Draw("SAME");
+// 	c_thr->cd(2);
+// 	hist_Thr199T->Draw("P");
+// 	hist_ThrPyth_TES50t_wiR->Draw("PSAME");
+// 	hist_ThrPyth_TES50t_noR->Draw("PSAME");
+// 	hist_ThrPyth_LEP912_wiR->Draw("PSAME");
+// 	hist_ThrPyth_LEP912_noR->Draw("PSAME");
+// 	lg_thr->Draw("SAME");
 
-// Modify stat-box
-	gStyle->SetOptStat();
-	c_thr->Modified();
+// // Modify stat-box
+// 	gStyle->SetOptStat();
+// 	c_thr->Modified();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Impact of ISR/Top on Thrust/Nch
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_ThrPyth_TES50t_wiR_000 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_000");
-	TH1F *hist_ThrPyth_TES50t_wiR_300 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_300");
-	TH1F *hist_ThrPyth_TES50t_wiR_425 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_425");
-	TH1F *hist_ThrPyth_TES50t_wiR_500 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_500");
+// 	TH1F *hist_ThrPyth_TES50t_wiR_000 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_000");
+// 	TH1F *hist_ThrPyth_TES50t_wiR_300 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_300");
+// 	TH1F *hist_ThrPyth_TES50t_wiR_425 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_425");
+// 	TH1F *hist_ThrPyth_TES50t_wiR_500 = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_500");
 
-	TH1F *hist_nHadron_TES50t_wiR_000 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_000");
-	TH1F *hist_nHadron_TES50t_wiR_300 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_300");
-	TH1F *hist_nHadron_TES50t_wiR_425 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_425");
-	TH1F *hist_nHadron_TES50t_wiR_500 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_500");
+// 	TH1F *hist_nHadron_TES50t_wiR_000 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_000");
+// 	TH1F *hist_nHadron_TES50t_wiR_300 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_300");
+// 	TH1F *hist_nHadron_TES50t_wiR_425 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_425");
+// 	TH1F *hist_nHadron_TES50t_wiR_500 = (TH1F*)input_TES50t_wiR->Get("hist_nHadron_500");
 
-	hist_ThrPyth_TES50t_wiR_000->SetLineColor(kYellow+2); hist_ThrPyth_TES50t_wiR_000->SetMarkerColor(kYellow+2); hist_ThrPyth_TES50t_wiR_000->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_000->SetMarkerSize(1.5);
-	hist_ThrPyth_TES50t_wiR_300->SetLineColor(kBlue+2); hist_ThrPyth_TES50t_wiR_300->SetMarkerColor(kBlue+2); hist_ThrPyth_TES50t_wiR_300->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_300->SetMarkerSize(1.5);
-	hist_ThrPyth_TES50t_wiR_425->SetLineColor(kGreen+2); hist_ThrPyth_TES50t_wiR_425->SetMarkerColor(kGreen+2); hist_ThrPyth_TES50t_wiR_425->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_425->SetMarkerSize(1.5);
-	hist_ThrPyth_TES50t_wiR_500->SetLineColor(kRed+2); hist_ThrPyth_TES50t_wiR_500->SetMarkerColor(kRed+2); hist_ThrPyth_TES50t_wiR_500->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_500->SetMarkerSize(1.5);
+// 	hist_ThrPyth_TES50t_wiR_000->SetLineColor(kYellow+2); hist_ThrPyth_TES50t_wiR_000->SetMarkerColor(kYellow+2); hist_ThrPyth_TES50t_wiR_000->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_000->SetMarkerSize(1.5);
+// 	hist_ThrPyth_TES50t_wiR_300->SetLineColor(kBlue+2); hist_ThrPyth_TES50t_wiR_300->SetMarkerColor(kBlue+2); hist_ThrPyth_TES50t_wiR_300->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_300->SetMarkerSize(1.5);
+// 	hist_ThrPyth_TES50t_wiR_425->SetLineColor(kGreen+2); hist_ThrPyth_TES50t_wiR_425->SetMarkerColor(kGreen+2); hist_ThrPyth_TES50t_wiR_425->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_425->SetMarkerSize(1.5);
+// 	hist_ThrPyth_TES50t_wiR_500->SetLineColor(kRed+2); hist_ThrPyth_TES50t_wiR_500->SetMarkerColor(kRed+2); hist_ThrPyth_TES50t_wiR_500->SetMarkerStyle(53); hist_ThrPyth_TES50t_wiR_500->SetMarkerSize(1.5);
 
-	hist_nHadron_TES50t_wiR_000->SetLineColor(kYellow+2); hist_nHadron_TES50t_wiR_000->SetMarkerColor(kYellow+2); hist_nHadron_TES50t_wiR_000->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_000->SetMarkerSize(1.5);
-	hist_nHadron_TES50t_wiR_300->SetLineColor(kBlue+2); hist_nHadron_TES50t_wiR_300->SetMarkerColor(kBlue+2); hist_nHadron_TES50t_wiR_300->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_300->SetMarkerSize(1.5);
-	hist_nHadron_TES50t_wiR_425->SetLineColor(kGreen+2); hist_nHadron_TES50t_wiR_425->SetMarkerColor(kGreen+2); hist_nHadron_TES50t_wiR_425->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_425->SetMarkerSize(1.5);
-	hist_nHadron_TES50t_wiR_500->SetLineColor(kRed+2); hist_nHadron_TES50t_wiR_500->SetMarkerColor(kRed+2); hist_nHadron_TES50t_wiR_500->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_500->SetMarkerSize(1.5);
+// 	hist_nHadron_TES50t_wiR_000->SetLineColor(kYellow+2); hist_nHadron_TES50t_wiR_000->SetMarkerColor(kYellow+2); hist_nHadron_TES50t_wiR_000->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_000->SetMarkerSize(1.5);
+// 	hist_nHadron_TES50t_wiR_300->SetLineColor(kBlue+2); hist_nHadron_TES50t_wiR_300->SetMarkerColor(kBlue+2); hist_nHadron_TES50t_wiR_300->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_300->SetMarkerSize(1.5);
+// 	hist_nHadron_TES50t_wiR_425->SetLineColor(kGreen+2); hist_nHadron_TES50t_wiR_425->SetMarkerColor(kGreen+2); hist_nHadron_TES50t_wiR_425->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_425->SetMarkerSize(1.5);
+// 	hist_nHadron_TES50t_wiR_500->SetLineColor(kRed+2); hist_nHadron_TES50t_wiR_500->SetMarkerColor(kRed+2); hist_nHadron_TES50t_wiR_500->SetMarkerStyle(53); hist_nHadron_TES50t_wiR_500->SetMarkerSize(1.5);
 
-	hist_ThrPyth_TES50t_wiR_000->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_300->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_425->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_500->SetStats(kFALSE);
-	hist_nHadron_TES50t_wiR_000->SetStats(kFALSE); hist_nHadron_TES50t_wiR_300->SetStats(kFALSE); hist_nHadron_TES50t_wiR_425->SetStats(kFALSE); hist_nHadron_TES50t_wiR_500->SetStats(kFALSE);
+// 	hist_ThrPyth_TES50t_wiR_000->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_300->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_425->SetStats(kFALSE); hist_ThrPyth_TES50t_wiR_500->SetStats(kFALSE);
+// 	hist_nHadron_TES50t_wiR_000->SetStats(kFALSE); hist_nHadron_TES50t_wiR_300->SetStats(kFALSE); hist_nHadron_TES50t_wiR_425->SetStats(kFALSE); hist_nHadron_TES50t_wiR_500->SetStats(kFALSE);
 
-	hist_ThrPyth_TES50t_wiR_000->Scale(1.0/hist_ThrPyth_TES50t_wiR_000->Integral()); hist_ThrPyth_TES50t_wiR_300->Scale(1.0/hist_ThrPyth_TES50t_wiR_300->Integral());
-	hist_ThrPyth_TES50t_wiR_425->Scale(1.0/hist_ThrPyth_TES50t_wiR_425->Integral()); hist_ThrPyth_TES50t_wiR_500->Scale(1.0/hist_ThrPyth_TES50t_wiR_500->Integral());
-	hist_nHadron_TES50t_wiR_000->Scale(1.0/hist_nHadron_TES50t_wiR_000->Integral()); hist_nHadron_TES50t_wiR_300->Scale(1.0/hist_nHadron_TES50t_wiR_300->Integral());
-	hist_nHadron_TES50t_wiR_425->Scale(1.0/hist_nHadron_TES50t_wiR_425->Integral()); hist_nHadron_TES50t_wiR_500->Scale(1.0/hist_nHadron_TES50t_wiR_500->Integral());
+// 	hist_ThrPyth_TES50t_wiR_000->Scale(1.0/hist_ThrPyth_TES50t_wiR_000->Integral()); hist_ThrPyth_TES50t_wiR_300->Scale(1.0/hist_ThrPyth_TES50t_wiR_300->Integral());
+// 	hist_ThrPyth_TES50t_wiR_425->Scale(1.0/hist_ThrPyth_TES50t_wiR_425->Integral()); hist_ThrPyth_TES50t_wiR_500->Scale(1.0/hist_ThrPyth_TES50t_wiR_500->Integral());
+// 	hist_nHadron_TES50t_wiR_000->Scale(1.0/hist_nHadron_TES50t_wiR_000->Integral()); hist_nHadron_TES50t_wiR_300->Scale(1.0/hist_nHadron_TES50t_wiR_300->Integral());
+// 	hist_nHadron_TES50t_wiR_425->Scale(1.0/hist_nHadron_TES50t_wiR_425->Integral()); hist_nHadron_TES50t_wiR_500->Scale(1.0/hist_nHadron_TES50t_wiR_500->Integral());
+
+// 	// Add legend
+// 	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
+// 	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_000, "#sqrt{s'} cut at 0 GeV", "p");
+// 	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_300, "#sqrt{s'} cut at 300 GeV", "p");
+// 	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_425, "#sqrt{s'} cut at 425 GeV", "p");
+// 	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_500, "#sqrt{s'} cut at 500 GeV", "p");
+// 	lg_thr2->SetTextSize(0.03);
+
+// 	// Create canvas
+// 	TCanvas* c_thr2 = new TCanvas("c_thr2", "Impact of #sqrt{s'} cuts on Event Shapes", 800, 600);
+
+// 	// Beautify
+// 	gStyle->SetErrorX(0.000000001);
+// 	c_thr2->Divide(2,1);
+// 	c_thr2->cd(1)->SetLeftMargin(0.15);
+// 	c_thr2->cd(1)->SetLogy();
+// 	c_thr2->cd(1)->SetTickx(); c_thr2->cd(1)->SetTicky();
+// 	c_thr2->cd(1)->SetGridx(); c_thr2->cd(1)->SetGridy();
+// 	c_thr2->cd(2)->SetLeftMargin(0.15);
+// 	c_thr2->cd(2)->SetLogy();
+// 	c_thr2->cd(2)->SetTickx(); c_thr2->cd(2)->SetTicky();
+// 	c_thr2->cd(2)->SetGridx(); c_thr2->cd(2)->SetGridy();
+
+// 	hist_ThrPyth_TES50t_wiR_000->GetYaxis()->SetRangeUser(1E-4,1E0);
+// 	hist_nHadron_TES50t_wiR_000->GetYaxis()->SetRangeUser(1E-5,1E0);
+
+// 	// Draw
+// 	c_thr2->cd(1);
+// 	hist_ThrPyth_TES50t_wiR_000->Draw("P");
+// 	hist_ThrPyth_TES50t_wiR_300->Draw("PSAME");
+// 	hist_ThrPyth_TES50t_wiR_425->Draw("PSAME");
+// 	hist_ThrPyth_TES50t_wiR_500->Draw("PSAME");
+// 	lg_thr2->Draw("SAME");
+// 	c_thr2->cd(2);
+// 	hist_nHadron_TES50t_wiR_000->Draw("P");
+// 	hist_nHadron_TES50t_wiR_300->Draw("PSAME");
+// 	hist_nHadron_TES50t_wiR_425->Draw("PSAME");
+// 	hist_nHadron_TES50t_wiR_500->Draw("PSAME");
+// 	lg_thr2->Draw("SAME");
+
+// // Modify stat-box
+// 	gStyle->SetOptStat();
+// 	c_thr2->Modified();
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plotting Impact of Processes on Nch
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TFile* input_TES50t_gZ0 = new TFile("cut_TES50t_gZ0.root", "READ");
+	TFile* input_TES500_gZ0 = new TFile("cut_TES500_gZ0.root", "READ");
+	TFile* input_TES500_WWW = new TFile("cut_TES500_WWW.root", "READ");
+	TFile* input_TES500_ZZZ = new TFile("cut_TES500_ZZZ.root", "READ");
+
+	TH1F *hist_ThrPyth_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("hist_ThrPyth");
+	TH1F *hist_ThrPyth_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("hist_ThrPyth");
+	TH1F *hist_ThrPyth_TES500_WWW = (TH1F*)input_TES500_WWW->Get("hist_ThrPyth");
+	TH1F *hist_ThrPyth_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("hist_ThrPyth");
+
+	TH1F *KNOO_ThrPyth_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("KNOO_nHadron");
+	TH1F *KNOO_ThrPyth_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("KNOO_nHadron");
+	TH1F *KNOO_ThrPyth_TES500_WWW = (TH1F*)input_TES500_WWW->Get("KNOO_nHadron");
+	TH1F *KNOO_ThrPyth_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("KNOO_nHadron");
+
+	TH1F *hist_Esprime_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("hist_Esprime");
+	TH1F *hist_Esprime_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("hist_Esprime");
+	TH1F *hist_Esprime_TES500_WWW = (TH1F*)input_TES500_WWW->Get("hist_Esprime");
+	TH1F *hist_Esprime_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("hist_Esprime");
+
+	hist_ThrPyth_TES50t_gZ0->SetLineColor(kYellow+2); hist_ThrPyth_TES50t_gZ0->SetMarkerColor(kYellow+2); hist_ThrPyth_TES50t_gZ0->SetMarkerStyle(53); hist_ThrPyth_TES50t_gZ0->SetMarkerSize(1.5);
+	hist_ThrPyth_TES500_gZ0->SetLineColor(kBlue+2); hist_ThrPyth_TES500_gZ0->SetMarkerColor(kBlue+2); hist_ThrPyth_TES500_gZ0->SetMarkerStyle(53); hist_ThrPyth_TES500_gZ0->SetMarkerSize(1.5);
+	hist_ThrPyth_TES500_WWW->SetLineColor(kGreen+2); hist_ThrPyth_TES500_WWW->SetMarkerColor(kGreen+2); hist_ThrPyth_TES500_WWW->SetMarkerStyle(53); hist_ThrPyth_TES500_WWW->SetMarkerSize(1.5);
+	hist_ThrPyth_TES500_ZZZ->SetLineColor(kRed+2); hist_ThrPyth_TES500_ZZZ->SetMarkerColor(kRed+2); hist_ThrPyth_TES500_ZZZ->SetMarkerStyle(53); hist_ThrPyth_TES500_ZZZ->SetMarkerSize(1.5);
+
+	KNOO_ThrPyth_TES50t_gZ0->SetLineColor(kYellow+2); KNOO_ThrPyth_TES50t_gZ0->SetMarkerColor(kYellow+2); KNOO_ThrPyth_TES50t_gZ0->SetMarkerStyle(53); KNOO_ThrPyth_TES50t_gZ0->SetMarkerSize(1.5);
+	KNOO_ThrPyth_TES500_gZ0->SetLineColor(kBlue+2); KNOO_ThrPyth_TES500_gZ0->SetMarkerColor(kBlue+2); KNOO_ThrPyth_TES500_gZ0->SetMarkerStyle(53); KNOO_ThrPyth_TES500_gZ0->SetMarkerSize(1.5);
+	KNOO_ThrPyth_TES500_WWW->SetLineColor(kGreen+2); KNOO_ThrPyth_TES500_WWW->SetMarkerColor(kGreen+2); KNOO_ThrPyth_TES500_WWW->SetMarkerStyle(53); KNOO_ThrPyth_TES500_WWW->SetMarkerSize(1.5);
+	KNOO_ThrPyth_TES500_ZZZ->SetLineColor(kRed+2); KNOO_ThrPyth_TES500_ZZZ->SetMarkerColor(kRed+2); KNOO_ThrPyth_TES500_ZZZ->SetMarkerStyle(53); KNOO_ThrPyth_TES500_ZZZ->SetMarkerSize(1.5);
+
+	hist_Esprime_TES50t_gZ0->SetLineColor(kYellow+2); hist_Esprime_TES50t_gZ0->SetMarkerColor(kYellow+2); hist_Esprime_TES50t_gZ0->SetMarkerStyle(53);
+	hist_Esprime_TES500_gZ0->SetLineColor(kBlue+2); hist_Esprime_TES500_gZ0->SetMarkerColor(kBlue+2); hist_Esprime_TES500_gZ0->SetMarkerStyle(53);
+	hist_Esprime_TES500_WWW->SetLineColor(kGreen+2); hist_Esprime_TES500_WWW->SetMarkerColor(kGreen+2); hist_Esprime_TES500_WWW->SetMarkerStyle(53);
+	hist_Esprime_TES500_ZZZ->SetLineColor(kRed+2); hist_Esprime_TES500_ZZZ->SetMarkerColor(kRed+2); hist_Esprime_TES500_ZZZ->SetMarkerStyle(53);
+
+	hist_ThrPyth_TES50t_gZ0->SetStats(kFALSE); hist_ThrPyth_TES500_gZ0->SetStats(kFALSE); hist_ThrPyth_TES500_WWW->SetStats(kFALSE); hist_ThrPyth_TES500_ZZZ->SetStats(kFALSE);
+	KNOO_ThrPyth_TES50t_gZ0->SetStats(kFALSE); KNOO_ThrPyth_TES500_gZ0->SetStats(kFALSE); KNOO_ThrPyth_TES500_WWW->SetStats(kFALSE); KNOO_ThrPyth_TES500_ZZZ->SetStats(kFALSE);
+	hist_Esprime_TES50t_gZ0->SetStats(kFALSE); hist_Esprime_TES500_gZ0->SetStats(kFALSE); hist_Esprime_TES500_WWW->SetStats(kFALSE); hist_Esprime_TES500_ZZZ->SetStats(kFALSE);
+
+	hist_ThrPyth_TES50t_gZ0->Scale(1.0/hist_ThrPyth_TES50t_gZ0->Integral()); hist_ThrPyth_TES500_gZ0->Scale(1.0/hist_ThrPyth_TES500_gZ0->Integral());
+	hist_ThrPyth_TES500_WWW->Scale(1.0/hist_ThrPyth_TES500_WWW->Integral()); hist_ThrPyth_TES500_ZZZ->Scale(1.0/hist_ThrPyth_TES500_ZZZ->Integral());
+	KNOO_ThrPyth_TES50t_gZ0->Scale(1.0/KNOO_ThrPyth_TES50t_gZ0->Integral()); KNOO_ThrPyth_TES500_gZ0->Scale(1.0/KNOO_ThrPyth_TES500_gZ0->Integral());
+	KNOO_ThrPyth_TES500_WWW->Scale(1.0/KNOO_ThrPyth_TES500_WWW->Integral()); KNOO_ThrPyth_TES500_ZZZ->Scale(1.0/KNOO_ThrPyth_TES500_ZZZ->Integral());
+	hist_Esprime_TES50t_gZ0->Scale(1.0/hist_Esprime_TES50t_gZ0->Integral()); hist_Esprime_TES500_gZ0->Scale(1.0/hist_Esprime_TES500_gZ0->Integral());
+	hist_Esprime_TES500_WWW->Scale(1.0/hist_Esprime_TES500_WWW->Integral()); hist_Esprime_TES500_ZZZ->Scale(1.0/hist_Esprime_TES500_ZZZ->Integral());
 
 	// Add legend
-	TLegend *lg_thr2 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_000, "#sqrt{s'} cut at 0 GeV", "p");
-	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_300, "#sqrt{s'} cut at 300 GeV", "p");
-	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_425, "#sqrt{s'} cut at 425 GeV", "p");
-	lg_thr2->AddEntry(hist_ThrPyth_TES50t_wiR_500, "#sqrt{s'} cut at 500 GeV", "p");
-	lg_thr2->SetTextSize(0.03);
+	TLegend *lg_thr3 = new TLegend(0.4, 0.2, 0.85, 0.4);
+	lg_thr3->AddEntry(hist_ThrPyth_TES50t_gZ0, "q q-bar wi top", "p");
+	lg_thr3->AddEntry(hist_ThrPyth_TES500_gZ0, "q q-bar wo top", "p");
+	lg_thr3->AddEntry(hist_ThrPyth_TES500_WWW, "WW pair wo top", "p");
+	lg_thr3->AddEntry(hist_ThrPyth_TES500_ZZZ, "ZZ pair wo top", "p");
+	lg_thr3->SetTextSize(0.03);
 
 	// Create canvas
-	TCanvas* c_thr2 = new TCanvas("c_thr2", "Impact of #sqrt{s'} cuts on Event Shapes", 800, 600);
+	TCanvas* c_thr3 = new TCanvas("c_thr3", "Process-separated Event Shapes", 800, 600);
 
 	// Beautify
 	gStyle->SetErrorX(0.000000001);
-	c_thr2->Divide(2,1);
-	c_thr2->cd(1)->SetLeftMargin(0.15);
-	c_thr2->cd(1)->SetLogy();
-	c_thr2->cd(1)->SetTickx(); c_thr2->cd(1)->SetTicky();
-	c_thr2->cd(1)->SetGridx(); c_thr2->cd(1)->SetGridy();
-	c_thr2->cd(2)->SetLeftMargin(0.15);
-	c_thr2->cd(2)->SetLogy();
-	c_thr2->cd(2)->SetTickx(); c_thr2->cd(2)->SetTicky();
-	c_thr2->cd(2)->SetGridx(); c_thr2->cd(2)->SetGridy();
+	c_thr3->Divide(3,1);
+	c_thr3->cd(1)->SetLeftMargin(0.15);
+	c_thr3->cd(1)->SetLogy();
+	c_thr3->cd(1)->SetTickx(); c_thr3->cd(1)->SetTicky();
+	c_thr3->cd(1)->SetGridx(); c_thr3->cd(1)->SetGridy();
+	c_thr3->cd(2)->SetLeftMargin(0.15);
+	c_thr3->cd(2)->SetLogy();
+	c_thr3->cd(2)->SetTickx(); c_thr3->cd(2)->SetTicky();
+	c_thr3->cd(2)->SetGridx(); c_thr3->cd(2)->SetGridy();
+	c_thr3->cd(3)->SetLeftMargin(0.15);
+	c_thr3->cd(3)->SetLogy();
+	c_thr3->cd(3)->SetTickx(); c_thr3->cd(3)->SetTicky();
+	c_thr3->cd(3)->SetGridx(); c_thr3->cd(3)->SetGridy();
 
-	hist_ThrPyth_TES50t_wiR_000->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_nHadron_TES50t_wiR_000->GetYaxis()->SetRangeUser(1E-5,1E0);
+	hist_ThrPyth_TES50t_gZ0->GetYaxis()->SetRangeUser(1E-4,1E0);
+	KNOO_ThrPyth_TES50t_gZ0->GetYaxis()->SetRangeUser(1E-5,1E0);
 
 	// Draw
-	c_thr2->cd(1);
-	hist_ThrPyth_TES50t_wiR_000->Draw("P");
-	hist_ThrPyth_TES50t_wiR_300->Draw("PSAME");
-	hist_ThrPyth_TES50t_wiR_425->Draw("PSAME");
-	hist_ThrPyth_TES50t_wiR_500->Draw("PSAME");
-	lg_thr2->Draw("SAME");
-	c_thr2->cd(2);
-	hist_nHadron_TES50t_wiR_000->Draw("P");
-	hist_nHadron_TES50t_wiR_300->Draw("PSAME");
-	hist_nHadron_TES50t_wiR_425->Draw("PSAME");
-	hist_nHadron_TES50t_wiR_500->Draw("PSAME");
-	lg_thr2->Draw("SAME");
+	c_thr3->cd(1);
+	hist_Esprime_TES50t_gZ0->Draw("P");
+	hist_Esprime_TES500_gZ0->Draw("PSAME");
+	hist_Esprime_TES500_WWW->Draw("PSAME");
+	hist_Esprime_TES500_ZZZ->Draw("PSAME");
+	c_thr3->cd(2);
+	hist_ThrPyth_TES50t_gZ0->Draw("P");
+	hist_ThrPyth_TES500_gZ0->Draw("PSAME");
+	hist_ThrPyth_TES500_WWW->Draw("PSAME");
+	hist_ThrPyth_TES500_ZZZ->Draw("PSAME");
+	lg_thr3->Draw("SAME");
+	c_thr3->cd(3);
+	KNOO_ThrPyth_TES50t_gZ0->Draw("P");
+	KNOO_ThrPyth_TES500_gZ0->Draw("PSAME");
+	KNOO_ThrPyth_TES500_WWW->Draw("PSAME");
+	KNOO_ThrPyth_TES500_ZZZ->Draw("PSAME");
+	lg_thr3->Draw("SAME");
 
-// Modify stat-box
+	// Modify stat-box
 	gStyle->SetOptStat();
-	c_thr2->Modified();
+	c_thr3->Modified();
 
 }
