@@ -35,32 +35,20 @@ using namespace std;
 using namespace fastjet;
 // Extras
 
-// Code
-int main(){
+// Function
+void applyCuts( const std::string& inputFileName, const std::string& outputFileName ) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create file, Read TTree data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	// Read ROOT
-	// TFile *input = new TFile("gen_TES500_noR.root", "READ");
-	// TFile *input = new TFile("gen_TES500_wiR.root", "READ");
-	// TFile *input = new TFile("gen_TES50t_noR.root", "READ");
-	TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
-	// TFile *input = new TFile("gen_LEP912_noR.root", "READ");
-	// TFile *input = new TFile("gen_LEP912_wiR.root", "READ");
-	
+	TFile *input = new TFile(inputFileName.c_str(), "READ");
 	// Read TTree
 	TTree *itree = (TTree*)input->Get("tree_raw");
 
 	// Define file
-	// TFile *output = new TFile("cut_TES500_noR.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES500_wiR.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES50t_noR.root", "RECREATE");
-	TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
-	// TFile *output = new TFile("cut_LEP912_noR.root", "RECREATE");
-	// TFile *output = new TFile("cut_LEP912_wiR.root", "RECREATE");
-	
+	TFile *output = new TFile(outputFileName.c_str(), "RECREATE");
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
@@ -297,7 +285,7 @@ int main(){
 
 		// Reset
 		nCh=0; particles.clear(); jets.clear();
-		
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
@@ -346,11 +334,16 @@ int main(){
 	delete input;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Terminate
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	return 0;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+// Code
+int main() {
+
+	// Call function
+	applyCuts("gen_TES500.root", "cut_TES500.root");
+
+	// Terminate
+	return 0;
 
 }
