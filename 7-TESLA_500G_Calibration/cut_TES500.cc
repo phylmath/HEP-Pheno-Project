@@ -46,14 +46,9 @@ int main(){
 	// TFile *input = new TFile("gen_TES500_noR.root", "READ");
 	// TFile *input = new TFile("gen_TES500_wiR.root", "READ");
 	// TFile *input = new TFile("gen_TES50t_noR.root", "READ");
-	// TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
+	TFile *input = new TFile("gen_TES50t_wiR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_noR.root", "READ");
 	// TFile *input = new TFile("gen_LEP912_wiR.root", "READ");
-	
-	// TFile *input = new TFile("gen_TES50t_gZ0.root", "READ");
-	// TFile *input = new TFile("gen_TES500_gZ0.root", "READ");
-	// TFile *input = new TFile("gen_TES500_WWW.root", "READ");
-	// TFile *input = new TFile("gen_TES500_ZZZ.root", "READ");
 	
 	// Read TTree
 	TTree *itree = (TTree*)input->Get("tree_raw");
@@ -62,20 +57,15 @@ int main(){
 	// TFile *output = new TFile("cut_TES500_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES500_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_TES50t_noR.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
+	TFile *output = new TFile("cut_TES50t_wiR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_noR.root", "RECREATE");
 	// TFile *output = new TFile("cut_LEP912_wiR.root", "RECREATE");
-	
-	// TFile *output = new TFile("cut_TES50t_gZ0.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES500_gZ0.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES500_WWW.root", "RECREATE");
-	// TFile *output = new TFile("cut_TES500_ZZZ.root", "RECREATE");
 	
 	// Define tree
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
 	// Intialise vecs
-	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *parNum=nullptr, *parPdg=nullptr;
+	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *eveCod=nullptr, *parNum=nullptr, *parPdg=nullptr;
 	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSph=nullptr, *eveSax=nullptr, *eveSpr=nullptr, \
 	 *sigmaT=nullptr, *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
 
@@ -83,6 +73,7 @@ int main(){
 	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
 	itree->SetBranchAddress("eveNum", &eveNum);											// Event number
 	itree->SetBranchAddress("eveSiz", &eveSiz);											// Event size
+	itree->SetBranchAddress("eveCod", &eveCod);											// Event process
 	itree->SetBranchAddress("eveSpr", &eveSpr);											// Event √s'
 	itree->SetBranchAddress("eveSph", &eveSph);											// Event spheric
 	itree->SetBranchAddress("eveSax", &eveSax);											// Event sphaxis
@@ -100,10 +91,25 @@ int main(){
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_Esprime = new TH1F("hist_Esprime", "Reduced centre-of-mass", 525, 0, 526);
-	hist_Esprime->GetXaxis()->SetTitle("#sqrt{s'}");
-	hist_Esprime->GetYaxis()->SetTitle("#events");
-	otree->Branch("hist_Esprime", &hist_Esprime, "hist_Esprime");
+	TH1F *hist_Esprime_Zq = new TH1F("hist_Esprime_Zq", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_Zq->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_Zq->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_Zq", &hist_Esprime_Zq, "hist_Esprime_Zq");
+	
+	TH1F *hist_Esprime_tt = new TH1F("hist_Esprime_tt", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_tt->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_tt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_tt", &hist_Esprime_tt, "hist_Esprime_tt");
+
+	TH1F *hist_Esprime_WW = new TH1F("hist_Esprime_WW", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_WW->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_WW->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_WW", &hist_Esprime_WW, "hist_Esprime_WW");
+
+	TH1F *hist_Esprime_ZZ = new TH1F("hist_Esprime_ZZ", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_ZZ->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_ZZ->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_ZZ", &hist_Esprime_ZZ, "hist_Esprime_ZZ");
 
 	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron->GetXaxis()->SetTitle("N_{CH}");
@@ -252,44 +258,46 @@ int main(){
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
-	
-		// Read data
-		Thr = (*eveThr)[0];
-		Tax = (*eveTax)[0];
-		Sph = (*eveSph)[0];
-		Sax = (*eveSax)[0];
 
-		// Cut on √s'
+		// No cut on √s'
 		if ((*eveSpr)[0] >= 0){
-			hist_ThrPyth->Fill(Thr);
-			hist_TaxPyth->Fill(Tax);
-			hist_SphPyth->Fill(Sph);
-			hist_SaxPyth->Fill(Sax);
+			hist_ThrPyth->Fill((*eveThr)[0]);
+			hist_TaxPyth->Fill((*eveTax)[0]);
+			hist_SphPyth->Fill((*eveSph)[0]);
+			hist_SaxPyth->Fill((*eveSax)[0]);
 			hist_nHadron->Fill(nCh);
 			hist_nJetTot->Fill(nCj);
 		}
+		// Cut on √s'
 		if ((*eveSpr)[0] >= 0) {
-			hist_ThrPyth_000->Fill(Thr);
+			hist_ThrPyth_000->Fill((*eveThr)[0]);
 			hist_nHadron_000->Fill(nCh);
-		}		
+		}
+		// Cut on √s'
 		if ((*eveSpr)[0] >= 300) {
-			hist_ThrPyth_300->Fill(Thr);
+			hist_ThrPyth_300->Fill((*eveThr)[0]);
 			hist_nHadron_300->Fill(nCh);
-		}	
+		}
+		// Cut on √s'
 		if ((*eveSpr)[0] >= 425) {
-			hist_ThrPyth_425->Fill(Thr);
+			hist_ThrPyth_425->Fill((*eveThr)[0]);
 			hist_nHadron_425->Fill(nCh);
-		}	
+		}
+		// Cut on √s'
 		if ((*eveSpr)[0] >= 500) {
-			hist_ThrPyth_500->Fill(Thr);
+			hist_ThrPyth_500->Fill((*eveThr)[0]);
 			hist_nHadron_500->Fill(nCh);
 		}
 
-		Spr = (*eveSpr)[0];
-		hist_Esprime->Fill(Spr);
+		// Store √s' according to processes
+		if ((*eveCod)[0] == 221) hist_Esprime_Zq->Fill((*eveSpr)[0]);
+		if ((*eveCod)[0] == 231) hist_Esprime_ZZ->Fill((*eveSpr)[0]);
+		if ((*eveCod)[0] == 233) hist_Esprime_WW->Fill((*eveSpr)[0]);
+		if ((*eveCod)[0] == 604) hist_Esprime_tt->Fill((*eveSpr)[0]);
 
 		// Reset
 		nCh=0; particles.clear(); jets.clear();
+		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}

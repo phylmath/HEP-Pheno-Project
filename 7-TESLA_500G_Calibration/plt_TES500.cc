@@ -398,102 +398,47 @@ void plt_TES500()
 // Plotting Impact of Processes on Nch
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TFile* input_TES50t_gZ0 = new TFile("cut_TES50t_gZ0.root", "READ");
-	TFile* input_TES500_gZ0 = new TFile("cut_TES500_gZ0.root", "READ");
-	TFile* input_TES500_WWW = new TFile("cut_TES500_WWW.root", "READ");
-	TFile* input_TES500_ZZZ = new TFile("cut_TES500_ZZZ.root", "READ");
+	TH1F *hist_Esprime_Zq = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_Zq");
+	TH1F *hist_Esprime_ZZ = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_ZZ");
+	TH1F *hist_Esprime_WW = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_WW");
+	TH1F *hist_Esprime_tt = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_tt");
 
-	TH1F *hist_ThrPyth_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("hist_ThrPyth");
-	TH1F *hist_ThrPyth_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("hist_ThrPyth");
-	TH1F *hist_ThrPyth_TES500_WWW = (TH1F*)input_TES500_WWW->Get("hist_ThrPyth");
-	TH1F *hist_ThrPyth_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("hist_ThrPyth");
+	hist_Esprime_Zq->SetLineColor(kYellow+2); hist_Esprime_Zq->SetMarkerColor(kYellow+2); hist_Esprime_Zq->SetMarkerStyle(kStar);
+	hist_Esprime_ZZ->SetLineColor(kBlue+2); hist_Esprime_ZZ->SetMarkerColor(kBlue+2); hist_Esprime_ZZ->SetMarkerStyle(kStar);
+	hist_Esprime_WW->SetLineColor(kGreen+2); hist_Esprime_WW->SetMarkerColor(kGreen+2); hist_Esprime_WW->SetMarkerStyle(kStar);
+	hist_Esprime_tt->SetLineColor(kRed+2); hist_Esprime_tt->SetMarkerColor(kRed+2); hist_Esprime_tt->SetMarkerStyle(kStar);
 
-	TH1F *KNOO_ThrPyth_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("KNOO_nHadron");
-	TH1F *KNOO_ThrPyth_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("KNOO_nHadron");
-	TH1F *KNOO_ThrPyth_TES500_WWW = (TH1F*)input_TES500_WWW->Get("KNOO_nHadron");
-	TH1F *KNOO_ThrPyth_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("KNOO_nHadron");
+	hist_Esprime_Zq->SetStats(kFALSE); hist_Esprime_ZZ->SetStats(kFALSE); hist_Esprime_WW->SetStats(kFALSE); hist_Esprime_tt->SetStats(kFALSE);
 
-	TH1F *hist_Esprime_TES50t_gZ0 = (TH1F*)input_TES50t_gZ0->Get("hist_Esprime");
-	TH1F *hist_Esprime_TES500_gZ0 = (TH1F*)input_TES500_gZ0->Get("hist_Esprime");
-	TH1F *hist_Esprime_TES500_WWW = (TH1F*)input_TES500_WWW->Get("hist_Esprime");
-	TH1F *hist_Esprime_TES500_ZZZ = (TH1F*)input_TES500_ZZZ->Get("hist_Esprime");
-
-	hist_ThrPyth_TES50t_gZ0->SetLineColor(kYellow+2); hist_ThrPyth_TES50t_gZ0->SetMarkerColor(kYellow+2); hist_ThrPyth_TES50t_gZ0->SetMarkerStyle(53); hist_ThrPyth_TES50t_gZ0->SetMarkerSize(1.5);
-	hist_ThrPyth_TES500_gZ0->SetLineColor(kBlue+2); hist_ThrPyth_TES500_gZ0->SetMarkerColor(kBlue+2); hist_ThrPyth_TES500_gZ0->SetMarkerStyle(53); hist_ThrPyth_TES500_gZ0->SetMarkerSize(1.5);
-	hist_ThrPyth_TES500_WWW->SetLineColor(kGreen+2); hist_ThrPyth_TES500_WWW->SetMarkerColor(kGreen+2); hist_ThrPyth_TES500_WWW->SetMarkerStyle(53); hist_ThrPyth_TES500_WWW->SetMarkerSize(1.5);
-	hist_ThrPyth_TES500_ZZZ->SetLineColor(kRed+2); hist_ThrPyth_TES500_ZZZ->SetMarkerColor(kRed+2); hist_ThrPyth_TES500_ZZZ->SetMarkerStyle(53); hist_ThrPyth_TES500_ZZZ->SetMarkerSize(1.5);
-
-	KNOO_ThrPyth_TES50t_gZ0->SetLineColor(kYellow+2); KNOO_ThrPyth_TES50t_gZ0->SetMarkerColor(kYellow+2); KNOO_ThrPyth_TES50t_gZ0->SetMarkerStyle(53); KNOO_ThrPyth_TES50t_gZ0->SetMarkerSize(1.5);
-	KNOO_ThrPyth_TES500_gZ0->SetLineColor(kBlue+2); KNOO_ThrPyth_TES500_gZ0->SetMarkerColor(kBlue+2); KNOO_ThrPyth_TES500_gZ0->SetMarkerStyle(53); KNOO_ThrPyth_TES500_gZ0->SetMarkerSize(1.5);
-	KNOO_ThrPyth_TES500_WWW->SetLineColor(kGreen+2); KNOO_ThrPyth_TES500_WWW->SetMarkerColor(kGreen+2); KNOO_ThrPyth_TES500_WWW->SetMarkerStyle(53); KNOO_ThrPyth_TES500_WWW->SetMarkerSize(1.5);
-	KNOO_ThrPyth_TES500_ZZZ->SetLineColor(kRed+2); KNOO_ThrPyth_TES500_ZZZ->SetMarkerColor(kRed+2); KNOO_ThrPyth_TES500_ZZZ->SetMarkerStyle(53); KNOO_ThrPyth_TES500_ZZZ->SetMarkerSize(1.5);
-
-	hist_Esprime_TES50t_gZ0->SetLineColor(kYellow+2); hist_Esprime_TES50t_gZ0->SetMarkerColor(kYellow+2); hist_Esprime_TES50t_gZ0->SetMarkerStyle(kStar);
-	hist_Esprime_TES500_gZ0->SetLineColor(kBlue+2); hist_Esprime_TES500_gZ0->SetMarkerColor(kBlue+2); hist_Esprime_TES500_gZ0->SetMarkerStyle(kStar);
-	hist_Esprime_TES500_WWW->SetLineColor(kGreen+2); hist_Esprime_TES500_WWW->SetMarkerColor(kGreen+2); hist_Esprime_TES500_WWW->SetMarkerStyle(kStar);
-	hist_Esprime_TES500_ZZZ->SetLineColor(kRed+2); hist_Esprime_TES500_ZZZ->SetMarkerColor(kRed+2); hist_Esprime_TES500_ZZZ->SetMarkerStyle(kStar);
-
-	hist_ThrPyth_TES50t_gZ0->SetStats(kFALSE); hist_ThrPyth_TES500_gZ0->SetStats(kFALSE); hist_ThrPyth_TES500_WWW->SetStats(kFALSE); hist_ThrPyth_TES500_ZZZ->SetStats(kFALSE);
-	KNOO_ThrPyth_TES50t_gZ0->SetStats(kFALSE); KNOO_ThrPyth_TES500_gZ0->SetStats(kFALSE); KNOO_ThrPyth_TES500_WWW->SetStats(kFALSE); KNOO_ThrPyth_TES500_ZZZ->SetStats(kFALSE);
-	hist_Esprime_TES50t_gZ0->SetStats(kFALSE); hist_Esprime_TES500_gZ0->SetStats(kFALSE); hist_Esprime_TES500_WWW->SetStats(kFALSE); hist_Esprime_TES500_ZZZ->SetStats(kFALSE);
-
-	hist_ThrPyth_TES50t_gZ0->Scale(1.0/hist_ThrPyth_TES50t_gZ0->Integral()); hist_ThrPyth_TES500_gZ0->Scale(1.0/hist_ThrPyth_TES500_gZ0->Integral());
-	hist_ThrPyth_TES500_WWW->Scale(1.0/hist_ThrPyth_TES500_WWW->Integral()); hist_ThrPyth_TES500_ZZZ->Scale(1.0/hist_ThrPyth_TES500_ZZZ->Integral());
-	KNOO_ThrPyth_TES50t_gZ0->Scale(1.0/KNOO_ThrPyth_TES50t_gZ0->Integral()); KNOO_ThrPyth_TES500_gZ0->Scale(1.0/KNOO_ThrPyth_TES500_gZ0->Integral());
-	KNOO_ThrPyth_TES500_WWW->Scale(1.0/KNOO_ThrPyth_TES500_WWW->Integral()); KNOO_ThrPyth_TES500_ZZZ->Scale(1.0/KNOO_ThrPyth_TES500_ZZZ->Integral());
-	// hist_Esprime_TES50t_gZ0->Scale(1.0/hist_Esprime_TES50t_gZ0->Integral()); hist_Esprime_TES500_gZ0->Scale(1.0/hist_Esprime_TES500_gZ0->Integral());
-	// hist_Esprime_TES500_WWW->Scale(1.0/hist_Esprime_TES500_WWW->Integral()); hist_Esprime_TES500_ZZZ->Scale(1.0/hist_Esprime_TES500_ZZZ->Integral());
+	// hist_Esprime_Zq->Scale(1.0/hist_Esprime_Zq->Integral()); hist_Esprime_ZZ->Scale(1.0/hist_Esprime_ZZ->Integral());
+	// hist_Esprime_WW->Scale(1.0/hist_Esprime_WW->Integral()); hist_Esprime_tt->Scale(1.0/hist_Esprime_tt->Integral());
 
 	// Add legend
 	TLegend *lg_thr3 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr3->AddEntry(hist_Esprime_TES50t_gZ0, "q q-bar wi top", "p");
-	lg_thr3->AddEntry(hist_Esprime_TES500_gZ0, "q q-bar wo top", "p");
-	lg_thr3->AddEntry(hist_Esprime_TES500_WWW, "WW pair wo top", "p");
-	lg_thr3->AddEntry(hist_Esprime_TES500_ZZZ, "ZZ pair wo top", "p");
+	lg_thr3->AddEntry(hist_Esprime_Zq, "ee#rightarrow#gamma/Z_{0}#rightarrowq#bar{q}", "p");
+	lg_thr3->AddEntry(hist_Esprime_WW, "ee#rightarrowW^{+}W^{-}#rightarrowq#bar{q}", "p");
+	lg_thr3->AddEntry(hist_Esprime_ZZ, "ee#rightarrowZ_{0}Z_{0}#rightarrowq#bar{q}", "p");
+	lg_thr3->AddEntry(hist_Esprime_tt, "ee#rightarrow#gamma/Z_{0}#rightarrowt#bar{t}", "p");
 	lg_thr3->SetTextSize(0.03);
-
+	
 	// Create canvas
 	TCanvas* c_thr3 = new TCanvas("c_thr3", "Process-separated Event Shapes", 800, 600);
 
 	// Beautify
 	gStyle->SetErrorX(0.000000001);
-	
 	c_thr3->SetLeftMargin(0.15);
 	c_thr3->SetLogy();
 	c_thr3->SetTickx(); c_thr3->SetTicky();
 	c_thr3->SetGridx(); c_thr3->SetGridy();
-	hist_Esprime_TES50t_gZ0->Draw("P");
-	hist_Esprime_TES500_gZ0->Draw("PSAME");
-	hist_Esprime_TES500_WWW->Draw("PSAME");
-	hist_Esprime_TES500_ZZZ->Draw("PSAME");
+	
+	// Draw
+	hist_Esprime_Zq->Draw("P");
+	hist_Esprime_ZZ->Draw("PSAME");
+	hist_Esprime_WW->Draw("PSAME");
+	hist_Esprime_tt->Draw("PSAME");
 	lg_thr3->Draw("SAME");
 
-	// c_thr3->Divide(2,1);
-	// c_thr3->cd(1)->SetLeftMargin(0.15);
-	// c_thr3->cd(1)->SetLogy();
-	// c_thr3->cd(1)->SetTickx(); c_thr3->cd(1)->SetTicky();
-	// c_thr3->cd(1)->SetGridx(); c_thr3->cd(1)->SetGridy();
-	// c_thr3->cd(2)->SetLeftMargin(0.15);
-	// c_thr3->cd(2)->SetLogy();
-	// c_thr3->cd(2)->SetTickx(); c_thr3->cd(2)->SetTicky();
-	// c_thr3->cd(2)->SetGridx(); c_thr3->cd(2)->SetGridy();
-
-	// hist_ThrPyth_TES50t_gZ0->GetYaxis()->SetRangeUser(1E-4,1E0);
-	// KNOO_ThrPyth_TES50t_gZ0->GetYaxis()->SetRangeUser(1E-5,1E0);
-
-	// // Draw
-	// c_thr3->cd(1);
-	// hist_ThrPyth_TES50t_gZ0->Draw("P");
-	// hist_ThrPyth_TES500_gZ0->Draw("PSAME");
-	// hist_ThrPyth_TES500_WWW->Draw("PSAME");
-	// hist_ThrPyth_TES500_ZZZ->Draw("PSAME");
-	// lg_thr3->Draw("SAME");
-	// c_thr3->cd(2);
-	// KNOO_ThrPyth_TES50t_gZ0->Draw("P");
-	// KNOO_ThrPyth_TES500_gZ0->Draw("PSAME");
-	// KNOO_ThrPyth_TES500_WWW->Draw("PSAME");
-	// KNOO_ThrPyth_TES500_ZZZ->Draw("PSAME");
-	// lg_thr3->Draw("SAME");
+	hist_Esprime_Zq->GetYaxis()->SetRangeUser(1E0,1E7);
 
 	// Modify stat-box
 	gStyle->SetOptStat();
