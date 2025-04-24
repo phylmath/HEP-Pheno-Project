@@ -99,6 +99,8 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_Esprime_ZZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_ZZ", &hist_Esprime_ZZ, "hist_Esprime_ZZ");
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	TH1F *hist_nHadron = new TH1F("hist_nHadron", "Charged Hadron Multiplicity", 60, 1, 121);
 	hist_nHadron->GetXaxis()->SetTitle("N_{CH}");
 	hist_nHadron->GetYaxis()->SetTitle("P(N_{CH})");
@@ -124,37 +126,74 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_nHadron_500->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_500", &hist_nHadron_500, "hist_nHadron_500");
 
-	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, 0, 11);
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, -1, 11);
 	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}>");
 	hist_nJetTot->GetYaxis()->SetTitle("P(N_{JETS})");
 	otree->Branch("hist_nJetTot", &hist_nJetTot, "hist_nJetTot");
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
-	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
+	
+	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
+	// TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_000->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_000->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_000", &hist_ThrPyth_000, "hist_ThrPyth_000");
 
+	// TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "vThrust", 100, 0, 0.4);
 	hist_ThrPyth_300->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_300->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_300", &hist_ThrPyth_300, "hist_ThrPyth_300");
 
+	// TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_425->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_425->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_425", &hist_ThrPyth_425, "hist_ThrPyth_425");
 
+	// TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_500->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_500->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_500", &hist_ThrPyth_500, "hist_ThrPyth_500");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_Zq->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");
+
+	// TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "vThrust", 100, 0, 0.4);
+	hist_ThrPyth_tt->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_tt->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_tt", &hist_ThrPyth_tt, "hist_ThrPyth_tt");
+
+	// TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_WW->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_WW->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_WW", &hist_ThrPyth_WW, "hist_ThrPyth_WW");
+
+	// TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_ZZ->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_ZZ->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPyth_ZZ", &hist_ThrPyth_ZZ, "hist_ThrPyth_ZZ");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	TH1F *hist_TaxPyth = new TH1F("hist_TaxPyth", "Thrust axis", 100, -1., 1.);
 	hist_TaxPyth->GetXaxis()->SetTitle("cosΘ_{Thrust}");
@@ -278,10 +317,22 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// Store √s' according to processes
-		if ((*eveCod)[0] == 221) hist_Esprime_Zq->Fill((*eveSpr)[0]);
-		if ((*eveCod)[0] == 231) hist_Esprime_ZZ->Fill((*eveSpr)[0]);
-		if ((*eveCod)[0] == 233) hist_Esprime_WW->Fill((*eveSpr)[0]);
-		if ((*eveCod)[0] == 604) hist_Esprime_tt->Fill((*eveSpr)[0]);
+		if ((*eveCod)[0] == 221) {
+			hist_Esprime_Zq->Fill((*eveSpr)[0]);
+			hist_ThrPyth_Zq->Fill((*eveThr)[0]);
+		}
+		if ((*eveCod)[0] == 231) {
+			hist_Esprime_ZZ->Fill((*eveSpr)[0]);
+			hist_ThrPyth_ZZ->Fill((*eveThr)[0]);
+		}
+		if ((*eveCod)[0] == 233) {
+			hist_Esprime_WW->Fill((*eveSpr)[0]);
+			hist_ThrPyth_WW->Fill((*eveThr)[0]);
+		} 
+		if ((*eveCod)[0] == 604) {
+			hist_Esprime_tt->Fill((*eveSpr)[0]);
+			hist_ThrPyth_tt->Fill((*eveThr)[0]);
+		} 
 
 		// Reset
 		nCh=0; particles.clear(); jets.clear();
@@ -341,7 +392,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call function
-	applyCuts("gen_TES500.root", "cut_TES500.root");
+	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
 
 	// Terminate
 	return 0;

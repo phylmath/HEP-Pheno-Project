@@ -403,15 +403,23 @@ void plt_TES500()
 	TH1F *hist_Esprime_WW = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_WW");
 	TH1F *hist_Esprime_tt = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_tt");
 
+	TH1F *hist_ThrPyth_Zq = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_Zq");
+	TH1F *hist_ThrPyth_ZZ = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_ZZ");
+	TH1F *hist_ThrPyth_WW = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_WW");
+	TH1F *hist_ThrPyth_tt = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_tt");
+
 	hist_Esprime_Zq->SetLineColor(kYellow+2); hist_Esprime_Zq->SetMarkerColor(kYellow+2); hist_Esprime_Zq->SetMarkerStyle(kStar);
 	hist_Esprime_ZZ->SetLineColor(kBlue+2); hist_Esprime_ZZ->SetMarkerColor(kBlue+2); hist_Esprime_ZZ->SetMarkerStyle(kStar);
 	hist_Esprime_WW->SetLineColor(kGreen+2); hist_Esprime_WW->SetMarkerColor(kGreen+2); hist_Esprime_WW->SetMarkerStyle(kStar);
 	hist_Esprime_tt->SetLineColor(kRed+2); hist_Esprime_tt->SetMarkerColor(kRed+2); hist_Esprime_tt->SetMarkerStyle(kStar);
 
-	hist_Esprime_Zq->SetStats(kFALSE); hist_Esprime_ZZ->SetStats(kFALSE); hist_Esprime_WW->SetStats(kFALSE); hist_Esprime_tt->SetStats(kFALSE);
+	hist_ThrPyth_Zq->SetLineColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerStyle(kStar);
+	hist_ThrPyth_ZZ->SetLineColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerStyle(kStar);
+	hist_ThrPyth_WW->SetLineColor(kGreen+2); hist_ThrPyth_WW->SetMarkerColor(kGreen+2); hist_ThrPyth_WW->SetMarkerStyle(kStar);
+	hist_ThrPyth_tt->SetLineColor(kRed+2); hist_ThrPyth_tt->SetMarkerColor(kRed+2); hist_ThrPyth_tt->SetMarkerStyle(kStar);
 
-	// hist_Esprime_Zq->Scale(1.0/hist_Esprime_Zq->Integral()); hist_Esprime_ZZ->Scale(1.0/hist_Esprime_ZZ->Integral());
-	// hist_Esprime_WW->Scale(1.0/hist_Esprime_WW->Integral()); hist_Esprime_tt->Scale(1.0/hist_Esprime_tt->Integral());
+	hist_Esprime_Zq->SetStats(kFALSE); hist_Esprime_ZZ->SetStats(kFALSE); hist_Esprime_WW->SetStats(kFALSE); hist_Esprime_tt->SetStats(kFALSE);
+	hist_ThrPyth_Zq->SetStats(kFALSE); hist_ThrPyth_ZZ->SetStats(kFALSE); hist_ThrPyth_WW->SetStats(kFALSE); hist_ThrPyth_tt->SetStats(kFALSE);
 
 	// Add legend
 	TLegend *lg_thr3 = new TLegend(0.4, 0.2, 0.85, 0.4);
@@ -426,19 +434,33 @@ void plt_TES500()
 
 	// Beautify
 	gStyle->SetErrorX(0.000000001);
-	c_thr3->SetLeftMargin(0.15);
-	c_thr3->SetLogy();
-	c_thr3->SetTickx(); c_thr3->SetTicky();
-	c_thr3->SetGridx(); c_thr3->SetGridy();
+	c_thr3->Divide(2,1);
+	c_thr3->cd(1)->SetLeftMargin(0.15);
+	c_thr3->cd(1)->SetLogy();
+	c_thr3->cd(1)->SetTickx(); c_thr3->cd(1)->SetTicky();
+	c_thr3->cd(1)->SetGridx(); c_thr3->cd(1)->SetGridy();
+	c_thr3->cd(2)->SetLeftMargin(0.15);
+	c_thr3->cd(2)->SetLogy();
+	c_thr3->cd(2)->SetTickx(); c_thr3->cd(2)->SetTicky();
+	c_thr3->cd(2)->SetGridx(); c_thr3->cd(2)->SetGridy();
 	
 	// Draw
+	c_thr3->cd(1);
 	hist_Esprime_Zq->Draw("P");
 	hist_Esprime_ZZ->Draw("PSAME");
 	hist_Esprime_WW->Draw("PSAME");
 	hist_Esprime_tt->Draw("PSAME");
 	lg_thr3->Draw("SAME");
+	c_thr3->cd(2);
+	hist_ThrPyth_Zq->Draw("P");
+	hist_ThrPyth_ZZ->Draw("PSAME");
+	hist_ThrPyth_WW->Draw("PSAME");
+	hist_ThrPyth_tt->Draw("PSAME");
+	lg_thr3->Draw("SAME");
 
+	// Set limits
 	hist_Esprime_Zq->GetYaxis()->SetRangeUser(1E0,1E7);
+	// hist_ThrPyth_Zq->GetYaxis()->SetRangeUser(1E-4,1E0);
 
 	// Modify stat-box
 	gStyle->SetOptStat();
