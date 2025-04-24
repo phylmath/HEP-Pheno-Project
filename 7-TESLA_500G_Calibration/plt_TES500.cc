@@ -200,7 +200,7 @@ void plt_TES500()
 	hist_ThrPyth_TES500_noR->Scale(1.0/hist_ThrPyth_TES500_noR->Integral());
 	hist_ThrPyth_TES50t_noR->Scale(1.0/hist_ThrPyth_TES50t_noR->Integral());
 	hist_ThrPyth_TES500_wiR->Scale(1.0/hist_ThrPyth_TES500_wiR->Integral());
-	hist_ThrPyth_TES50t_wiR->Scale(1.0/hist_ThrPyth_TES50t_wiR->Integral());
+	// hist_ThrPyth_TES50t_wiR->Scale(1.0/hist_ThrPyth_TES50t_wiR->Integral());
 	
 	// Divide by area under hist
 	hist_Thr1999->Scale(1.0/hist_Thr1999->Integral());
@@ -402,31 +402,44 @@ void plt_TES500()
 	TH1F *hist_Esprime_ZZ = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_ZZ");
 	TH1F *hist_Esprime_WW = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_WW");
 	TH1F *hist_Esprime_tt = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_tt");
+	TH1F *hist_Esprime_ZZWWtt = (TH1F*)input_TES50t_wiR->Get("hist_Esprime_ZZWWtt");
 
 	TH1F *hist_ThrPyth_Zq = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_Zq");
 	TH1F *hist_ThrPyth_ZZ = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_ZZ");
 	TH1F *hist_ThrPyth_WW = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_WW");
 	TH1F *hist_ThrPyth_tt = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_tt");
+	TH1F *hist_ThrPyth_ZZWWtt = (TH1F*)input_TES50t_wiR->Get("hist_ThrPyth_ZZWWtt");
 
-	hist_Esprime_Zq->SetLineColor(kYellow+2); hist_Esprime_Zq->SetMarkerColor(kYellow+2); hist_Esprime_Zq->SetMarkerStyle(kStar);
-	hist_Esprime_ZZ->SetLineColor(kBlue+2); hist_Esprime_ZZ->SetMarkerColor(kBlue+2); hist_Esprime_ZZ->SetMarkerStyle(kStar);
-	hist_Esprime_WW->SetLineColor(kGreen+2); hist_Esprime_WW->SetMarkerColor(kGreen+2); hist_Esprime_WW->SetMarkerStyle(kStar);
-	hist_Esprime_tt->SetLineColor(kRed+2); hist_Esprime_tt->SetMarkerColor(kRed+2); hist_Esprime_tt->SetMarkerStyle(kStar);
+	hist_Esprime_Zq->SetLineColor(kYellow+2); hist_Esprime_Zq->SetMarkerColor(kYellow+2); hist_Esprime_Zq->SetMarkerStyle(kStar); hist_Esprime_Zq->SetLineWidth(2);
+	hist_Esprime_ZZ->SetLineColor(kBlue+2); hist_Esprime_ZZ->SetMarkerColor(kBlue+2); hist_Esprime_ZZ->SetMarkerStyle(kStar); hist_Esprime_ZZ->SetLineWidth(2);
+	hist_Esprime_WW->SetLineColor(kGreen+2); hist_Esprime_WW->SetMarkerColor(kGreen+2); hist_Esprime_WW->SetMarkerStyle(kStar); hist_Esprime_WW->SetLineWidth(2);
+	hist_Esprime_tt->SetLineColor(kRed+2); hist_Esprime_tt->SetMarkerColor(kRed+2); hist_Esprime_tt->SetMarkerStyle(kStar); hist_Esprime_tt->SetLineWidth(2);
+	hist_Esprime_ZZWWtt->SetLineColor(kMagenta+2); hist_Esprime_ZZWWtt->SetMarkerColor(kMagenta+2); hist_Esprime_ZZWWtt->SetMarkerStyle(kStar); hist_Esprime_ZZWWtt->SetLineWidth(2);
 
-	hist_ThrPyth_Zq->SetLineColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerStyle(kStar);
-	hist_ThrPyth_ZZ->SetLineColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerStyle(kStar);
-	hist_ThrPyth_WW->SetLineColor(kGreen+2); hist_ThrPyth_WW->SetMarkerColor(kGreen+2); hist_ThrPyth_WW->SetMarkerStyle(kStar);
-	hist_ThrPyth_tt->SetLineColor(kRed+2); hist_ThrPyth_tt->SetMarkerColor(kRed+2); hist_ThrPyth_tt->SetMarkerStyle(kStar);
+	hist_ThrPyth_TES50t_wiR->SetLineColor(kBlack); hist_ThrPyth_TES50t_wiR->SetMarkerColor(kBlack); hist_ThrPyth_TES50t_wiR->SetMarkerStyle(kStar); hist_ThrPyth_TES50t_wiR->SetLineWidth(3);
+	hist_ThrPyth_Zq->SetLineColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerColor(kYellow+2); hist_ThrPyth_Zq->SetMarkerStyle(kStar); hist_ThrPyth_Zq->SetLineWidth(3);
+	hist_ThrPyth_ZZ->SetLineColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerColor(kBlue+2); hist_ThrPyth_ZZ->SetMarkerStyle(kStar); hist_ThrPyth_ZZ->SetLineWidth(3);
+	hist_ThrPyth_WW->SetLineColor(kGreen+2); hist_ThrPyth_WW->SetMarkerColor(kGreen+2); hist_ThrPyth_WW->SetMarkerStyle(kStar); hist_ThrPyth_WW->SetLineWidth(3);
+	hist_ThrPyth_tt->SetLineColor(kRed+2); hist_ThrPyth_tt->SetMarkerColor(kRed+2); hist_ThrPyth_tt->SetMarkerStyle(kStar); hist_ThrPyth_tt->SetLineWidth(3);
+	hist_ThrPyth_ZZWWtt->SetLineColor(kMagenta+2); hist_ThrPyth_ZZWWtt->SetMarkerColor(kMagenta+2); hist_ThrPyth_ZZWWtt->SetMarkerStyle(kStar); hist_ThrPyth_ZZWWtt->SetLineWidth(3);
 
 	hist_Esprime_Zq->SetStats(kFALSE); hist_Esprime_ZZ->SetStats(kFALSE); hist_Esprime_WW->SetStats(kFALSE); hist_Esprime_tt->SetStats(kFALSE);
 	hist_ThrPyth_Zq->SetStats(kFALSE); hist_ThrPyth_ZZ->SetStats(kFALSE); hist_ThrPyth_WW->SetStats(kFALSE); hist_ThrPyth_tt->SetStats(kFALSE);
+	hist_Esprime_ZZWWtt->SetStats(kFALSE); hist_ThrPyth_ZZWWtt->SetStats(kFALSE);
+
+	// hist_ThrPyth_Zq->Scale(1.0/hist_ThrPyth_Zq->Integral()); hist_ThrPyth_ZZ->Scale(1.0/hist_ThrPyth_ZZ->Integral());
+	// hist_ThrPyth_WW->Scale(1.0/hist_ThrPyth_WW->Integral()); hist_ThrPyth_tt->Scale(1.0/hist_ThrPyth_tt->Integral());
+	// hist_ThrPyth_ZZWWtt->Scale(1.0/hist_ThrPyth_ZZWWtt->Integral());
 
 	// Add legend
 	TLegend *lg_thr3 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr3->AddEntry(hist_Esprime_Zq, "ee#rightarrow#gamma/Z_{0}#rightarrowq#bar{q}", "p");
-	lg_thr3->AddEntry(hist_Esprime_WW, "ee#rightarrowW^{+}W^{-}#rightarrowq#bar{q}", "p");
-	lg_thr3->AddEntry(hist_Esprime_ZZ, "ee#rightarrowZ_{0}Z_{0}#rightarrowq#bar{q}", "p");
-	lg_thr3->AddEntry(hist_Esprime_tt, "ee#rightarrow#gamma/Z_{0}#rightarrowt#bar{t}", "p");
+	lg_thr3->AddEntry(hist_Esprime_Zq, "ee#rightarrow#gamma/Z_{0}#rightarrowq#bar{q}", "pl");
+	lg_thr3->AddEntry(hist_Esprime_WW, "ee#rightarrowW^{+}W^{-}#rightarrowq#bar{q}", "pl");
+	lg_thr3->AddEntry(hist_Esprime_ZZ, "ee#rightarrowZ_{0}Z_{0}#rightarrowq#bar{q}", "pl");
+	lg_thr3->AddEntry(hist_Esprime_tt, "ee#rightarrow#gamma/Z_{0}#rightarrowt#bar{t}", "pl");
+	lg_thr3->AddEntry(hist_Esprime_ZZWWtt, "ee#rightarrowZZ,WW,t#bar{t}", "pl");
+	lg_thr3->AddEntry(hist_ThrPyth_TES50t_wiR, "All processes", "pl");
+	// lg_thr3->AddEntry(hist_Thr199T, "1999 TESLA study", "pl");
 	lg_thr3->SetTextSize(0.03);
 	
 	// Create canvas
@@ -446,21 +459,25 @@ void plt_TES500()
 	
 	// Draw
 	c_thr3->cd(1);
-	hist_Esprime_Zq->Draw("P");
-	hist_Esprime_ZZ->Draw("PSAME");
-	hist_Esprime_WW->Draw("PSAME");
-	hist_Esprime_tt->Draw("PSAME");
+	hist_Esprime_Zq->Draw("L");
+	hist_Esprime_ZZ->Draw("LSAME");
+	hist_Esprime_WW->Draw("LSAME");
+	hist_Esprime_tt->Draw("LSAME");
+	hist_Esprime_ZZWWtt->Draw("LSAME");
 	lg_thr3->Draw("SAME");
 	c_thr3->cd(2);
-	hist_ThrPyth_Zq->Draw("P");
-	hist_ThrPyth_ZZ->Draw("PSAME");
-	hist_ThrPyth_WW->Draw("PSAME");
-	hist_ThrPyth_tt->Draw("PSAME");
+	hist_ThrPyth_Zq->Draw("L");
+	hist_ThrPyth_ZZ->Draw("LSAME");
+	hist_ThrPyth_WW->Draw("LSAME");
+	hist_ThrPyth_tt->Draw("LSAME");
+	hist_ThrPyth_ZZWWtt->Draw("LSAME");
+	hist_ThrPyth_TES50t_wiR->Draw("LSAME");
+	// hist_Thr199T->Draw("LSAME");
 	lg_thr3->Draw("SAME");
 
 	// Set limits
 	hist_Esprime_Zq->GetYaxis()->SetRangeUser(1E0,1E7);
-	// hist_ThrPyth_Zq->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_ThrPyth_Zq->GetYaxis()->SetRangeUser(1E0,1E6);
 
 	// Modify stat-box
 	gStyle->SetOptStat();

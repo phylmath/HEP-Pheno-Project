@@ -79,6 +79,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	TH1F *hist_Esprime_ZZWWtt = new TH1F("hist_Esprime_ZZWWtt", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_ZZWWtt->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_ZZWWtt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_ZZWWtt", &hist_Esprime_ZZWWtt, "hist_Esprime_ZZWWtt");
+
 	TH1F *hist_Esprime_Zq = new TH1F("hist_Esprime_Zq", "Reduced centre-of-mass", 108, -1, 541);
 	hist_Esprime_Zq->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_Zq->GetYaxis()->SetTitle("#events");
@@ -169,28 +174,34 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	// TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_ZZWWtt->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_ZZWWtt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPyth_ZZWWtt", &hist_ThrPyth_ZZWWtt, "hist_ThrPyth_ZZWWtt");
+
 	// TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
-	hist_ThrPyth_Zq->GetYaxis()->SetTitle("P(1-T)");
+	hist_ThrPyth_Zq->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");
 
 	// TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "vThrust", 100, 0, 0.4);
 	hist_ThrPyth_tt->GetXaxis()->SetTitle("(1-T)");
-	hist_ThrPyth_tt->GetYaxis()->SetTitle("P(1-T)");
+	hist_ThrPyth_tt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_tt", &hist_ThrPyth_tt, "hist_ThrPyth_tt");
 
 	// TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_WW->GetXaxis()->SetTitle("(1-T)");
-	hist_ThrPyth_WW->GetYaxis()->SetTitle("P(1-T)");
+	hist_ThrPyth_WW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_WW", &hist_ThrPyth_WW, "hist_ThrPyth_WW");
 
 	// TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
 	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_ZZ->GetXaxis()->SetTitle("(1-T)");
-	hist_ThrPyth_ZZ->GetYaxis()->SetTitle("P(1-T)");
+	hist_ThrPyth_ZZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_ZZ", &hist_ThrPyth_ZZ, "hist_ThrPyth_ZZ");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,7 +220,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_SaxPyth->GetXaxis()->SetTitle("cosΘ_{Sphericity}");
 	hist_SaxPyth->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_SaxPyth", &hist_SaxPyth, "hist_SaxPyth");
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Perform cuts, Populate histograms
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -227,7 +238,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	
 	// Run through events
 	for(int iEvent = 0; iEvent < itree->GetEntries(); iEvent++ ) {
-
+		
 		// Access
 		itree->GetEntry(iEvent);
 
@@ -286,7 +297,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 
-		// No cut on √s'
+		// Cut on √s'
 		if ((*eveSpr)[0] >= 0){
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
@@ -295,43 +306,55 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			hist_nHadron->Fill(nCh);
 			hist_nJetTot->Fill(nCj);
 		}
-		// Cut on √s'
 		if ((*eveSpr)[0] >= 0) {
 			hist_ThrPyth_000->Fill((*eveThr)[0]);
 			hist_nHadron_000->Fill(nCh);
 		}
-		// Cut on √s'
 		if ((*eveSpr)[0] >= 300) {
 			hist_ThrPyth_300->Fill((*eveThr)[0]);
 			hist_nHadron_300->Fill(nCh);
 		}
-		// Cut on √s'
 		if ((*eveSpr)[0] >= 425) {
 			hist_ThrPyth_425->Fill((*eveThr)[0]);
 			hist_nHadron_425->Fill(nCh);
 		}
-		// Cut on √s'
 		if ((*eveSpr)[0] >= 500) {
 			hist_ThrPyth_500->Fill((*eveThr)[0]);
 			hist_nHadron_500->Fill(nCh);
 		}
 
-		// Store √s' according to processes
+		// Cut on process
 		if ((*eveCod)[0] == 221) {
 			hist_Esprime_Zq->Fill((*eveSpr)[0]);
-			hist_ThrPyth_Zq->Fill((*eveThr)[0]);
 		}
 		if ((*eveCod)[0] == 231) {
 			hist_Esprime_ZZ->Fill((*eveSpr)[0]);
-			hist_ThrPyth_ZZ->Fill((*eveThr)[0]);
+			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
 		}
 		if ((*eveCod)[0] == 233) {
 			hist_Esprime_WW->Fill((*eveSpr)[0]);
-			hist_ThrPyth_WW->Fill((*eveThr)[0]);
-		} 
+			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
+		}
 		if ((*eveCod)[0] == 604) {
 			hist_Esprime_tt->Fill((*eveSpr)[0]);
+			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
+		} 
+
+		// Cut on √s' and process
+		if ((*eveCod)[0] == 221 && (*eveSpr)[0] >= 425) {
+			hist_ThrPyth_Zq->Fill((*eveThr)[0]);
+		}
+		if ((*eveCod)[0] == 231 && (*eveSpr)[0] >= 425) {
+			hist_ThrPyth_ZZ->Fill((*eveThr)[0]);
+			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
+		}
+		if ((*eveCod)[0] == 233 && (*eveSpr)[0] >= 425) {
+			hist_ThrPyth_WW->Fill((*eveThr)[0]);
+			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
+		}
+		if ((*eveCod)[0] == 604 && (*eveSpr)[0] >= 425) {
 			hist_ThrPyth_tt->Fill((*eveThr)[0]);
+			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
 		} 
 
 		// Reset

@@ -44,7 +44,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES500.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -79,7 +79,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e3;
+	int nEvent = 1e5;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
