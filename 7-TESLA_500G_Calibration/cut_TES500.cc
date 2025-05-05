@@ -142,64 +142,64 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
 	
-	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
-	// TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_000->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_000->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_000", &hist_ThrPyth_000, "hist_ThrPyth_000");
 
-	// TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "vThrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "vThrust", 100, 0, 0.4);
 	hist_ThrPyth_300->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_300->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_300", &hist_ThrPyth_300, "hist_ThrPyth_300");
 
-	// TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_425->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_425->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_425", &hist_ThrPyth_425, "hist_ThrPyth_425");
 
-	// TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_500->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_500->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_500", &hist_ThrPyth_500, "hist_ThrPyth_500");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_ZZWWtt->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_ZZWWtt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_ZZWWtt", &hist_ThrPyth_ZZWWtt, "hist_ThrPyth_ZZWWtt");
 
-	// TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_Zq->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");
 
-	// TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "vThrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "vThrust", 100, 0, 0.4);
 	hist_ThrPyth_tt->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_tt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_tt", &hist_ThrPyth_tt, "hist_ThrPyth_tt");
 
-	// TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_WW->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_WW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_WW", &hist_ThrPyth_WW, "hist_ThrPyth_WW");
 
-	// TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	// TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_ZZ->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_ZZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_ZZ", &hist_ThrPyth_ZZ, "hist_ThrPyth_ZZ");
@@ -343,6 +343,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		// Cut on √s' and process
 		if ((*eveCod)[0] == 221 && (*eveSpr)[0] >= 425) {
 			hist_ThrPyth_Zq->Fill((*eveThr)[0]);
+			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
 		}
 		if ((*eveCod)[0] == 231 && (*eveSpr)[0] >= 425) {
 			hist_ThrPyth_ZZ->Fill((*eveThr)[0]);

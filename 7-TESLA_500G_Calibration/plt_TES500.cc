@@ -200,7 +200,7 @@ void plt_TES500()
 	hist_ThrPyth_TES500_noR->Scale(1.0/hist_ThrPyth_TES500_noR->Integral());
 	hist_ThrPyth_TES50t_noR->Scale(1.0/hist_ThrPyth_TES50t_noR->Integral());
 	hist_ThrPyth_TES500_wiR->Scale(1.0/hist_ThrPyth_TES500_wiR->Integral());
-	// hist_ThrPyth_TES50t_wiR->Scale(1.0/hist_ThrPyth_TES50t_wiR->Integral());
+	hist_ThrPyth_TES50t_wiR->Scale(1.0/hist_ThrPyth_TES50t_wiR->Integral());
 	
 	// Divide by area under hist
 	hist_Thr1999->Scale(1.0/hist_Thr1999->Integral());
@@ -427,19 +427,19 @@ void plt_TES500()
 	hist_ThrPyth_Zq->SetStats(kFALSE); hist_ThrPyth_ZZ->SetStats(kFALSE); hist_ThrPyth_WW->SetStats(kFALSE); hist_ThrPyth_tt->SetStats(kFALSE);
 	hist_Esprime_ZZWWtt->SetStats(kFALSE); hist_ThrPyth_ZZWWtt->SetStats(kFALSE);
 
-	// hist_ThrPyth_Zq->Scale(1.0/hist_ThrPyth_Zq->Integral()); hist_ThrPyth_ZZ->Scale(1.0/hist_ThrPyth_ZZ->Integral());
-	// hist_ThrPyth_WW->Scale(1.0/hist_ThrPyth_WW->Integral()); hist_ThrPyth_tt->Scale(1.0/hist_ThrPyth_tt->Integral());
-	// hist_ThrPyth_ZZWWtt->Scale(1.0/hist_ThrPyth_ZZWWtt->Integral());
+	hist_ThrPyth_Zq->Scale(1.0/hist_ThrPyth_Zq->Integral()); hist_ThrPyth_ZZ->Scale(1.0/hist_ThrPyth_ZZ->Integral());
+	hist_ThrPyth_WW->Scale(1.0/hist_ThrPyth_WW->Integral()); hist_ThrPyth_tt->Scale(1.0/hist_ThrPyth_tt->Integral());
+	hist_ThrPyth_ZZWWtt->Scale(1.0/hist_ThrPyth_ZZWWtt->Integral());
 
 	// Add legend
 	TLegend *lg_thr3 = new TLegend(0.4, 0.2, 0.85, 0.4);
-	lg_thr3->AddEntry(hist_Esprime_Zq, "ee#rightarrow#gamma/Z_{0}#rightarrowq#bar{q}", "pl");
-	lg_thr3->AddEntry(hist_Esprime_WW, "ee#rightarrowW^{+}W^{-}#rightarrowq#bar{q}", "pl");
-	lg_thr3->AddEntry(hist_Esprime_ZZ, "ee#rightarrowZ_{0}Z_{0}#rightarrowq#bar{q}", "pl");
-	lg_thr3->AddEntry(hist_Esprime_tt, "ee#rightarrow#gamma/Z_{0}#rightarrowt#bar{t}", "pl");
-	lg_thr3->AddEntry(hist_Esprime_ZZWWtt, "ee#rightarrowZZ,WW,t#bar{t}", "pl");
-	lg_thr3->AddEntry(hist_ThrPyth_TES50t_wiR, "All processes", "pl");
-	// lg_thr3->AddEntry(hist_Thr199T, "1999 TESLA study", "pl");
+	// lg_thr3->AddEntry(hist_Esprime_Zq, "ee#rightarrow#gamma/Z_{0}#rightarrowq#bar{q}", "pl");
+	// lg_thr3->AddEntry(hist_Esprime_WW, "ee#rightarrowW^{+}W^{-}#rightarrowq#bar{q}", "pl");
+	// lg_thr3->AddEntry(hist_Esprime_ZZ, "ee#rightarrowZ_{0}Z_{0}#rightarrowq#bar{q}", "pl");
+	// lg_thr3->AddEntry(hist_Esprime_tt, "ee#rightarrow#gamma/Z_{0}#rightarrowt#bar{t}", "pl");
+	// lg_thr3->AddEntry(hist_Esprime_ZZWWtt, "ee#rightarrowZZ,WW,t#bar{t}", "pl");
+	lg_thr3->AddEntry(hist_ThrPyth_TES50t_wiR, "ee#rightarrow#gamma/Z/ZZ/WW/t#bar{t}#rightarrowq#bar{q}", "p");
+	lg_thr3->AddEntry(hist_Thr199T, "1999 TESLA study", "p");
 	lg_thr3->SetTextSize(0.03);
 	
 	// Create canvas
@@ -466,18 +466,18 @@ void plt_TES500()
 	hist_Esprime_ZZWWtt->Draw("LSAME");
 	lg_thr3->Draw("SAME");
 	c_thr3->cd(2);
-	hist_ThrPyth_Zq->Draw("L");
-	hist_ThrPyth_ZZ->Draw("LSAME");
-	hist_ThrPyth_WW->Draw("LSAME");
-	hist_ThrPyth_tt->Draw("LSAME");
-	hist_ThrPyth_ZZWWtt->Draw("LSAME");
-	hist_ThrPyth_TES50t_wiR->Draw("LSAME");
-	// hist_Thr199T->Draw("LSAME");
+	// hist_ThrPyth_Zq->Draw("P");
+	// hist_ThrPyth_ZZ->Draw("PSAME");
+	// hist_ThrPyth_WW->Draw("PSAME");
+	// hist_ThrPyth_tt->Draw("PSAME");
+	// hist_ThrPyth_ZZWWtt->Draw("PSAME");
+	hist_ThrPyth_TES50t_wiR->Draw("P");
+	hist_Thr199T->Draw("PSAME");
 	lg_thr3->Draw("SAME");
 
 	// Set limits
 	hist_Esprime_Zq->GetYaxis()->SetRangeUser(1E0,1E7);
-	hist_ThrPyth_Zq->GetYaxis()->SetRangeUser(1E0,1E6);
+	hist_ThrPyth_TES50t_wiR->GetYaxis()->SetRangeUser(1E-7,1E1);
 
 	// Modify stat-box
 	gStyle->SetOptStat();
