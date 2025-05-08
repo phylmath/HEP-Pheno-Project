@@ -133,6 +133,28 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	TH1F *hist_nHadron_Zq = new TH1F("hist_nHadron_Zq", "Charged Hadron Multiplicity", 60, 1, 121);
+	hist_nHadron_Zq->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_Zq->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_Zq", &hist_nHadron_Zq, "hist_nHadron_Zq");
+
+	TH1F *hist_nHadron_ZZ = new TH1F("hist_nHadron_ZZ", "Charged Hadron Multiplicity", 60, 1, 121);
+	hist_nHadron_ZZ->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_ZZ->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_ZZ", &hist_nHadron_ZZ, "hist_nHadron_ZZ");
+
+	TH1F *hist_nHadron_WW = new TH1F("hist_nHadron_WW", "Charged Hadron Multiplicity", 60, 1, 121);
+	hist_nHadron_WW->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_WW->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_WW", &hist_nHadron_WW, "hist_nHadron_WW");
+
+	TH1F *hist_nHadron_tt = new TH1F("hist_nHadron_tt", "Charged Hadron Multiplicity", 60, 1, 121);
+	hist_nHadron_tt->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_tt->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_tt", &hist_nHadron_tt, "hist_nHadron_tt");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, -1, 11);
 	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}>");
 	hist_nJetTot->GetYaxis()->SetTitle("P(N_{JETS})");
@@ -142,67 +164,111 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
 	
-	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth", &hist_ThrPyth, "hist_ThrPyth");
 
-	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_000 = new TH1F("hist_ThrPyth_000", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_000->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_000->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_000", &hist_ThrPyth_000, "hist_ThrPyth_000");
 
-	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "vThrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_300 = new TH1F("hist_ThrPyth_300", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_300->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_300->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_300", &hist_ThrPyth_300, "hist_ThrPyth_300");
 
-	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_425 = new TH1F("hist_ThrPyth_425", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_425->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_425->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_425", &hist_ThrPyth_425, "hist_ThrPyth_425");
 
-	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_500 = new TH1F("hist_ThrPyth_500", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_500->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_500->GetYaxis()->SetTitle("P(1-T)");
 	otree->Branch("hist_ThrPyth_500", &hist_ThrPyth_500, "hist_ThrPyth_500");
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_ThrPy99 = new TH1F("hist_ThrPy99", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPy99", &hist_ThrPy99, "hist_ThrPy99");
+
+	TH1F *hist_ThrPy99_000 = new TH1F("hist_ThrPy99_000", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_000->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_000->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPy99_000", &hist_ThrPy99_000, "hist_ThrPy99_000");
+
+	TH1F *hist_ThrPy99_300 = new TH1F("hist_ThrPy99_300", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_300->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_300->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPy99_300", &hist_ThrPy99_300, "hist_ThrPy99_300");
+
+	TH1F *hist_ThrPy99_425 = new TH1F("hist_ThrPy99_425", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_425->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_425->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPy99_425", &hist_ThrPy99_425, "hist_ThrPy99_425");
+
+	TH1F *hist_ThrPy99_500 = new TH1F("hist_ThrPy99_500", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_500->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_500->GetYaxis()->SetTitle("P(1-T)");
+	otree->Branch("hist_ThrPy99_500", &hist_ThrPy99_500, "hist_ThrPy99_500");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_ZZWWtt = new TH1F("hist_ThrPyth_ZZWWtt", "Inverse Thrust", 100, 0, 0.4);
-	hist_ThrPyth_ZZWWtt->GetXaxis()->SetTitle("(1-T)");
-	hist_ThrPyth_ZZWWtt->GetYaxis()->SetTitle("#events");
-	otree->Branch("hist_ThrPyth_ZZWWtt", &hist_ThrPyth_ZZWWtt, "hist_ThrPyth_ZZWWtt");
-
-	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_Zq->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");
 
-	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "vThrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_tt = new TH1F("hist_ThrPyth_tt", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_tt->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_tt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_tt", &hist_ThrPyth_tt, "hist_ThrPyth_tt");
 
-	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_WW = new TH1F("hist_ThrPyth_WW", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_WW->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_WW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_WW", &hist_ThrPyth_WW, "hist_ThrPyth_WW");
 
-	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
-	// TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_ZZ = new TH1F("hist_ThrPyth_ZZ", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth_ZZ->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_ZZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_ZZ", &hist_ThrPyth_ZZ, "hist_ThrPyth_ZZ");
+
+	TH1F *hist_ThrPyth_Zt = new TH1F("hist_ThrPyth_Zt", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_Zt->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_Zt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPyth_Zt", &hist_ThrPyth_Zt, "hist_ThrPyth_Zt");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_ThrPy99_Zq = new TH1F("hist_ThrPy99_Zq", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_Zq->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_Zq->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPy99_Zq", &hist_ThrPy99_Zq, "hist_ThrPy99_Zq");
+
+	TH1F *hist_ThrPy99_tt = new TH1F("hist_ThrPy99_tt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_tt->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_tt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPy99_tt", &hist_ThrPy99_tt, "hist_ThrPy99_tt");
+
+	TH1F *hist_ThrPy99_WW = new TH1F("hist_ThrPy99_WW", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_WW->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_WW->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPy99_WW", &hist_ThrPy99_WW, "hist_ThrPy99_WW");
+
+	TH1F *hist_ThrPy99_ZZ = new TH1F("hist_ThrPy99_ZZ", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_ZZ->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_ZZ->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPy99_ZZ", &hist_ThrPy99_ZZ, "hist_ThrPy99_ZZ");
+
+	TH1F *hist_ThrPy99_Zt = new TH1F("hist_ThrPy99_Zt", "Inverse Thrust", (sizeof(xbin)/sizeof(xbin[0])-1), xbin);
+	hist_ThrPy99_Zt->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPy99_Zt->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPy99_Zt", &hist_ThrPy99_Zt, "hist_ThrPy99_Zt");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -226,7 +292,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define
-	int nCh=0, nCj=0, nParts=0, Pdg;
+	int nCh=0, nCj=0, nParts=0, Pdg=0, Rad_000=0, Rad_300=0, Rad_425=0, Rad_500=0;
 	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr;
 	
 	Pythia8::Thrust thr;
@@ -277,7 +343,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		
 		////////////////////////// PRINTING CLUSTERED INFO //////////////////////////////////////////////////
 
-		cout << "Event " << iEvent << " has " << particles.size() << " particles" << " / " << jets.size() << " jets" << endl;
+		// cout << "Event " << iEvent << " has " << particles.size() << " particles" << " / " << jets.size() << " jets" << endl;
 
 		// Run through jets
 		for (int iJet = 0; iJet < jets.size(); iJet++) {
@@ -297,73 +363,95 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 
-		// Cut on √s'
+		// 0% cut on √s'
 		if ((*eveSpr)[0] >= 0){
+			
+			Rad_000++;
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
 			hist_SphPyth->Fill((*eveSph)[0]);
 			hist_SaxPyth->Fill((*eveSax)[0]);
 			hist_nHadron->Fill(nCh);
 			hist_nJetTot->Fill(nCj);
-		}
-		if ((*eveSpr)[0] >= 0) {
-			hist_ThrPyth_000->Fill((*eveThr)[0]);
+			
 			hist_nHadron_000->Fill(nCh);
+			hist_ThrPyth_000->Fill((*eveThr)[0]); hist_ThrPy99_000->Fill((*eveThr)[0]);
+
+			// Process cuts
+			if ((*eveCod)[0] == 221) {
+				hist_Esprime_Zq->Fill((*eveSpr)[0]);
+				hist_nHadron_Zq->Fill(nCh);
+			}
+			if ((*eveCod)[0] == 231) {
+				hist_Esprime_ZZ->Fill((*eveSpr)[0]);
+				hist_nHadron_ZZ->Fill(nCh);
+			}
+			if ((*eveCod)[0] == 233) {
+				hist_Esprime_WW->Fill((*eveSpr)[0]);
+				hist_nHadron_WW->Fill(nCh);
+			}
+			if ((*eveCod)[0] == 604) {
+				hist_Esprime_tt->Fill((*eveSpr)[0]);
+				hist_nHadron_tt->Fill(nCh);
+			} 
+
 		}
+
+		// 60% cut on √s'
 		if ((*eveSpr)[0] >= 300) {
-			hist_ThrPyth_300->Fill((*eveThr)[0]);
+			Rad_300++;
+			hist_ThrPyth_300->Fill((*eveThr)[0]); hist_ThrPy99_300->Fill((*eveThr)[0]);
 			hist_nHadron_300->Fill(nCh);
 		}
+
+		// 85% cut on √s'
 		if ((*eveSpr)[0] >= 425) {
-			hist_ThrPyth_425->Fill((*eveThr)[0]);
+			Rad_425++;
+			hist_ThrPyth_425->Fill((*eveThr)[0]); hist_ThrPy99_425->Fill((*eveThr)[0]);
 			hist_nHadron_425->Fill(nCh);
 		}
+
+		// 100% cut on √s'
 		if ((*eveSpr)[0] >= 500) {
-			hist_ThrPyth_500->Fill((*eveThr)[0]);
+			Rad_500++;
+			hist_ThrPyth_500->Fill((*eveThr)[0]); hist_ThrPy99_500->Fill((*eveThr)[0]);
 			hist_nHadron_500->Fill(nCh);
 		}
 
-		// Cut on process
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		if ((*eveCod)[0] == 221) {
-			hist_Esprime_Zq->Fill((*eveSpr)[0]);
+			hist_ThrPyth_Zq->Fill((*eveThr)[0]); hist_ThrPy99_Zq->Fill((*eveThr)[0]);
+			hist_ThrPyth_Zt->Fill((*eveThr)[0]); hist_ThrPy99_Zt->Fill((*eveThr)[0]);			
 		}
 		if ((*eveCod)[0] == 231) {
-			hist_Esprime_ZZ->Fill((*eveSpr)[0]);
-			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
+			hist_ThrPyth_ZZ->Fill((*eveThr)[0]); hist_ThrPy99_ZZ->Fill((*eveThr)[0]);
 		}
 		if ((*eveCod)[0] == 233) {
-			hist_Esprime_WW->Fill((*eveSpr)[0]);
-			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
+			hist_ThrPyth_WW->Fill((*eveThr)[0]); hist_ThrPy99_WW->Fill((*eveThr)[0]);
 		}
 		if ((*eveCod)[0] == 604) {
-			hist_Esprime_tt->Fill((*eveSpr)[0]);
-			hist_Esprime_ZZWWtt->Fill((*eveSpr)[0]);
-		} 
-
-		// Cut on √s' and process
-		if ((*eveCod)[0] == 221 && (*eveSpr)[0] >= 425) {
-			hist_ThrPyth_Zq->Fill((*eveThr)[0]);
-			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
+			hist_ThrPyth_tt->Fill((*eveThr)[0]); hist_ThrPy99_tt->Fill((*eveThr)[0]);
+			hist_ThrPyth_Zt->Fill((*eveThr)[0]); hist_ThrPy99_Zt->Fill((*eveThr)[0]);
 		}
-		if ((*eveCod)[0] == 231 && (*eveSpr)[0] >= 425) {
-			hist_ThrPyth_ZZ->Fill((*eveThr)[0]);
-			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
-		}
-		if ((*eveCod)[0] == 233 && (*eveSpr)[0] >= 425) {
-			hist_ThrPyth_WW->Fill((*eveThr)[0]);
-			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
-		}
-		if ((*eveCod)[0] == 604 && (*eveSpr)[0] >= 425) {
-			hist_ThrPyth_tt->Fill((*eveThr)[0]);
-			hist_ThrPyth_ZZWWtt->Fill((*eveThr)[0]);
-		} 
-
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Reset
-		nCh=0; particles.clear(); jets.clear();
-
+		nCh=0; nCj=0; particles.clear(); jets.clear();
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Print info
+	cout << "----------------------------------------" << endl;
+	cout << "Radiative events < 000 GeV : " << Rad_000 << endl;
+	cout << "Radiative events < 300 GeV : " << Rad_300 << endl;
+	cout << "Radiative events < 425 GeV : " << Rad_425 << endl;
+	cout << "Radiative events < 500 GeV : " << Rad_500 << endl;
+	cout << "----------------------------------------" << endl;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // KNO Scaling
@@ -375,10 +463,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Axes params
-	histNch = hist_nHadron->GetMean();
-	histMax = hist_nHadron->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron->GetBinWidth(10)/histNch;
+	histNch = hist_nHadron_000->GetMean();
+	histMax = hist_nHadron_000->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron_000->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron_000->GetBinWidth(10)/histNch;
 	numBin = static_cast<int>(ceil(histMax/histBin));
 	// KNO histogram
 	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
@@ -386,14 +474,110 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
 	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
 	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron->GetBinContent(bin);
+	for (int bin = 1; bin <= hist_nHadron_000->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron_000->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron_000->GetBinContent(bin);
 	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron->GetBinError(bin) * histNch;
+	double scaledContent = hist_nHadron_000->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron_000->GetBinError(bin) * histNch;
 	KNOO_nHadron->Fill(scaledNch, scaledContent);
 	KNOO_nHadron->SetBinError(KNOO_nHadron->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nHadron_Zq->GetMean();
+	histMax = hist_nHadron_Zq->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron_Zq->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron_Zq->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nHadron_Zq = new TH1D("KNOO_nHadron_Zq", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
+	// Beautify
+	KNOO_nHadron_Zq->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nHadron_Zq->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nHadron_Zq->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron_Zq->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron_Zq->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nHadron_Zq->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron_Zq->GetBinError(bin) * histNch;
+	KNOO_nHadron_Zq->Fill(scaledNch, scaledContent);
+	KNOO_nHadron_Zq->SetBinError(KNOO_nHadron_Zq->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nHadron_ZZ->GetMean();
+	histMax = hist_nHadron_ZZ->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron_ZZ->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron_ZZ->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nHadron_ZZ = new TH1D("KNOO_nHadron_ZZ", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
+	// Beautify
+	KNOO_nHadron_ZZ->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nHadron_ZZ->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nHadron_ZZ->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron_ZZ->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron_ZZ->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nHadron_ZZ->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron_ZZ->GetBinError(bin) * histNch;
+	KNOO_nHadron_ZZ->Fill(scaledNch, scaledContent);
+	KNOO_nHadron_ZZ->SetBinError(KNOO_nHadron_ZZ->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nHadron_WW->GetMean();
+	histMax = hist_nHadron_WW->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron_WW->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron_WW->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nHadron_WW = new TH1D("KNOO_nHadron_WW", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
+	// Beautify
+	KNOO_nHadron_WW->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nHadron_WW->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nHadron_WW->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron_WW->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron_WW->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nHadron_WW->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron_WW->GetBinError(bin) * histNch;
+	KNOO_nHadron_WW->Fill(scaledNch, scaledContent);
+	KNOO_nHadron_WW->SetBinError(KNOO_nHadron_WW->FindBin(scaledNch), scaledError);
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Axes params
+	histNch = hist_nHadron_tt->GetMean();
+	histMax = hist_nHadron_tt->GetXaxis()->GetXmax()/histNch;
+	histMin = hist_nHadron_tt->GetXaxis()->GetXmin()/histNch;
+	histBin = hist_nHadron_tt->GetBinWidth(10)/histNch;
+	numBin = static_cast<int>(ceil(histMax/histBin));
+	// KNO histogram
+	TH1D* KNOO_nHadron_tt = new TH1D("KNOO_nHadron_tt", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
+	// Beautify
+	KNOO_nHadron_tt->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+	KNOO_nHadron_tt->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
+	// Fill histogram
+	for (int bin = 1; bin <= hist_nHadron_tt->GetNbinsX(); ++bin) {
+	double nCh = hist_nHadron_tt->GetXaxis()->GetBinCenter(bin);
+	double binContent = hist_nHadron_tt->GetBinContent(bin);
+	double scaledNch = nCh / histNch;
+	double scaledContent = hist_nHadron_tt->GetBinContent(bin) * histNch;
+	double scaledError = hist_nHadron_tt->GetBinError(bin) * histNch;
+	KNOO_nHadron_tt->Fill(scaledNch, scaledContent);
+	KNOO_nHadron_tt->SetBinError(KNOO_nHadron_tt->FindBin(scaledNch), scaledError);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,8 +599,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Code
 int main() {
 
-	// Call function
+	// Call cut function
 	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
+	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
 
 	// Terminate
 	return 0;
