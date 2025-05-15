@@ -698,4 +698,46 @@ void plt_TES500()
 	gStyle->SetOptStat();
 	c_thr4->Modified();
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Plotting Jets
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// TH1F *hist_nJetTot_al_noR = (TH1F*)input_TES50t_noR->Get("hist_nJetTot");
+	// TH1F *hist_nJetTot_al_wiR = (TH1F*)input_TES50t_wiR->Get("hist_nJetTot");
+
+	// hist_nJetTot_al_noR->SetLineColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerStyle(kStar); hist_nJetTot_al_noR->SetLineWidth(2); hist_nJetTot_al_noR->SetStats(kFALSE);
+	// hist_nJetTot_al_wiR->SetLineColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerStyle(kStar); hist_nJetTot_al_wiR->SetLineWidth(2); hist_nJetTot_al_wiR->SetStats(kFALSE); 
+
+	// hist_nJetTot_al_noR->SetTitle("Total Jet multiplicity");hist_nJetTot_al_noR->GetYaxis()->SetTitle("# Events");
+	// hist_nJetTot_al_wiR->SetTitle("Total Jet multiplicity");hist_nJetTot_al_wiR->GetYaxis()->SetTitle("# Events");
+
+	// // Add legend
+	// TLegend *lg_thr7 = new TLegend(0.4, 0.2, 0.6, 0.4);
+	// lg_thr7->AddEntry(hist_nJetTot_al_noR, "ee#rightarrowq#bar{q}", "p");
+	// lg_thr7->AddEntry(hist_nJetTot_al_wiR, "ee(#gamma)#rightarrowq#bar{q}", "pl");
+	// lg_thr7->SetTextSize(0.03);
+
+	// // Create canvas
+	// TCanvas* c_thr5 = new TCanvas("c_thr5", "Process-separated Event Shapes", 600, 500);
+
+	// // Beautify
+	// gStyle->SetErrorX(0.000000001);
+	// c_thr5->SetLeftMargin(0.15);
+	// c_thr5->SetLogy();
+	// c_thr5->SetTickx(); c_thr5->SetTicky();
+	// c_thr5->SetGridx(); c_thr5->SetGridy();
+
+	// // Draw
+	// c_thr5->cd(1);
+	// hist_nJetTot_al_noR->Draw("P");
+	// hist_nJetTot_al_wiR->Draw("PSAME");
+	// lg_thr7->Draw("SAME");
+
+	// // Set limits
+	// // hist_nJetTot_al_noR->GetYaxis()->SetRangeUser(1E0,1E5);
+
+	// // Modify stat-box
+	// gStyle->SetOptStat();
+	// c_thr5->Modified();
+
 }

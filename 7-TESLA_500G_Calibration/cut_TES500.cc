@@ -155,10 +155,30 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 10, -1, 11);
-	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}>");
+	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 100, -1, 20);
+	hist_nJetTot->GetXaxis()->SetTitle("N_{JETS}");
 	hist_nJetTot->GetYaxis()->SetTitle("P(N_{JETS})");
 	otree->Branch("hist_nJetTot", &hist_nJetTot, "hist_nJetTot");
+
+	TH1F *hist_nJetTot_Zq = new TH1F("hist_nJetTot_Zq", "Jet Multiplicity", 100, -1, 20);
+	hist_nJetTot_Zq->GetXaxis()->SetTitle("N_{JETS}");
+	hist_nJetTot_Zq->GetYaxis()->SetTitle("P(N_{JETS})");
+	otree->Branch("hist_nJetTot_Zq", &hist_nJetTot_Zq, "hist_nJetTot_Zq");
+
+	TH1F *hist_nJetTot_ZZ = new TH1F("hist_nJetTot_ZZ", "Jet Multiplicity", 100, -1, 20);
+	hist_nJetTot_ZZ->GetXaxis()->SetTitle("N_{JETS}");
+	hist_nJetTot_ZZ->GetYaxis()->SetTitle("P(N_{JETS})");
+	otree->Branch("hist_nJetTot_ZZ", &hist_nJetTot_ZZ, "hist_nJetTot_ZZ");
+
+	TH1F *hist_nJetTot_WW = new TH1F("hist_nJetTot_WW", "Jet Multiplicity", 100, -1, 20);
+	hist_nJetTot_WW->GetXaxis()->SetTitle("N_{JETS}");
+	hist_nJetTot_WW->GetYaxis()->SetTitle("P(N_{JETS})");
+	otree->Branch("hist_nJetTot_WW", &hist_nJetTot_WW, "hist_nJetTot_WW");
+
+	TH1F *hist_nJetTot_tt = new TH1F("hist_nJetTot_tt", "Jet Multiplicity", 100, -1, 20);
+	hist_nJetTot_tt->GetXaxis()->SetTitle("N_{JETS}");
+	hist_nJetTot_tt->GetYaxis()->SetTitle("P(N_{JETS})");
+	otree->Branch("hist_nJetTot_tt", &hist_nJetTot_tt, "hist_nJetTot_tt");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -381,18 +401,22 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			if ((*eveCod)[0] == 221) {
 				hist_Esprime_Zq->Fill((*eveSpr)[0]);
 				hist_nHadron_Zq->Fill(nCh);
+				hist_nJetTot_Zq->Fill(nCj);
 			}
 			if ((*eveCod)[0] == 231) {
 				hist_Esprime_ZZ->Fill((*eveSpr)[0]);
 				hist_nHadron_ZZ->Fill(nCh);
+				hist_nJetTot_ZZ->Fill(nCj);
 			}
 			if ((*eveCod)[0] == 233) {
 				hist_Esprime_WW->Fill((*eveSpr)[0]);
 				hist_nHadron_WW->Fill(nCh);
+				hist_nJetTot_WW->Fill(nCj);
 			}
 			if ((*eveCod)[0] == 604) {
 				hist_Esprime_tt->Fill((*eveSpr)[0]);
 				hist_nHadron_tt->Fill(nCh);
+				hist_nJetTot_tt->Fill(nCj);
 			} 
 
 		}
