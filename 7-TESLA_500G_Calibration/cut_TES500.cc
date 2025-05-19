@@ -33,9 +33,48 @@
 using namespace Pythia8;
 using namespace std;
 using namespace fastjet;
-// Extras
 
-// Function
+// 
+TH1F* ComputeKNOScaling(TH1F* inputHist, const std::string& outputName) {
+    // Axes params
+	double histNch = inputHist->GetMean();
+    double histMax = inputHist->GetXaxis()->GetXmax()/histNch;
+    double histMin = inputHist->GetXaxis()->GetXmin()/histNch;
+    double histBin = inputHist->GetBinWidth(10)/histNch;
+    int numBin = static_cast<int>(ceil(histMax/histBin));
+    // KNO histogram
+    TH1F* knoHist = new TH1F(outputName.c_str(), "KNO Charged Multiplicity", numBin, 0, histMax);
+	// Beautify
+    knoHist->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
+    knoHist->GetYaxis()->SetTitle("P(N_{CH}) x <N_{CH}>");
+    // Fill histogram
+    for (int bin = 1; bin <= inputHist->GetNbinsX(); ++bin) {
+        double nCh = inputHist->GetXaxis()->GetBinCenter(bin);
+        double binContent = inputHist->GetBinContent(bin);
+        double scaledNch = nCh / histNch;
+        double scaledCon = inputHist->GetBinContent(bin)*histNch;
+        double scaledErr = inputHist->GetBinError(bin)*histNch;
+        knoHist->Fill(scaledNch, scaledCon);
+        knoHist->SetBinError(knoHist->FindBin(scaledNch), scaledErr);
+    }
+
+    return knoHist;
+}
+
+// Divide histograms by bin width
+void NormalizeByBinWidth(TH1* hist) {
+    for (int i = 1; i <= hist->GetNbinsX(); ++i) {
+        double content = hist->GetBinContent(i);
+        double error = hist->GetBinError(i);
+        double width = hist->GetBinWidth(i);
+        if (width > 0) {
+            hist->SetBinContent(i, content/width);
+            hist->SetBinError(i, error/width);
+        }
+    }
+}
+
+// Import data, perform cuts, store data
 void applyCuts( const std::string& inputFileName, const std::string& outputFileName ) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -481,128 +520,26 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // KNO Scaling
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// KNO params
-	double histNch=0.0, histMax=0.0, histMin=0.0, histBin=0.0; int numBin=0;
+	TH1F* KNOO_nHadron = ComputeKNOScaling(hist_nHadron_000, "KNOO_nHadron");
+	TH1F* KNOO_nHadron_Zq = ComputeKNOScaling(hist_nHadron_Zq, "KNOO_nHadron_Zq");
+	TH1F* KNOO_nHadron_ZZ = ComputeKNOScaling(hist_nHadron_ZZ, "KNOO_nHadron_ZZ");
+	TH1F* KNOO_nHadron_WW = ComputeKNOScaling(hist_nHadron_WW, "KNOO_nHadron_WW");
+	TH1F* KNOO_nHadron_tt = ComputeKNOScaling(hist_nHadron_tt, "KNOO_nHadron_tt");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Bin width normalising
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// Axes params
-	histNch = hist_nHadron_000->GetMean();
-	histMax = hist_nHadron_000->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron_000->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron_000->GetBinWidth(10)/histNch;
-	numBin = static_cast<int>(ceil(histMax/histBin));
-	// KNO histogram
-	TH1D* KNOO_nHadron = new TH1D("KNOO_nHadron", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
-	// Beautify
-	KNOO_nHadron->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
-	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron_000->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron_000->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron_000->GetBinContent(bin);
-	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron_000->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron_000->GetBinError(bin) * histNch;
-	KNOO_nHadron->Fill(scaledNch, scaledContent);
-	KNOO_nHadron->SetBinError(KNOO_nHadron->FindBin(scaledNch), scaledError);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Axes params
-	histNch = hist_nHadron_Zq->GetMean();
-	histMax = hist_nHadron_Zq->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron_Zq->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron_Zq->GetBinWidth(10)/histNch;
-	numBin = static_cast<int>(ceil(histMax/histBin));
-	// KNO histogram
-	TH1D* KNOO_nHadron_Zq = new TH1D("KNOO_nHadron_Zq", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
-	// Beautify
-	KNOO_nHadron_Zq->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron_Zq->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
-	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron_Zq->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron_Zq->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron_Zq->GetBinContent(bin);
-	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron_Zq->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron_Zq->GetBinError(bin) * histNch;
-	KNOO_nHadron_Zq->Fill(scaledNch, scaledContent);
-	KNOO_nHadron_Zq->SetBinError(KNOO_nHadron_Zq->FindBin(scaledNch), scaledError);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Axes params
-	histNch = hist_nHadron_ZZ->GetMean();
-	histMax = hist_nHadron_ZZ->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron_ZZ->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron_ZZ->GetBinWidth(10)/histNch;
-	numBin = static_cast<int>(ceil(histMax/histBin));
-	// KNO histogram
-	TH1D* KNOO_nHadron_ZZ = new TH1D("KNOO_nHadron_ZZ", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
-	// Beautify
-	KNOO_nHadron_ZZ->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron_ZZ->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
-	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron_ZZ->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron_ZZ->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron_ZZ->GetBinContent(bin);
-	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron_ZZ->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron_ZZ->GetBinError(bin) * histNch;
-	KNOO_nHadron_ZZ->Fill(scaledNch, scaledContent);
-	KNOO_nHadron_ZZ->SetBinError(KNOO_nHadron_ZZ->FindBin(scaledNch), scaledError);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Axes params
-	histNch = hist_nHadron_WW->GetMean();
-	histMax = hist_nHadron_WW->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron_WW->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron_WW->GetBinWidth(10)/histNch;
-	numBin = static_cast<int>(ceil(histMax/histBin));
-	// KNO histogram
-	TH1D* KNOO_nHadron_WW = new TH1D("KNOO_nHadron_WW", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
-	// Beautify
-	KNOO_nHadron_WW->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron_WW->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
-	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron_WW->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron_WW->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron_WW->GetBinContent(bin);
-	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron_WW->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron_WW->GetBinError(bin) * histNch;
-	KNOO_nHadron_WW->Fill(scaledNch, scaledContent);
-	KNOO_nHadron_WW->SetBinError(KNOO_nHadron_WW->FindBin(scaledNch), scaledError);
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Axes params
-	histNch = hist_nHadron_tt->GetMean();
-	histMax = hist_nHadron_tt->GetXaxis()->GetXmax()/histNch;
-	histMin = hist_nHadron_tt->GetXaxis()->GetXmin()/histNch;
-	histBin = hist_nHadron_tt->GetBinWidth(10)/histNch;
-	numBin = static_cast<int>(ceil(histMax/histBin));
-	// KNO histogram
-	TH1D* KNOO_nHadron_tt = new TH1D("KNOO_nHadron_tt", "KNO Charged Hadron Multiplicity", numBin, 0, histMax);
-	// Beautify
-	KNOO_nHadron_tt->GetXaxis()->SetTitle("N_{CH}/<N_{CH}>");
-	KNOO_nHadron_tt->GetYaxis()->SetTitle("P(N_{CH})x<N_{CH}>");
-	// Fill histogram
-	for (int bin = 1; bin <= hist_nHadron_tt->GetNbinsX(); ++bin) {
-	double nCh = hist_nHadron_tt->GetXaxis()->GetBinCenter(bin);
-	double binContent = hist_nHadron_tt->GetBinContent(bin);
-	double scaledNch = nCh / histNch;
-	double scaledContent = hist_nHadron_tt->GetBinContent(bin) * histNch;
-	double scaledError = hist_nHadron_tt->GetBinError(bin) * histNch;
-	KNOO_nHadron_tt->Fill(scaledNch, scaledContent);
-	KNOO_nHadron_tt->SetBinError(KNOO_nHadron_tt->FindBin(scaledNch), scaledError);
-	}
+	NormalizeByBinWidth(hist_ThrPy99);
+	NormalizeByBinWidth(hist_ThrPy99_000);
+	NormalizeByBinWidth(hist_ThrPy99_300);
+	NormalizeByBinWidth(hist_ThrPy99_425);
+	NormalizeByBinWidth(hist_ThrPy99_500);
+	NormalizeByBinWidth(hist_ThrPy99_Zq);
+	NormalizeByBinWidth(hist_ThrPy99_tt);
+	NormalizeByBinWidth(hist_ThrPy99_WW);
+	NormalizeByBinWidth(hist_ThrPy99_ZZ);
+	NormalizeByBinWidth(hist_ThrPy99_Zt);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -626,6 +563,7 @@ int main() {
 	// Call cut function
 	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
 	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
+	applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
 
 	// Terminate
 	return 0;

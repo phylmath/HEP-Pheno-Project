@@ -673,13 +673,12 @@ void plt_TES500()
 	c_thr4->cd(5);
 	hist_Thr1999->Draw("P");
 	hist_ThrPy99_Zq_noR->Draw("PSAME");
-	hist_ThrPyth_Zq_noR->Draw("PSAME");
-	// hist_ThrPyth_Zq_wiR->Draw("PSAME");
+	// hist_ThrPyth_Zq_noR->Draw("PSAME");
 	lg_thr5->Draw("SAME");	
 	c_thr4->cd(6);
 	hist_Thr199T->Draw("P");
 	hist_ThrPy99_Zt_noR->Draw("PSAME");
-	hist_ThrPyth_Zt_noR->Draw("PSAME");
+	// hist_ThrPyth_Zt_noR->Draw("PSAME");
 	lg_thr6->Draw("SAME");
 	
 	hist_ThrPyth_Zq_noR->Scale(1.0/hist_ThrPyth_Zq_noR->Integral());
