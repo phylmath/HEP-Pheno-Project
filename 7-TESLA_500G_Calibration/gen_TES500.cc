@@ -79,7 +79,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e6;
+	int nEvent = 5e5;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
@@ -106,7 +106,7 @@ int main(){
 	pythia.readString("23:onMode = off");													// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16");									// turn on W iff duscbt
 	
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing
