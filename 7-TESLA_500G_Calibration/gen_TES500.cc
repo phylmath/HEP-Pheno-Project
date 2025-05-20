@@ -44,7 +44,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES50t_wiR.root", "RECREATE");
+  	TFile *output = new TFile("gen_TES50t_noR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -79,7 +79,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 5e5;
+	int nEvent = 1e6;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
@@ -91,7 +91,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	pythia.readString("PDF:lepton = on");													// ISR toggle
+	pythia.readString("PDF:lepton = off");													// ISR toggle
 	
 	// EW boson processes
 	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels

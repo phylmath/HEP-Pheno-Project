@@ -561,9 +561,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
+	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
 	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
-	applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
+	// applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
 
 	// Terminate
 	return 0;

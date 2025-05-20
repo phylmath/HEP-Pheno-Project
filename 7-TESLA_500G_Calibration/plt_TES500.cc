@@ -589,23 +589,22 @@ void plt_TES500()
 	hist_nHadron_al_wiR->SetTitle("Charged Multiplicity wi ISR");hist_nHadron_al_wiR->GetYaxis()->SetTitle("# Events");
 
 	// Add legend
-	TLegend *lg_thr4 = new TLegend(0.4, 0.2, 0.6, 0.4);
+	TLegend *lg_thr4 = new TLegend(0.64, 0.65, 0.87, 0.87);
 	lg_thr4->AddEntry(hist_nHadron_al_noR, "ee#rightarrowq#bar{q}", "p");
 	lg_thr4->AddEntry(hist_nHadron_Zq_noR, "ee#rightarrow#gamma*/Z#rightarrowq#bar{q}", "pl");
 	lg_thr4->AddEntry(hist_nHadron_ZZ_noR, "ee#rightarrowWW#rightarrowq#bar{q}", "pl");
 	lg_thr4->AddEntry(hist_nHadron_WW_noR, "ee#rightarrowZZ#rightarrowq#bar{q}", "pl");
 	lg_thr4->AddEntry(hist_nHadron_tt_noR, "ee#rightarrowt#bar{t}#rightarrowq#bar{q}", "pl");
-	lg_thr4->AddEntry(hist_Thr199T, "1999 TESLA study", "pl");
 	lg_thr4->SetTextSize(0.03);
 
 	// Add legend
-	TLegend *lg_thr5 = new TLegend(0.4, 0.2, 0.6, 0.4);
+	TLegend *lg_thr5 = new TLegend(0.18, 0.15, 0.48, 0.25);
 	lg_thr5->AddEntry(hist_ThrPy99_Zq_noR, "ee#rightarrow#gamma*/Z#rightarrowq#bar{q}", "pl");
 	lg_thr5->AddEntry(hist_Thr199T, "1999 TESLA study", "pl");
 	lg_thr5->SetTextSize(0.03);
 
 	// Add legend
-	TLegend *lg_thr6 = new TLegend(0.4, 0.2, 0.6, 0.4);
+	TLegend *lg_thr6 = new TLegend(0.18, 0.15, 0.48, 0.25);
 	lg_thr6->AddEntry(hist_ThrPy99_Zt_noR, "ee#rightarrow#gamma*/Z/t#bar{t}#rightarrowq#bar{q}", "pl");
 	lg_thr6->AddEntry(hist_Thr199T, "1999 TESLA study", "pl");
 	lg_thr6->SetTextSize(0.03);
@@ -690,8 +689,8 @@ void plt_TES500()
 	hist_ThrPyth_al_wiR->GetYaxis()->SetRangeUser(1E0,1E5);
 	hist_nHadron_al_noR->GetYaxis()->SetRangeUser(1E0,1E5);
 	hist_nHadron_al_wiR->GetYaxis()->SetRangeUser(1E0,1E5);
-	hist_Thr1999->GetYaxis()->SetRangeUser(1E-7,1E0);
-	hist_Thr199T->GetYaxis()->SetRangeUser(1E-7,1E0);
+	hist_Thr1999->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_Thr199T->GetYaxis()->SetRangeUser(1E-4,1E0);
 
 	// Modify stat-box
 	gStyle->SetOptStat();
