@@ -30,9 +30,13 @@ int main() {
 
     int nEvents = 5e6;
 
+    // Run through events
     for (int iEvent = 0; iEvent < nEvents; ++iEvent) {
+        
+        // Anti-crash
         if (!pythia.next()) continue;
-
+        
+        // Run through particles
         for (int i = 0; i < pythia.event.size(); ++i) {
             if (!pythia.event[i].isFinal()) continue;
             int id = pythia.event[i].id();
@@ -70,7 +74,7 @@ int main() {
 	h_ratio_el_mu->SetLineColor(kMagenta+2);
 	h_ratio_el_mu->SetLineWidth(2);
 	h_ratio_el_mu->SetStats(kFALSE);
-
+    
 	h_ratio_el_pos->SetLineColor(kOrange+7);
 	h_ratio_el_pos->SetLineWidth(2);
 	h_ratio_el_pos->SetStats(kFALSE);
