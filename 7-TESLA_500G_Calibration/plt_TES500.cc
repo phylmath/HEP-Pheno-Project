@@ -703,8 +703,8 @@ void plt_TES500()
 	// TH1F *hist_nJetTot_al_noR = (TH1F*)input_TES50t_noR->Get("hist_nJetTot");
 	// TH1F *hist_nJetTot_al_wiR = (TH1F*)input_TES50t_wiR->Get("hist_nJetTot");
 
-	// hist_nJetTot_al_noR->SetLineColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerStyle(kStar); hist_nJetTot_al_noR->SetLineWidth(2); hist_nJetTot_al_noR->SetStats(kFALSE);
-	// hist_nJetTot_al_wiR->SetLineColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerStyle(kStar); hist_nJetTot_al_wiR->SetLineWidth(2); hist_nJetTot_al_wiR->SetStats(kFALSE); 
+	// hist_nJetTot_al_noR->SetLineColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerColor(kYellow+2); hist_nJetTot_al_noR->SetMarkerStyle(kStar); hist_nJetTot_al_noR->SetLineWidth(1); hist_nJetTot_al_noR->SetStats(kFALSE);
+	// hist_nJetTot_al_wiR->SetLineColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerColor(kBlue+2); hist_nJetTot_al_wiR->SetMarkerStyle(kStar); hist_nJetTot_al_wiR->SetLineWidth(1); hist_nJetTot_al_wiR->SetStats(kFALSE);
 
 	// hist_nJetTot_al_noR->SetTitle("Total Jet multiplicity");hist_nJetTot_al_noR->GetYaxis()->SetTitle("# Events");
 	// hist_nJetTot_al_wiR->SetTitle("Total Jet multiplicity");hist_nJetTot_al_wiR->GetYaxis()->SetTitle("# Events");
@@ -727,8 +727,8 @@ void plt_TES500()
 
 	// // Draw
 	// c_thr5->cd(1);
-	// hist_nJetTot_al_noR->Draw("P");
-	// hist_nJetTot_al_wiR->Draw("PSAME");
+	// hist_nJetTot_al_noR->Draw("HIST");
+	// hist_nJetTot_al_wiR->Draw("HIST SAME");
 	// lg_thr7->Draw("SAME");
 
 	// // Set limits

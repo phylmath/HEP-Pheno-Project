@@ -13,6 +13,8 @@
 #include "fjcore.hh"
 #include "fastjet/PseudoJet.hh"
 #include "fastjet/ClusterSequence.hh"
+// LHAPDF
+// #include "LHAPDF/LHAPDF.h"
 // ROOT
 #include "TFile.h"
 #include "TTree.h"
@@ -79,7 +81,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 5e5;
+	int nEvent = 1e5;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
