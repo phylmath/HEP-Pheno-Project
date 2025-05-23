@@ -81,7 +81,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 1e5;
+	int nEvent = 2e6;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
@@ -95,21 +95,31 @@ int main(){
 	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
 	pythia.readString("PDF:lepton = off");													// ISR toggle
 	
-	// EW boson processes
-	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
-	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
-	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->(γ*/Z)(γ*/Z)
-	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (233) ee'->WW
-	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
 
+	// Z processes
+	pythia.readString("WeakZ0:gmZmode = 0");												// allow γ* or Z channels
+	pythia.readString("WeakSingleBoson:ffbar2gmZ = on");									// (221) ee'->γ*/Z
+	pythia.readString("WeakDoubleBoson:ffbar2gmZgmZ = on");									// (231) ee'->(γ*/Z)(γ*/Z)
 	// Constrain decays
 	pythia.readString("23:onMode = off");													// turn off Z production
 	pythia.readString("23:onIfAny = 1 2 3 4 5 6");											// turn on Z iff duscbt
+	
+	// W processes
+	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (233) ee'->WW
+	// Constrain decays
 	pythia.readString("24:onMode = off");													// turn off W production
 	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16");									// turn on W iff duscbt
 	
+	// Higgs processes
+	pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
+	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = on");											// (906) ee'->ZZ->H
+	pythia.readString("HiggsSM:ff2Hff(t:WW) = on");											// (907) ee'->WW->H
+	// Constrain decays
+	pythia.readString("25:onMode = off");													// turn off H production
+	pythia.readString("25:onIfAny = 1 2 3 4 5 6");											// turn on H iff duscbt
+
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing
 	pythia.readString("Next:numberCount = 1000");											// print #events updates
