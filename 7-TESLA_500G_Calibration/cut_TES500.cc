@@ -217,6 +217,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_nHadron_tt->GetYaxis()->SetTitle("P(N_{CH})");
 	otree->Branch("hist_nHadron_tt", &hist_nHadron_tt, "hist_nHadron_tt");
 
+	TH1F *hist_nHadron_noH = new TH1F("hist_nHadron_noH", "Charged Hadron Multiplicity", 60, 1, 121);
+	hist_nHadron_noH->GetXaxis()->SetTitle("N_{CH}");
+	hist_nHadron_noH->GetYaxis()->SetTitle("P(N_{CH})");
+	otree->Branch("hist_nHadron_noH", &hist_nHadron_noH, "hist_nHadron_noH");
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	TH1F *hist_nJetTot = new TH1F("hist_nJetTot", "Jet Multiplicity", 100, -1, 20);
@@ -341,6 +346,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_ThrPyth_Zt->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_Zt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_Zt", &hist_ThrPyth_Zt, "hist_ThrPyth_Zt");
+
+	TH1F *hist_ThrPyth_noH = new TH1F("hist_ThrPyth_noH", "Inverse Thrust", 100, 0, 0.4);
+	hist_ThrPyth_noH->GetXaxis()->SetTitle("(1-T)");
+	hist_ThrPyth_noH->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_ThrPyth_noH", &hist_ThrPyth_noH, "hist_ThrPyth_noH");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -485,7 +495,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 				hist_ThrPyth_Zq->Fill((*eveThr)[0]); 
 				hist_ThrPy99_Zq->Fill((*eveThr)[0]);
 				hist_ThrPyth_Zt->Fill((*eveThr)[0]); 
-				hist_ThrPy99_Zt->Fill((*eveThr)[0]);	
+				hist_ThrPy99_Zt->Fill((*eveThr)[0]);
+
+				hist_nHadron_noH->Fill(nCh);
+				hist_ThrPyth_noH->Fill((*eveThr)[0]);
 			}
 			if ((*eveCod)[0] == 231) {
 				hist_Esprime_ZZ->Fill((*eveSpr)[0]);
@@ -494,6 +507,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 				hist_ThrPyth_ZZ->Fill((*eveThr)[0]); 
 				hist_ThrPy99_ZZ->Fill((*eveThr)[0]);
+
+				hist_nHadron_noH->Fill(nCh);
+				hist_ThrPyth_noH->Fill((*eveThr)[0]);
 			}
 			if ((*eveCod)[0] == 233) {
 				hist_Esprime_WW->Fill((*eveSpr)[0]);
@@ -502,6 +518,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 				hist_ThrPyth_WW->Fill((*eveThr)[0]); 
 				hist_ThrPy99_WW->Fill((*eveThr)[0]);
+
+				hist_nHadron_noH->Fill(nCh);
+				hist_ThrPyth_noH->Fill((*eveThr)[0]);
 			}
 			if ((*eveCod)[0] == 604) {
 				hist_Esprime_tt->Fill((*eveSpr)[0]);
@@ -512,6 +531,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 				hist_ThrPy99_tt->Fill((*eveThr)[0]);
 				hist_ThrPyth_Zt->Fill((*eveThr)[0]); 
 				hist_ThrPy99_Zt->Fill((*eveThr)[0]);
+
+				hist_nHadron_noH->Fill(nCh);
+				hist_ThrPyth_noH->Fill((*eveThr)[0]);
 			}
 
 			//Higgs processes
@@ -621,7 +643,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
+	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
 	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
 	// applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
 
