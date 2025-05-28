@@ -16,6 +16,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TH1D.h"
 #include "TGraph.h"
 #include "TCanvas.h"
@@ -29,12 +30,160 @@
 #include "TPaveStats.h"
 #include "TList.h"
 #include "TLorentzVector.h"
+#include "TEllipse.h"
+#include "TText.h"
+#include "TPolyLine3D.h"
 // Header
 using namespace Pythia8;
 using namespace std;
 using namespace fastjet;
 
-// 
+void DrawJets3D_Combined(const vector<vector<PseudoJet>>& allJets, const vector<int>& processCodes, const string& cname = "Combined3D") {
+    TCanvas* c3D = new TCanvas(cname.c_str(), "Combined Jets in 3D", 800, 600);
+        c3D->cd();
+
+    // Axes and 3D bounding box
+    TPolyLine3D* xAxis = new TPolyLine3D(2);
+    xAxis->SetPoint(0, -120, 0, 0);
+    xAxis->SetPoint(1, 120, 0, 0);
+    xAxis->SetLineColor(kBlack); xAxis->SetLineStyle(2); xAxis->Draw();
+    TPolyLine3D* yAxis = new TPolyLine3D(2);
+    yAxis->SetPoint(0, 0, -120, 0);
+    yAxis->SetPoint(1, 0, 120, 0);
+    yAxis->SetLineColor(kBlack); yAxis->SetLineStyle(2); yAxis->Draw();
+    TPolyLine3D* zAxis = new TPolyLine3D(2);
+    zAxis->SetPoint(0, 0, 0, -120);
+    zAxis->SetPoint(1, 0, 0, 120);
+    zAxis->SetLineColor(kBlack); zAxis->SetLineStyle(2); zAxis->Draw();
+
+    // Draw bounding box
+    double L = 120;
+    double corners[8][3] = {
+        {-L, -L, -L}, {L, -L, -L}, {L, L, -L}, {-L, L, -L},
+        {-L, -L, L},  {L, -L, L},  {L, L, L},  {-L, L, L}
+    };
+    int edges[12][2] = {
+        {0,1},{1,2},{2,3},{3,0},  // bottom
+        {4,5},{5,6},{6,7},{7,4},  // top
+        {0,4},{1,5},{2,6},{3,7}   // sides
+    };
+    for (int i = 0; i < 12; ++i) {
+        TPolyLine3D* edge = new TPolyLine3D(2);
+        edge->SetPoint(0, corners[edges[i][0]][0], corners[edges[i][0]][1], corners[edges[i][0]][2]);
+        edge->SetPoint(1, corners[edges[i][1]][0], corners[edges[i][1]][1], corners[edges[i][1]][2]);
+        edge->SetLineColor(kGray+1);
+        edge->SetLineStyle(1);
+        edge->Draw();
+    }
+
+    TLegend* legend = new TLegend(0.7, 0.7, 0.95, 0.9);
+    TLatex* title = new TLatex(0.1, 0.95, "Combined Jet Visualization for 3 Events");
+    title->SetNDC();
+    title->SetTextSize(0.04);
+    title->Draw();
+    const int colors[5] = {kRed, kBlue, kGreen+2, kYellow+1, kMagenta};
+
+    for (size_t e = 0; e < allJets.size(); ++e) {
+        const vector<PseudoJet>& jets = allJets[e];
+        int color = colors[e % 5];
+
+        const char* label = "Unknown";
+        switch (processCodes[e]) {
+            case 221: label = "Zq"; break;
+            case 231: label = "ZZ"; break;
+            case 233: label = "WW"; break;
+            case 604: label = "tt"; break;
+            case 904: label = "HZ"; break;
+            case 906: label = "hZ"; break;
+            case 907: label = "hW"; break;
+        }
+
+        TPolyLine3D* legendLine = new TPolyLine3D(2);
+        legendLine->SetLineColor(color);
+        legendLine->SetLineWidth(2);
+        legend->AddEntry(legendLine, Form("Event %lu: %s", e, label), "l");
+
+        for (size_t i = 0; i < jets.size(); ++i) {
+            TPolyLine3D* line = new TPolyLine3D(2);
+            double px = jets[i].px();
+            double py = jets[i].py();
+            double pz = jets[i].pz();
+            line->SetPoint(0, 0, 0, 0);
+            line->SetPoint(1, px, py, pz);
+            line->SetLineColor(color);
+            line->SetLineWidth(2);
+            line->Draw();
+        }
+    }
+
+    // Add e+ and e- beam lines
+    TPolyLine3D* ebeam = new TPolyLine3D(2);
+    ebeam->SetPoint(0, 0, 0, 0);
+    ebeam->SetPoint(1, 0, 0, 200);
+    ebeam->SetLineColor(kBlack);
+    ebeam->SetLineStyle(1);
+    ebeam->SetLineWidth(2);
+    ebeam->Draw();
+
+    TPolyLine3D* epbeam = new TPolyLine3D(2);
+    epbeam->SetPoint(0, 0, 0, 0);
+    epbeam->SetPoint(1, 0, 0, -200);
+    epbeam->SetLineColor(kBlack);
+    epbeam->SetLineStyle(1);
+    epbeam->SetLineWidth(2);
+    epbeam->Draw();
+
+    legend->AddEntry(ebeam, "e^{+} beam", "l");
+    legend->AddEntry(epbeam, "e^{-} beam", "l");
+    legend->SetTextSize(0.03);
+    legend->Draw();
+
+	// Axis labels
+    TLatex* xlabel = new TLatex(0.92, 0.53, "X");
+    xlabel->SetNDC();
+    xlabel->SetTextSize(0.03);
+    xlabel->Draw();
+
+    TLatex* ylabel = new TLatex(0.53, 0.92, "Y");
+    ylabel->SetNDC();
+    ylabel->SetTextSize(0.03);
+    ylabel->Draw();
+
+    TLatex* zlabel = new TLatex(0.53, 0.08, "Z");
+    zlabel->SetNDC();
+    zlabel->SetTextSize(0.03);
+    zlabel->Draw();
+    c3D->Update();
+    c3D->SaveAs((cname + ".png").c_str());
+    delete c3D;
+	
+}
+
+void DrawJetsEtaPhi(const vector<PseudoJet>& jets, double R, const string& cname = "cEtaPhi") {
+    TCanvas* c = new TCanvas(cname.c_str(), "Jets in #eta-#phi", 800, 600);
+    TH2F* frame = new TH2F("frame", "Jets in #eta-#phi;#eta;#phi", 1, -5, 5, 1, -TMath::Pi(), TMath::Pi());
+    frame->Draw();
+
+    for (size_t i = 0; i < jets.size(); ++i) {
+        double eta = jets[i].eta();
+        double phi = jets[i].phi_std();
+        double pt = jets[i].pt();
+
+        TEllipse* jetCone = new TEllipse(eta, phi, R, R);
+        jetCone->SetLineColor(kBlue);
+        jetCone->SetFillStyle(0);
+        jetCone->Draw();
+
+        TText* label = new TText(eta, phi + 0.2, Form("p_{T}=%.1f", pt));
+        label->SetTextSize(0.02);
+        label->Draw();
+    }
+
+    c->Update();
+    c->SaveAs((cname + ".png").c_str());
+    delete c;
+}
+
 TH1F* ComputeKNOScaling(TH1F* inputHist, const std::string& outputName) {
     // Axes params
 	double histNch = inputHist->GetMean();
@@ -117,6 +266,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_Esprime_al = new TH1F("hist_Esprime_al", "Reduced centre-of-mass", 108, -1, 541);
+	hist_Esprime_al->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_al->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_al", &hist_Esprime_al, "hist_Esprime_al");
 
 	TH1F *hist_Esprime_HZ = new TH1F("hist_Esprime_HZ", "Reduced centre-of-mass", 108, -1, 541);
 	hist_Esprime_HZ->GetXaxis()->SetTitle("#sqrt{s'}");
@@ -403,6 +557,8 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	// Define
 	int nCh=0, nCj=0, nParts=0, Pdg=0, Rad_000=0, Rad_300=0, Rad_425=0, Rad_500=0;
 	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr;
+	vector<vector<PseudoJet>> allJets;
+    vector<int> procCodes;
 	
 	Pythia8::Thrust thr;
 	Pythia8::Event event;
@@ -449,7 +605,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		vector<fastjet::PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store jets
 		nCj = jets.size();																// Jet multiplicity
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+
 		////////////////////////// PRINTING CLUSTERED INFO //////////////////////////////////////////////////
 
 		// cout << "Event " << iEvent << " has " << particles.size() << " particles" << " / " << jets.size() << " jets" << endl;
@@ -476,6 +632,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		if ((*eveSpr)[0] >= 0){
 			
 			Rad_000++;
+
+			hist_Esprime_al->Fill((*eveSpr)[0]);
+
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
 			hist_SphPyth->Fill((*eveSph)[0]);
@@ -580,11 +739,22 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // if (iEvent < 5) {
+        //     allJets.push_back(jets);
+        //     procCodes.push_back((*eveCod)[0]);   
+        // }
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Reset
 		nCh=0; nCj=0; particles.clear(); jets.clear();
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	DrawJets3D_Combined(allJets, procCodes);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -643,9 +813,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
+	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
 	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
-	// applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
+	applyCuts("gen_TES50t_noR_noH.root", "cut_TES50t_noR_noH.root");
+	applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
 
 	// Terminate
 	return 0;

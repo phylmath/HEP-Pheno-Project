@@ -81,7 +81,7 @@ int main(){
 	Pythia pythia;
 
 	// Set # of events
-	int nEvent = 2e6;
+	int nEvent = 1e5;
 
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass

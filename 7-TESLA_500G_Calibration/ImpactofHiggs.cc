@@ -224,7 +224,8 @@ void ImpactofHiggs()
 	// hist_nHadron_al->GetYaxis()->SetRangeUser(1E-6,1E0);
 
 	// Modify stat-box
-	// gStyle->SetOptStat();
-	// c_thr->Modified();
+	gStyle->SetOptStat();
+	// Update canvas
+	c_thr->Modified();
 
 }
