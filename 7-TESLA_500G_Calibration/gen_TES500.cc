@@ -80,20 +80,21 @@ int main(){
 	// Define study object
 	Pythia pythia;
 
-	// Set # of events
-	int nEvent = 1e5;
-
 	// Store masses
 	float mZ = pythia.particleData.m0(23);													// Z0 mass
 	float mW = pythia.particleData.m0(24);													// W+ mass
+
+	// Set # of events
+	int nEvent = 1e5;
+	int nEnerg = 500.0;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
 	// Define Beam params
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
-	pythia.settings.parm("Beams:eCM", 500);													// c-om energy
-	pythia.readString("PDF:lepton = off");													// ISR toggle
+	pythia.settings.parm("Beams:eCM", nEnerg);												// c-om energy
+	pythia.readString("PDF:lepton = on");													// ISR toggle
 	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
@@ -194,7 +195,7 @@ int main(){
 		}
 		
 		// Compute √s'
-		sigISR = 500.0*sqrt(1.0-(2.0*sigISR)/500.0);
+		sigISR = nEnerg*sqrt(1.0-(2.0*sigISR)/nEnerg);
 
 		// Store event info
 		if (nCh!=0) {

@@ -267,6 +267,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	TH1F *hist_Esprime_norm = new TH1F("hist_Esprime_norm", "Reduced centre-of-mass", 100, 0, 1);
+	hist_Esprime_norm->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_Esprime_norm->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_Esprime_norm", &hist_Esprime_norm, "hist_Esprime_norm");
+
 	TH1F *hist_Esprime_al = new TH1F("hist_Esprime_al", "Reduced centre-of-mass", 108, -1, 541);
 	hist_Esprime_al->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_al->GetYaxis()->SetTitle("#events");
@@ -634,6 +639,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			Rad_000++;
 
 			hist_Esprime_al->Fill((*eveSpr)[0]);
+			hist_Esprime_norm->Fill((*eveSpr)[0]/91.2);
 
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
@@ -813,10 +819,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
-	applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
-	applyCuts("gen_TES50t_noR_noH.root", "cut_TES50t_noR_noH.root");
-	applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
+	applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root");
+	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root");
+	// applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root");
+	// applyCuts("gen_TES50t_noR_noH.root", "cut_TES50t_noR_noH.root");
+	// applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root");
 
 	// Terminate
 	return 0;
