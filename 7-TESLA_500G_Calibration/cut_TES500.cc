@@ -229,7 +229,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Create file, Read TTree data
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
-
+	
 	// Read ROOT
 	TFile *input = new TFile(inputFileName.c_str(), "READ");
 	// Read TTree
@@ -567,7 +567,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	
 	Pythia8::Thrust thr;
 	Pythia8::Event event;
-
+	
 	// FastJet params
 	double R = 0.6, ptmin = 5.0;
 	vector<fastjet::PseudoJet> particles;

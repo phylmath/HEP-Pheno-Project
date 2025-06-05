@@ -46,7 +46,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_TES50t_noR.root", "RECREATE");
+  	TFile *output = new TFile("gen_240_wiR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -86,7 +86,7 @@ int main(){
 
 	// Set # of events
 	int nEvent = 1e5;
-	int nEnerg = 500.0;
+	int nEnerg = 240;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -111,7 +111,7 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (233) ee'->WW
 	// Constrain decays
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6 15 16");									// turn on W iff duscbt
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
 	
 	// Higgs processes
 	pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
