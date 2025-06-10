@@ -241,9 +241,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	TTree *otree = new TTree("tree_cut", "Cut Pythia data");
 
 	// Intialise vecs
-	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *eveCod=nullptr, *parNum=nullptr, *parPdg=nullptr;
+	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *eveCod=nullptr, *parNum=nullptr, *parPdg=nullptr, \
+	 *isrNum=nullptr;
 	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSph=nullptr, *eveSax=nullptr, *eveSpr=nullptr, \
-	 *sigmaT=nullptr, *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr;
+	 *sigmaT=nullptr, *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr, \
+	 *isrEng=nullptr, *isrMax=nullptr;
 
 	// Set branches
 	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
@@ -255,6 +257,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	itree->SetBranchAddress("eveSax", &eveSax);											// Event sphaxis
 	itree->SetBranchAddress("eveThr", &eveThr);											// Event thrust
 	itree->SetBranchAddress("eveTax", &eveTax);											// Event thraxis
+	itree->SetBranchAddress("isrNum", &isrNum);											// ISR γ number
+	itree->SetBranchAddress("isrEng", &isrEng);											// ISR γ energy
+	itree->SetBranchAddress("isrMax", &isrMax);											// ISR γ energy
 	itree->SetBranchAddress("parNum", &parNum);											// Parts number
 	itree->SetBranchAddress("parPdg", &parPdg);											// Parts pdg id
 	itree->SetBranchAddress("parEto", &parEto);											// Parts energy
@@ -554,6 +559,23 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_SaxPyth->GetXaxis()->SetTitle("cosΘ_{Sphericity}");
 	hist_SaxPyth->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_SaxPyth", &hist_SaxPyth, "hist_SaxPyth");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TH1F *hist_NumbISR = new TH1F("hist_NumbISR", "Number of ISR photons", 100, 0, 10);
+	hist_NumbISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_NumbISR->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_NumbISR", &hist_NumbISR, "hist_NumbISR");
+
+	TH1F *hist_EnrgISR = new TH1F("hist_EnrgISR", "Energy of ISR photons", 100, 0, 500);
+	hist_EnrgISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_EnrgISR->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_EnrgISR", &hist_EnrgISR, "hist_EnrgISR");
+
+	TH1F *hist_EmaxISR = new TH1F("hist_EmaxISR", "Max energy of ISR photons", 100, 0, 500);
+	hist_EmaxISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	hist_EmaxISR->GetYaxis()->SetTitle("#events");
+	otree->Branch("hist_EmaxISR", &hist_EmaxISR, "hist_EmaxISR");
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Perform cuts, Populate histograms
@@ -561,13 +583,13 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 	// Define
 	int nCh=0, nCj=0, nParts=0, Pdg=0, Rad_000=0, Rad_060=0, Rad_085=0, Rad_100=0;
-	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr;
+	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr, Gammas[itree->GetEntries()], Sprime[itree->GetEntries()];
 	vector<vector<PseudoJet>> allJets;
     vector<int> procCodes;
 	
 	Pythia8::Thrust thr;
 	Pythia8::Event event;
-	
+
 	// FastJet params
 	double R = 0.6, ptmin = 5.0;
 	vector<fastjet::PseudoJet> particles;
@@ -588,7 +610,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			Pdg = (*parPdg)[jParts]; Eto = (*parEto)[jParts]; Ett = (*parEtt)[jParts];
 			Pmx = (*parPmx)[jParts]; Pmy = (*parPmy)[jParts]; Pmz = (*parPmz)[jParts];
 			/////////////////////////////////////////////////////////////////////////////////////////////////
-			
+				
 			Pythia8::Vec4 Pm4(Pmx, Pmy, Pmz, Eto);
  			event.append(Pdg, 1, 0, 0, Pm4);
 
@@ -633,6 +655,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 
+		Gammas[iEvent]=(*isrMax)[0]; 
+		Sprime[iEvent]=(*eveSpr)[0];
+
 		// 0% cut on √s'
 		if ((*eveSpr)[0] >= 0){
 			
@@ -650,6 +675,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			
 			hist_nHadron_000->Fill(nCh);
 			hist_ThrPyth_000->Fill((*eveThr)[0]); hist_ThrPy99_000->Fill((*eveThr)[0]);
+
+			hist_NumbISR->Fill((*isrNum)[0]);
+			hist_EnrgISR->Fill((*isrEng)[0]);
+			hist_EmaxISR->Fill((*isrMax)[0]);
 
 			// Process cuts
 			if ((*eveCod)[0] == 221) {
@@ -760,7 +789,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	DrawJets3D_Combined(allJets, procCodes);
+	// DrawJets3D_Combined(allJets, procCodes);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -775,6 +804,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	cout << "----------------------------------------" << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	TGraph *ISRvsEsprime = new TGraph(itree->GetEntries(), Gammas, Sprime);
+	ISRvsEsprime->GetXaxis()->SetTitle("#sqrt{s'}");
+	ISRvsEsprime->GetYaxis()->SetTitle("#events");
+	otree->Branch("ISRvsEsprime", &ISRvsEsprime, "ISRvsEsprime");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // KNO Scaling
@@ -821,8 +855,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
-	applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);
+	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365);
+	// applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
+	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);
 	// applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root", 500.0);
 	// applyCuts("gen_TES50t_noR_noH.root", "cut_TES50t_noR_noH.root", 500.0);
 	// applyCuts("gen_TES500_noR.root", "cut_TES500_noR.root", 500.0);

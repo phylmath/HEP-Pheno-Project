@@ -32,6 +32,7 @@
 #include "TPaveStats.h"
 #include "TList.h"
 #include "TLorentzVector.h"
+#include <algorithm>
 // Header
 using namespace Pythia8;
 using namespace std;
@@ -46,14 +47,14 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_240_wiR.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
 	// Intialise vecs
-	vector<int> eveNum, eveSiz, eveCod, parNum, parPdg;
-	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
+	vector<int> eveNum, eveSiz, eveCod, isrNum, parNum, parPdg;
+	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, isrEng, isrMax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);										// Total sigma
@@ -65,6 +66,9 @@ int main(){
 	tree->Branch("eveSax", "vector<float>", &eveSax);										// Event sphaxis
 	tree->Branch("eveThr", "vector<float>", &eveThr);										// Event thrust
 	tree->Branch("eveTax", "vector<float>", &eveTax);										// Event thraxis
+	tree->Branch("isrNum", "vector<int>", &isrNum);											// ISR γ number
+	tree->Branch("isrEng", "vector<float>", &isrEng);										// ISR γ energy
+	tree->Branch("isrMax", "vector<float>", &isrMax);										// ISR γ energy
 	tree->Branch("parNum", "vector<int>", &parNum);											// Parts number
 	tree->Branch("parPdg", "vector<int>", &parPdg);											// Parts pdg id
 	tree->Branch("parEto", "vector<float>", &parEto);										// Parts energy
@@ -85,8 +89,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1e5;
-	int nEnerg = 240;
+	int nEvent = 1e4;
+	// Set centre mass
+	int nEnerg = 365;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -124,6 +129,7 @@ int main(){
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing
 	pythia.readString("Next:numberCount = 1000");											// print #events updates
+	pythia.readString("Next:numberShowEvent = 10");
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,8 +140,11 @@ int main(){
 	// Initialise PYTHIA
 	pythia.init();
 
-	// Analyses
+	// Define analytics
 	Thrust thr; Sphericity sph; Event event_fch;
+
+	// Define vars
+	vector<float> gammas;
 	float sigISR=0.0, sigmaE=0.0;
 	int nCh=0, nISR=0, nC_ZZ=0, nC_WW=0;
 	
@@ -145,13 +154,15 @@ int main(){
 		// Anti-crash
 		if (!pythia.next()) continue;
 
-		// Counter
-		nCh=0; sigISR=0.0; sigmaE=0.0;
+		// Reset vars
+		nCh=0; sigISR=0.0; sigmaE=0.0; nISR=0;
 
 		// Reset event vectors
 		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
 		eveSpr.clear(); eveThr.clear(); eveTax.clear(); eveSiz.clear();
 		eveCod.clear(); eveSph.clear(); eveSax.clear();
+		// Reset ISR vectors
+		isrNum.clear(); isrEng.clear(); isrMax.clear(); gammas.clear();
 		// Reset part vectors
 		parNum.clear(); parPdg.clear(); parEto.clear(); 
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
@@ -179,21 +190,34 @@ int main(){
 			}
 
 			// Search ISR photon
-			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22) {
+			if (pythia.event[jParts].id()==22 && abs(pythia.event[jParts].status())==43) {
 				
 				// Store origins
-				int idmom1 = pythia.event[jParts].mother1();
-				int idmom2 = pythia.event[jParts].mother2();
+				int idmom1 = pythia.event[jParts].mother1(); int idmom2 = pythia.event[jParts].mother2();
 
-				// ISR found
-				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) )
-					if ( pythia.event[jParts].e()>0.001 ) if (pythia.event[jParts].e() > sigISR)
-						sigISR=pythia.event[jParts].e();
+				// Check mothers
+				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) ) {
+						
+						// Count isr photons
+						nISR++;
+
+						// Print info
+						// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
+						
+						// Store infos
+						gammas.push_back(pythia.event[jParts].e());
+						sigISR = pythia.event[jParts].e();
+
+				}
 				
 			}
 
 		}
-		
+
+		// Store ISR info
+		// if( nISR > 1 ) cout << nISR << " photons found in event " << iEvent << endl;
+		isrNum.push_back(nISR); isrEng.push_back(sigISR); isrMax.push_back(*std::max_element(gammas.begin(),gammas.end()));
+
 		// Compute √s'
 		sigISR = nEnerg*sqrt(1.0-(2.0*sigISR)/nEnerg);
 
