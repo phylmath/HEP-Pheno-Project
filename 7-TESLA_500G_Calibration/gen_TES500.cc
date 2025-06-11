@@ -47,7 +47,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -89,9 +89,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1e4;
+	int nEvent = 1e5;
 	// Set centre mass
-	int nEnerg = 365;
+	int nEnerg = 91.2;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -129,7 +129,7 @@ int main(){
 	// Suppress terminal text
 	pythia.readString("Print:quiet = on");													// print nothing
 	pythia.readString("Next:numberCount = 1000");											// print #events updates
-	pythia.readString("Next:numberShowEvent = 10");
+	// pythia.readString("Next:numberShowEvent = 10");
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -144,9 +144,7 @@ int main(){
 	Thrust thr; Sphericity sph; Event event_fch;
 
 	// Define vars
-	vector<float> gammas;
-	float sigISR=0.0, sigmaE=0.0;
-	int nCh=0, nISR=0, nC_ZZ=0, nC_WW=0;
+	float sigISR=0.0, sigmaE=0.0; int nCh=0, nISR=0;
 	
 	// Run through events
 	for (int iEvent=0; iEvent<nEvent; iEvent++ ) {
@@ -162,7 +160,7 @@ int main(){
 		eveSpr.clear(); eveThr.clear(); eveTax.clear(); eveSiz.clear();
 		eveCod.clear(); eveSph.clear(); eveSax.clear();
 		// Reset ISR vectors
-		isrNum.clear(); isrEng.clear(); isrMax.clear(); gammas.clear();
+		isrNum.clear(); isrEng.clear(); isrMax.clear();
 		// Reset part vectors
 		parNum.clear(); parPdg.clear(); parEto.clear(); 
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
@@ -201,12 +199,12 @@ int main(){
 						// Count isr photons
 						nISR++;
 
-						// Print info
+						// Print isr info
 						// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
 						
-						// Store infos
-						gammas.push_back(pythia.event[jParts].e());
-						sigISR = pythia.event[jParts].e();
+						// Store isr info
+						isrEng.push_back(pythia.event[jParts].e()/nEnerg);
+						sigISR =+ pythia.event[jParts].e();
 
 				}
 				
@@ -214,12 +212,16 @@ int main(){
 
 		}
 
-		// Store ISR info
+		// Print ISR info
 		// if( nISR > 1 ) cout << nISR << " photons found in event " << iEvent << endl;
-		isrNum.push_back(nISR); isrEng.push_back(sigISR); isrMax.push_back(*std::max_element(gammas.begin(),gammas.end()));
+		// cout << *std::max_element(gammas.begin(),gammas.end()) << " GeV photon at √s' = " << sigISR << endl;
 
 		// Compute √s'
 		sigISR = nEnerg*sqrt(1.0-(2.0*sigISR)/nEnerg);
+	
+		// Store ISR info
+		isrNum.push_back(nISR);
+		isrMax.push_back(*std::max_element(isrEng.begin(),isrEng.end()));
 
 		// Store event info
 		if (nCh!=0) {

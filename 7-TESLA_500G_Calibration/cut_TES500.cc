@@ -33,6 +33,7 @@
 #include "TEllipse.h"
 #include "TText.h"
 #include "TPolyLine3D.h"
+#include <TVectorF.h>
 // Header
 using namespace Pythia8;
 using namespace std;
@@ -272,47 +273,47 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Define histograms, Add branches
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_Esprime_norm = new TH1F("hist_Esprime_norm", "Reduced centre-of-mass", 100, 0, 1);
+	TH1F *hist_Esprime_norm = new TH1F("hist_Esprime_norm", "Reduced energy after ISR", 100, 0, 1);
 	hist_Esprime_norm->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_norm->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_norm", &hist_Esprime_norm, "hist_Esprime_norm");
 
-	TH1F *hist_Esprime_al = new TH1F("hist_Esprime_al", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_al = new TH1F("hist_Esprime_al", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_al->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_al->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_al", &hist_Esprime_al, "hist_Esprime_al");
 
-	TH1F *hist_Esprime_HZ = new TH1F("hist_Esprime_HZ", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_HZ = new TH1F("hist_Esprime_HZ", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_HZ->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_HZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_HZ", &hist_Esprime_HZ, "hist_Esprime_HZ");
 
-	TH1F *hist_Esprime_hZ = new TH1F("hist_Esprime_hZ", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_hZ = new TH1F("hist_Esprime_hZ", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_hZ->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_hZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_hZ", &hist_Esprime_hZ, "hist_Esprime_hZ");
 
-	TH1F *hist_Esprime_hW = new TH1F("hist_Esprime_hW", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_hW = new TH1F("hist_Esprime_hW", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_hW->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_hW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_hW", &hist_Esprime_hW, "hist_Esprime_hW");
 
-	TH1F *hist_Esprime_Zq = new TH1F("hist_Esprime_Zq", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_Zq = new TH1F("hist_Esprime_Zq", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_Zq->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_Zq->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_Zq", &hist_Esprime_Zq, "hist_Esprime_Zq");
 	
-	TH1F *hist_Esprime_tt = new TH1F("hist_Esprime_tt", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_tt = new TH1F("hist_Esprime_tt", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_tt->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_tt->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_tt", &hist_Esprime_tt, "hist_Esprime_tt");
 
-	TH1F *hist_Esprime_WW = new TH1F("hist_Esprime_WW", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_WW = new TH1F("hist_Esprime_WW", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_WW->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_WW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_WW", &hist_Esprime_WW, "hist_Esprime_WW");
 
-	TH1F *hist_Esprime_ZZ = new TH1F("hist_Esprime_ZZ", "Reduced centre-of-mass", 108, -1, 541);
+	TH1F *hist_Esprime_ZZ = new TH1F("hist_Esprime_ZZ", "Reduced energy after ISR", 200, -1, 366);
 	hist_Esprime_ZZ->GetXaxis()->SetTitle("#sqrt{s'}");
 	hist_Esprime_ZZ->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_Esprime_ZZ", &hist_Esprime_ZZ, "hist_Esprime_ZZ");
@@ -562,18 +563,18 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_NumbISR = new TH1F("hist_NumbISR", "Number of ISR photons", 100, 0, 10);
-	hist_NumbISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	TH1F *hist_NumbISR = new TH1F("hist_NumbISR", "Number of ISR photons", 12, -1, 11);
+	hist_NumbISR->GetXaxis()->SetTitle("#E_{#gamma}");
 	hist_NumbISR->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_NumbISR", &hist_NumbISR, "hist_NumbISR");
 
-	TH1F *hist_EnrgISR = new TH1F("hist_EnrgISR", "Energy of ISR photons", 100, 0, 500);
-	hist_EnrgISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	TH1F *hist_EnrgISR = new TH1F("hist_EnrgISR", "Energy of all ISR photons", 100, 0, 0.6);
+	hist_EnrgISR->GetXaxis()->SetTitle("E_{#gamma}/#sqrt{s}");
 	hist_EnrgISR->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_EnrgISR", &hist_EnrgISR, "hist_EnrgISR");
 
-	TH1F *hist_EmaxISR = new TH1F("hist_EmaxISR", "Max energy of ISR photons", 100, 0, 500);
-	hist_EmaxISR->GetXaxis()->SetTitle("#sqrt{s'}");
+	TH1F *hist_EmaxISR = new TH1F("hist_EmaxISR", "Energy of max ISR photons", 100, 0, 0.6);
+	hist_EmaxISR->GetXaxis()->SetTitle("E_{#gamma}/#sqrt{s}");
 	hist_EmaxISR->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_EmaxISR", &hist_EmaxISR, "hist_EmaxISR");
 	
@@ -581,9 +582,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Perform cuts, Populate histograms
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Define
+	// Define vars
 	int nCh=0, nCj=0, nParts=0, Pdg=0, Rad_000=0, Rad_060=0, Rad_085=0, Rad_100=0;
-	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr, Gammas[itree->GetEntries()], Sprime[itree->GetEntries()];
+	float Pmx, Pmy, Pmz, Eto, Ett, Thr, Tax, Sph, Sax, Spr;
 	vector<vector<PseudoJet>> allJets;
     vector<int> procCodes;
 	
@@ -609,17 +610,14 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			////////////////////////// READING PARTS DATA ///////////////////////////////////////////////////
 			Pdg = (*parPdg)[jParts]; Eto = (*parEto)[jParts]; Ett = (*parEtt)[jParts];
 			Pmx = (*parPmx)[jParts]; Pmy = (*parPmy)[jParts]; Pmz = (*parPmz)[jParts];
+			hist_EnrgISR->Fill((*isrEng)[0]);
 			/////////////////////////////////////////////////////////////////////////////////////////////////
-				
 			Pythia8::Vec4 Pm4(Pmx, Pmy, Pmz, Eto);
  			event.append(Pdg, 1, 0, 0, Pm4);
-
 			////////////////////////// STORING JETS PARAMS //////////////////////////////////////////////////
 			fastjet::PseudoJet particle(Pmx,Pmy,Pmz,Eto);								// Particle vector
 			particle.set_user_index(Pdg);												// Set particle id
-			particles.push_back(particle);												// Add to particles
-			/////////////////////////////////////////////////////////////////////////////////////////////////
-			
+			particles.push_back(particle);												// Add to particles		
 			////////////////////////// COMPUTING NCH CURVE //////////////////////////////////////////////////
 			nCh++;																		// Charged hadrons
 			/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -655,16 +653,13 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 
-		Gammas[iEvent]=(*isrMax)[0]; 
-		Sprime[iEvent]=(*eveSpr)[0];
-
 		// 0% cut on √s'
 		if ((*eveSpr)[0] >= 0){
 			
 			Rad_000++;
 
 			hist_Esprime_al->Fill((*eveSpr)[0]);
-			hist_Esprime_norm->Fill((*eveSpr)[0]/91.2);
+			hist_Esprime_norm->Fill((*eveSpr)[0]/nEnerg);
 
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
@@ -674,10 +669,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			hist_nJetTot->Fill(nCj);
 			
 			hist_nHadron_000->Fill(nCh);
-			hist_ThrPyth_000->Fill((*eveThr)[0]); hist_ThrPy99_000->Fill((*eveThr)[0]);
+			hist_ThrPyth_000->Fill((*eveThr)[0]); 
+			hist_ThrPy99_000->Fill((*eveThr)[0]);
 
+			// cout << (*isrNum)[0] << endl;
 			hist_NumbISR->Fill((*isrNum)[0]);
-			hist_EnrgISR->Fill((*isrEng)[0]);
 			hist_EmaxISR->Fill((*isrMax)[0]);
 
 			// Process cuts
@@ -804,13 +800,6 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	cout << "----------------------------------------" << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	TGraph *ISRvsEsprime = new TGraph(itree->GetEntries(), Gammas, Sprime);
-	ISRvsEsprime->GetXaxis()->SetTitle("#sqrt{s'}");
-	ISRvsEsprime->GetYaxis()->SetTitle("#events");
-	otree->Branch("ISRvsEsprime", &ISRvsEsprime, "ISRvsEsprime");
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // KNO Scaling
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -855,8 +844,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365);
-	// applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
+	applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+
 	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
 	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);
 	// applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root", 500.0);
