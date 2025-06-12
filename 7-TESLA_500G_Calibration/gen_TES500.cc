@@ -47,7 +47,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -89,9 +89,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1e5;
+	int nEvent = 1e6;
 	// Set centre mass
-	int nEnerg = 91.2;
+	int nEnerg = 365;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -188,23 +188,24 @@ int main(){
 			}
 
 			// Search ISR photon
-			if (pythia.event[jParts].id()==22 && abs(pythia.event[jParts].status())==43) {
+			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22 && abs(pythia.event[jParts].status())==43) {
 				
 				// Store origins
 				int idmom1 = pythia.event[jParts].mother1(); int idmom2 = pythia.event[jParts].mother2();
+				int iddod1 = pythia.event[jParts].daughter1(); int iddod2 = pythia.event[jParts].daughter2();
 
 				// Check mothers
 				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) ) {
 						
-						// Count isr photons
-						nISR++;
+					// Count isr photons
+					nISR++;
 
-						// Print isr info
-						// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
-						
-						// Store isr info
-						isrEng.push_back(pythia.event[jParts].e()/nEnerg);
-						sigISR =+ pythia.event[jParts].e();
+					// Print isr info
+					// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
+					
+					// Store isr info
+					isrEng.push_back(pythia.event[jParts].e()/nEnerg);
+					sigISR =+ pythia.event[jParts].e();
 
 				}
 				
@@ -213,7 +214,7 @@ int main(){
 		}
 
 		// Print ISR info
-		// if( nISR > 1 ) cout << nISR << " photons found in event " << iEvent << endl;
+		if( nISR > 1 ) cout << nISR << " photons found in event " << iEvent << endl;
 		// cout << *std::max_element(gammas.begin(),gammas.end()) << " GeV photon at √s' = " << sigISR << endl;
 
 		// Compute √s'

@@ -563,7 +563,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_NumbISR = new TH1F("hist_NumbISR", "Number of ISR photons", 12, -1, 11);
+	TH1F *hist_NumbISR = new TH1F("hist_NumbISR", "Number of ISR photons", 2, 0, 2);
 	hist_NumbISR->GetXaxis()->SetTitle("#E_{#gamma}");
 	hist_NumbISR->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_NumbISR", &hist_NumbISR, "hist_NumbISR");
@@ -667,10 +667,6 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			hist_SaxPyth->Fill((*eveSax)[0]);
 			hist_nHadron->Fill(nCh);
 			hist_nJetTot->Fill(nCj);
-			
-			hist_nHadron_000->Fill(nCh);
-			hist_ThrPyth_000->Fill((*eveThr)[0]); 
-			hist_ThrPy99_000->Fill((*eveThr)[0]);
 
 			// cout << (*isrNum)[0] << endl;
 			hist_NumbISR->Fill((*isrNum)[0]);
@@ -689,6 +685,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 				hist_nHadron_noH->Fill(nCh);
 				hist_ThrPyth_noH->Fill((*eveThr)[0]);
+
+				hist_nHadron_000->Fill(nCh);
+				hist_ThrPyth_000->Fill((*eveThr)[0]); 
+				hist_ThrPy99_000->Fill((*eveThr)[0]);
 			}
 			if ((*eveCod)[0] == 231) {
 				hist_Esprime_ZZ->Fill((*eveSpr)[0]);
@@ -746,7 +746,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// 60% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.6) {
+		if ((*eveSpr)[0] >= nEnerg*0.6 && (*eveCod)[0] == 221) {
 			Rad_060++;
 			hist_ThrPyth_060->Fill((*eveThr)[0]); 
 			hist_ThrPy99_060->Fill((*eveThr)[0]);
@@ -754,7 +754,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// 85% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.85) {
+		if ((*eveSpr)[0] >= nEnerg*0.85 && (*eveCod)[0] == 221) {
 			Rad_085++;
 			hist_ThrPyth_085->Fill((*eveThr)[0]); 
 			hist_ThrPy99_085->Fill((*eveThr)[0]);
@@ -762,7 +762,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// 100% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg) {
+		if ((*eveSpr)[0] >= nEnerg*1.00 && (*eveCod)[0] == 221) {
 			Rad_100++;
 			hist_ThrPyth_100->Fill((*eveThr)[0]); 
 			hist_ThrPy99_100->Fill((*eveThr)[0]);
@@ -793,10 +793,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	cout << "----------------------------------------" << endl;
 	cout << "Colliding at " << nEnerg << " GeV " << endl;
 	cout << "----------------------------------------" << endl;
-	cout << "Radiative events ≥ " << nEnerg*0.00 << " GeV : " << Rad_000 << endl;
-	cout << "Radiative events ≥ " << nEnerg*0.60 << " GeV : " << Rad_060 << endl;
-	cout << "Radiative events ≥ " << nEnerg*0.85 << " GeV : " << Rad_085 << endl;
-	cout << "Radiative events ≥ " << nEnerg*1.00 << " GeV : " << Rad_100 << endl;
+	cout << "Events ≥ " << nEnerg*0.00 << " GeV : " << Rad_000 << endl;
+	cout << "Events ≥ " << nEnerg*0.60 << " GeV : " << Rad_060 << endl;
+	cout << "Events ≥ " << nEnerg*0.85 << " GeV : " << Rad_085 << endl;
+	cout << "Events ≥ " << nEnerg*1.00 << " GeV : " << Rad_100 << endl;
 	cout << "----------------------------------------" << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -808,6 +808,11 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	TH1F* KNOO_nHadron_ZZ = ComputeKNOScaling(hist_nHadron_ZZ, "KNOO_nHadron_ZZ");
 	TH1F* KNOO_nHadron_WW = ComputeKNOScaling(hist_nHadron_WW, "KNOO_nHadron_WW");
 	TH1F* KNOO_nHadron_tt = ComputeKNOScaling(hist_nHadron_tt, "KNOO_nHadron_tt");
+
+	TH1F* KNOO_nHadron_000 = ComputeKNOScaling(hist_nHadron_000, "KNOO_nHadron_000");
+	TH1F* KNOO_nHadron_060 = ComputeKNOScaling(hist_nHadron_060, "KNOO_nHadron_060");
+	TH1F* KNOO_nHadron_085 = ComputeKNOScaling(hist_nHadron_085, "KNOO_nHadron_085");
+	TH1F* KNOO_nHadron_100 = ComputeKNOScaling(hist_nHadron_100, "KNOO_nHadron_100");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Bin width normalising
