@@ -308,7 +308,7 @@ void ImpactofISR() {
 	TLegend *lg2 = new TLegend(0.64, 0.65, 0.87, 0.87);
 	lg2->AddEntry(hist_ThrPyth_365_000, "0.00#sqrt{s'} cut", "p");
 	lg2->AddEntry(hist_ThrPyth_365_060, "0.65#sqrt{s'} cut", "p");
-	lg2->AddEntry(hist_ThrPyth_365_085, "0.80#sqrt{s'} cut", "p");
+	lg2->AddEntry(hist_ThrPyth_365_085, "0.85#sqrt{s'} cut", "p");
 	lg2->AddEntry(hist_ThrPyth_365_100, "1.00#sqrt{s'} cut", "p");
 	lg2->SetTextSize(0.03);
 	

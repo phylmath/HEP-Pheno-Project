@@ -754,7 +754,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// 85% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.85 && (*eveCod)[0] == 221) {
+		if ((*eveSpr)[0] >= nEnerg*0.99 && (*eveCod)[0] == 221) {
 			Rad_085++;
 			hist_ThrPyth_085->Fill((*eveThr)[0]); 
 			hist_ThrPy99_085->Fill((*eveThr)[0]);
