@@ -33,6 +33,7 @@
 #include "TList.h"
 #include "TLorentzVector.h"
 #include <algorithm>
+#include <numeric>
 // Header
 using namespace Pythia8;
 using namespace std;
@@ -47,14 +48,14 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC500.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
 	// Intialise vecs
-	vector<int> eveNum, eveSiz, eveCod, isrNum, parNum, parPdg;
-	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, isrEng, isrMax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
+	vector<int> eveNum, eveSiz, eveCod, isrNum, parNum, parPdg, parChg;
+	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, isrMax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);										// Total sigma
@@ -67,10 +68,10 @@ int main(){
 	tree->Branch("eveThr", "vector<float>", &eveThr);										// Event thrust
 	tree->Branch("eveTax", "vector<float>", &eveTax);										// Event thraxis
 	tree->Branch("isrNum", "vector<int>", &isrNum);											// ISR γ number
-	tree->Branch("isrEng", "vector<float>", &isrEng);										// ISR γ energy
 	tree->Branch("isrMax", "vector<float>", &isrMax);										// ISR γ energy
 	tree->Branch("parNum", "vector<int>", &parNum);											// Parts number
 	tree->Branch("parPdg", "vector<int>", &parPdg);											// Parts pdg id
+	tree->Branch("parChg", "vector<int>", &parChg);											// Parts charge
 	tree->Branch("parEto", "vector<float>", &parEto);										// Parts energy
 	tree->Branch("parEtt", "vector<float>", &parEtt);										// Parts energy
 	tree->Branch("parPmx", "vector<float>", &parPmx);										// Parts mom-x
@@ -89,9 +90,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1e6;
+	int nEvent = 5e4;
 	// Set centre mass
-	int nEnerg = 365;
+	int nEnerg = 500.0;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -99,7 +100,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", nEnerg);												// c-om energy
-	pythia.readString("PDF:lepton = on");													// ISR toggle
+	pythia.readString("PDF:lepton = off");													// ISR toggle
 	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
@@ -116,12 +117,12 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (233) ee'->WW
 	// Constrain decays
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6");									// turn on W iff duscbt
 	
-	// Higgs processes
-	pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
-	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = on");											// (906) ee'->ZZ->H
-	pythia.readString("HiggsSM:ff2Hff(t:WW) = on");											// (907) ee'->WW->H
+	// // Higgs processes
+	// pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
+	// pythia.readString("HiggsSM:ff2Hff(t:ZZ) = on");											// (906) ee'->ZZ->H
+	// pythia.readString("HiggsSM:ff2Hff(t:WW) = on");											// (907) ee'->WW->H
 	// Constrain decays
 	pythia.readString("25:onMode = off");													// turn off H production
 	pythia.readString("25:onIfAny = 1 2 3 4 5 6");											// turn on H iff duscbt
@@ -145,6 +146,7 @@ int main(){
 
 	// Define vars
 	float sigISR=0.0, sigmaE=0.0; int nCh=0, nISR=0;
+	vector<float> isrEng;
 	
 	// Run through events
 	for (int iEvent=0; iEvent<nEvent; iEvent++ ) {
@@ -162,22 +164,21 @@ int main(){
 		// Reset ISR vectors
 		isrNum.clear(); isrEng.clear(); isrMax.clear();
 		// Reset part vectors
-		parNum.clear(); parPdg.clear(); parEto.clear(); 
+		parNum.clear(); parPdg.clear(); parChg.clear(); parEto.clear(); 
 		parEtt.clear(); parPmx.clear(); parPmy.clear(); parPmz.clear();
 
 		// Run through particles
 		for (int jParts=0; jParts<pythia.event.size(); jParts++) {
 
-			// Sum final energies
-			if (pythia.event[jParts].isFinal()) sigmaE+=pythia.event[jParts].e();
-
 			// Store particle info
-			if (pythia.event[jParts].isFinal() && pythia.event[jParts].isCharged()) {
+			if (pythia.event[jParts].isFinal()) {
 		
+				sigmaE+=pythia.event[jParts].e();											// Sum final energies
 				nCh++;																		// Count FC particles
 				eveNum.push_back(iEvent);													// Add event number
 				parNum.push_back(jParts);													// Add particle number
 				parPdg.push_back(pythia.event[jParts].id());								// Add particle pdg id
+				parChg.push_back(pythia.particleData.charge(pythia.event[jParts].id()));	// Add particle charge
 				parEto.push_back(pythia.event[jParts].e());									// Add particle energy
 				parEtt.push_back(pythia.event[jParts].eT());								// Add particle energy
 				parPmx.push_back(pythia.event[jParts].px());								// Add particle mom-x
@@ -185,44 +186,42 @@ int main(){
 				parPmz.push_back(pythia.event[jParts].pz());								// Add particle mom-z
 				event_fch.append(pythia.event[jParts]);										// Update event vector
 
+				// Search ISR photon
+				if (pythia.event[jParts].id()==22 && pythia.event[jParts].status()==43) {
+					
+					// Store origins
+					int idmom1 = pythia.event[jParts].mother1(); int idmom2 = pythia.event[jParts].mother2();
+					int iddod1 = pythia.event[jParts].daughter1(); int iddod2 = pythia.event[jParts].daughter2();
+
+					// Check mothers
+					if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) ) {
+						
+						// Print isr info
+						// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
+						// Count isr photons
+						nISR++;																// Count isr photons
+						isrEng.push_back(pythia.event[jParts].e()/nEnerg);					// Count event isr
+						sigISR =+ pythia.event[jParts].e();									// 
+
+					}
+					
+				}
+
 			}
 			
-			// Search ISR photon
-			if (pythia.event[jParts].isFinal() && pythia.event[jParts].id()==22 && abs(pythia.event[jParts].status())==43) {
-				
-				// Store origins
-				int idmom1 = pythia.event[jParts].mother1(); int idmom2 = pythia.event[jParts].mother2();
-				int iddod1 = pythia.event[jParts].daughter1(); int iddod2 = pythia.event[jParts].daughter2();
-
-				// Check mothers
-				if ( (abs(pythia.event[idmom1].id())==11 || abs(pythia.event[idmom2].id())==11) ) {
-						
-					// Count isr photons
-					nISR++;
-
-					// Print isr info
-					// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
-					
-					// Store isr info
-					isrEng.push_back(pythia.event[jParts].e()/nEnerg);
-					sigISR =+ pythia.event[jParts].e();
-
-				}
-				
-			}
-
 		}
 
 		// Print ISR info
 		if( nISR > 1 ) cout << nISR << " photons found in event " << iEvent << endl;
 		// cout << *std::max_element(gammas.begin(),gammas.end()) << " GeV photon at √s' = " << sigISR << endl;
 
-		// Compute √s'
-		sigISR = nEnerg*sqrt(1.0-(2.0*sigISR)/nEnerg);
-	
 		// Store ISR info
 		isrNum.push_back(nISR);
-		isrMax.push_back(*std::max_element(isrEng.begin(),isrEng.end()));
+		if (!isrEng.empty()) isrMax.push_back(*std::max_element(isrEng.begin(),isrEng.end()));
+		else isrMax.push_back(0.0);
+
+		// Compute √s'
+		sigISR = nEnerg*sqrt(1.0-(2.0*sigISR)/nEnerg);
 
 		// Store event info
 		if (nCh!=0) {

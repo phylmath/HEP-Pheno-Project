@@ -243,10 +243,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 	// Intialise vecs
 	vector<int> *eveNum=nullptr, *eveSiz=nullptr, *eveCod=nullptr, *parNum=nullptr, *parPdg=nullptr, \
-	 *isrNum=nullptr;
+	 *parChg=nullptr, *isrNum=nullptr;
 	vector<float> *eveThr=nullptr, *eveTax=nullptr, *eveSph=nullptr, *eveSax=nullptr, *eveSpr=nullptr, \
 	 *sigmaT=nullptr, *parEto=nullptr, *parEtt=nullptr, *parPmx=nullptr, *parPmy=nullptr, *parPmz=nullptr, \
-	 *isrEng=nullptr, *isrMax=nullptr;
+	 *isrMax=nullptr;
 
 	// Set branches
 	itree->SetBranchAddress("sigmaT", &sigmaT);											// Total sigma
@@ -259,10 +259,10 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	itree->SetBranchAddress("eveThr", &eveThr);											// Event thrust
 	itree->SetBranchAddress("eveTax", &eveTax);											// Event thraxis
 	itree->SetBranchAddress("isrNum", &isrNum);											// ISR γ number
-	itree->SetBranchAddress("isrEng", &isrEng);											// ISR γ energy
 	itree->SetBranchAddress("isrMax", &isrMax);											// ISR γ energy
 	itree->SetBranchAddress("parNum", &parNum);											// Parts number
 	itree->SetBranchAddress("parPdg", &parPdg);											// Parts pdg id
+	itree->SetBranchAddress("parChg", &parChg);											// Parts charge
 	itree->SetBranchAddress("parEto", &parEto);											// Parts energy
 	itree->SetBranchAddress("parEtt", &parEtt);											// Parts energy
 	itree->SetBranchAddress("parPmx", &parPmx);											// Parts mom-x
@@ -568,11 +568,6 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_NumbISR->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_NumbISR", &hist_NumbISR, "hist_NumbISR");
 
-	TH1F *hist_EnrgISR = new TH1F("hist_EnrgISR", "Energy of all ISR photons", 100, 0, 0.6);
-	hist_EnrgISR->GetXaxis()->SetTitle("E_{#gamma}/#sqrt{s}");
-	hist_EnrgISR->GetYaxis()->SetTitle("#events");
-	otree->Branch("hist_EnrgISR", &hist_EnrgISR, "hist_EnrgISR");
-
 	TH1F *hist_EmaxISR = new TH1F("hist_EmaxISR", "Energy of max ISR photons", 100, 0, 0.6);
 	hist_EmaxISR->GetXaxis()->SetTitle("E_{#gamma}/#sqrt{s}");
 	hist_EmaxISR->GetYaxis()->SetTitle("#events");
@@ -610,17 +605,18 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 			////////////////////////// READING PARTS DATA ///////////////////////////////////////////////////
 			Pdg = (*parPdg)[jParts]; Eto = (*parEto)[jParts]; Ett = (*parEtt)[jParts];
 			Pmx = (*parPmx)[jParts]; Pmy = (*parPmy)[jParts]; Pmz = (*parPmz)[jParts];
-			hist_EnrgISR->Fill((*isrEng)[0]);
+			
 			/////////////////////////////////////////////////////////////////////////////////////////////////
 			Pythia8::Vec4 Pm4(Pmx, Pmy, Pmz, Eto);
  			event.append(Pdg, 1, 0, 0, Pm4);
+			
 			////////////////////////// STORING JETS PARAMS //////////////////////////////////////////////////
 			fastjet::PseudoJet particle(Pmx,Pmy,Pmz,Eto);								// Particle vector
 			particle.set_user_index(Pdg);												// Set particle id
 			particles.push_back(particle);												// Add to particles		
+			
 			////////////////////////// COMPUTING NCH CURVE //////////////////////////////////////////////////
-			nCh++;																		// Charged hadrons
-			/////////////////////////////////////////////////////////////////////////////////////////////////
+			if ((*parChg)[jParts]!=0) nCh++;											// Charged hadrons
 
 		}
 		
@@ -629,7 +625,6 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		fastjet::ClusterSequence cs(particles, jet_def);								// Run clustering
 		vector<fastjet::PseudoJet> jets = sorted_by_pt(cs.inclusive_jets(ptmin));		// Sort/store jets
 		nCj = jets.size();																// Jet multiplicity
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// PRINTING CLUSTERED INFO //////////////////////////////////////////////////
 
@@ -649,17 +644,13 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 			}
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		////////////////////////// COMPUTING EVENT SHAPES VARS //////////////////////////////////////////////
 
 		// 0% cut on √s'
 		if ((*eveSpr)[0] >= 0){
-			
-			Rad_000++;
-
 			hist_Esprime_al->Fill((*eveSpr)[0]);
-			hist_Esprime_norm->Fill((*eveSpr)[0]/nEnerg);
+			hist_Esprime_norm->Fill((*eveSpr)[0]);
 
 			hist_ThrPyth->Fill((*eveThr)[0]);
 			hist_TaxPyth->Fill((*eveTax)[0]);
@@ -747,15 +738,13 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		// 60% cut on √s'
 		if ((*eveSpr)[0] >= nEnerg*0.6 && (*eveCod)[0] == 221) {
-			Rad_060++;
 			hist_ThrPyth_060->Fill((*eveThr)[0]); 
 			hist_ThrPy99_060->Fill((*eveThr)[0]);
 			hist_nHadron_060->Fill(nCh);
 		}
 
 		// 85% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.99 && (*eveCod)[0] == 221) {
-			Rad_085++;
+		if ((*eveSpr)[0] >= nEnerg*0.85 && (*eveCod)[0] == 221) {
 			hist_ThrPyth_085->Fill((*eveThr)[0]); 
 			hist_ThrPy99_085->Fill((*eveThr)[0]);
 			hist_nHadron_085->Fill(nCh);
@@ -763,11 +752,16 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 		// 100% cut on √s'
 		if ((*eveSpr)[0] >= nEnerg*1.00 && (*eveCod)[0] == 221) {
-			Rad_100++;
 			hist_ThrPyth_100->Fill((*eveThr)[0]); 
 			hist_ThrPy99_100->Fill((*eveThr)[0]);
 			hist_nHadron_100->Fill(nCh);
 		}
+
+		// Radiative checks
+		if ((*eveSpr)[0] >= nEnerg*0.00) Rad_000++;
+		if ((*eveSpr)[0] >= nEnerg*0.60) Rad_060++;
+		if ((*eveSpr)[0] >= nEnerg*0.85) Rad_085++;
+		if ((*eveSpr)[0] >= nEnerg*1.00) Rad_100++;
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -849,10 +843,12 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
-	applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
-	applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
-	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+	applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
+	// applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
+	// applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	// applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+	// applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
+	// applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
 
 	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
 	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);
