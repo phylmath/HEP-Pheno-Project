@@ -737,21 +737,21 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 		}
 
 		// 60% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.6 && (*eveCod)[0] == 221) {
-			hist_ThrPyth_060->Fill((*eveThr)[0]); 
+		if ((*eveSpr)[0] >= nEnerg*0.80 && (*eveCod)[0] == 221) {
+			hist_ThrPyth_060->Fill((*eveThr)[0]);
 			hist_ThrPy99_060->Fill((*eveThr)[0]);
 			hist_nHadron_060->Fill(nCh);
 		}
 
 		// 85% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*0.85 && (*eveCod)[0] == 221) {
+		if ((*eveSpr)[0] >= nEnerg-1.0 && (*eveCod)[0] == 221) {
 			hist_ThrPyth_085->Fill((*eveThr)[0]); 
 			hist_ThrPy99_085->Fill((*eveThr)[0]);
 			hist_nHadron_085->Fill(nCh);
 		}
 
 		// 100% cut on √s'
-		if ((*eveSpr)[0] >= nEnerg*1.00 && (*eveCod)[0] == 221) {
+		if ((*eveSpr)[0] >= nEnerg-0.5 && (*eveCod)[0] == 221) {
 			hist_ThrPyth_100->Fill((*eveThr)[0]); 
 			hist_ThrPy99_100->Fill((*eveThr)[0]);
 			hist_nHadron_100->Fill(nCh);
@@ -788,9 +788,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	cout << "Colliding at " << nEnerg << " GeV " << endl;
 	cout << "----------------------------------------" << endl;
 	cout << "Events ≥ " << nEnerg*0.00 << " GeV : " << Rad_000 << endl;
-	cout << "Events ≥ " << nEnerg*0.60 << " GeV : " << Rad_060 << endl;
-	cout << "Events ≥ " << nEnerg*0.85 << " GeV : " << Rad_085 << endl;
-	cout << "Events ≥ " << nEnerg*1.00 << " GeV : " << Rad_100 << endl;
+	cout << "Events ≥ " << nEnerg*0.80 << " GeV : " << Rad_060 << endl;
+	cout << "Events ≥ " << nEnerg-2.00 << " GeV : " << Rad_085 << endl;
+	cout << "Events ≥ " << nEnerg-1.00 << " GeV : " << Rad_100 << endl;
 	cout << "----------------------------------------" << endl;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -844,11 +844,11 @@ int main() {
 
 	// Call cut function
 	applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
-	// applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
-	// applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
-	// applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
-	// applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
-	// applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
+	applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
+	applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
 
 	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
 	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);

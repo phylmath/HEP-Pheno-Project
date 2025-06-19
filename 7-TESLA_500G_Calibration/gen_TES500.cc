@@ -48,7 +48,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC500.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -90,9 +90,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 5e4;
+	int nEvent = 5E5;
 	// Set centre mass
-	int nEnerg = 500.0;
+	int nEnerg = 91.2;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -100,7 +100,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", nEnerg);												// c-om energy
-	pythia.readString("PDF:lepton = off");													// ISR toggle
+	pythia.readString("PDF:lepton = on");													// ISR toggle
 	
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
@@ -120,9 +120,9 @@ int main(){
 	pythia.readString("24:onIfAny = 1 2 3 4 5 6");									// turn on W iff duscbt
 	
 	// // Higgs processes
-	// pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
-	// pythia.readString("HiggsSM:ff2Hff(t:ZZ) = on");											// (906) ee'->ZZ->H
-	// pythia.readString("HiggsSM:ff2Hff(t:WW) = on");											// (907) ee'->WW->H
+	pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
+	pythia.readString("HiggsSM:ff2Hff(t:ZZ) = on");											// (906) ee'->ZZ->H
+	pythia.readString("HiggsSM:ff2Hff(t:WW) = on");											// (907) ee'->WW->H
 	// Constrain decays
 	pythia.readString("25:onMode = off");													// turn off H production
 	pythia.readString("25:onIfAny = 1 2 3 4 5 6");											// turn on H iff duscbt

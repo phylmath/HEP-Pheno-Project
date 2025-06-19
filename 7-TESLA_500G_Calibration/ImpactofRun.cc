@@ -37,6 +37,7 @@ void ImpactofRun() {
 	TFile *input_180 = new TFile("cut_FCC180.root", "READ");
 	TFile *input_240 = new TFile("cut_FCC240.root", "READ");
 	TFile *input_365 = new TFile("cut_FCC365.root", "READ");
+	TFile *input_500 = new TFile("cut_FCC500.root", "READ");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plotting Impact of ISR Cuts on Thrust/Nch
@@ -47,11 +48,14 @@ void ImpactofRun() {
 	TH1F *hist_ThrPyth_180_100 = (TH1F*)input_180->Get("hist_ThrPyth_100");
 	TH1F *hist_ThrPyth_240_100 = (TH1F*)input_240->Get("hist_ThrPyth_100");
 	TH1F *hist_ThrPyth_365_100 = (TH1F*)input_365->Get("hist_ThrPyth_100");
+	TH1F *hist_ThrPyth_500_100 = (TH1F*)input_500->Get("hist_ThrPyth_100");
+
 	TH1F *hist_nHadron_912_100 = (TH1F*)input_912->Get("hist_nHadron_000");
 	TH1F *hist_nHadron_160_100 = (TH1F*)input_160->Get("hist_nHadron_100");
 	TH1F *hist_nHadron_180_100 = (TH1F*)input_180->Get("hist_nHadron_100");
 	TH1F *hist_nHadron_240_100 = (TH1F*)input_240->Get("hist_nHadron_100");
 	TH1F *hist_nHadron_365_100 = (TH1F*)input_365->Get("hist_nHadron_100");
+	TH1F *hist_nHadron_500_100 = (TH1F*)input_500->Get("hist_nHadron_100");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Normalisation
@@ -62,11 +66,14 @@ void ImpactofRun() {
 	hist_ThrPyth_180_100->Scale(1.0/hist_ThrPyth_180_100->Integral());
 	hist_ThrPyth_240_100->Scale(1.0/hist_ThrPyth_240_100->Integral());
 	hist_ThrPyth_365_100->Scale(1.0/hist_ThrPyth_365_100->Integral());
+	hist_ThrPyth_500_100->Scale(1.0/hist_ThrPyth_500_100->Integral());
+
 	hist_nHadron_912_100->Scale(1.0/hist_nHadron_912_100->Integral());
 	hist_nHadron_160_100->Scale(1.0/hist_nHadron_160_100->Integral());
 	hist_nHadron_180_100->Scale(1.0/hist_nHadron_180_100->Integral());
 	hist_nHadron_240_100->Scale(1.0/hist_nHadron_240_100->Integral());
 	hist_nHadron_365_100->Scale(1.0/hist_nHadron_365_100->Integral());
+	hist_nHadron_500_100->Scale(1.0/hist_nHadron_500_100->Integral());
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit titles
@@ -79,9 +86,9 @@ void ImpactofRun() {
 // Running of <1-T>
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	double Sprime[] = {91.2, 160.0, 180.0, 240.0, 365.0};
-	double Thrust[] = {hist_ThrPyth_912_100->GetMean(), hist_ThrPyth_160_100->GetMean(), hist_ThrPyth_180_100->GetMean(), hist_ThrPyth_240_100->GetMean(), hist_ThrPyth_365_100->GetMean()};
-	double Hadron[] = {hist_nHadron_912_100->GetMean(), hist_nHadron_160_100->GetMean(), hist_nHadron_180_100->GetMean(), hist_nHadron_240_100->GetMean(), hist_nHadron_365_100->GetMean()};
+	double Sprime[] = {91.2, 160.0, 180.0, 240.0, 365.0, 500.0};
+	double Thrust[] = {hist_ThrPyth_912_100->GetMean(), hist_ThrPyth_160_100->GetMean(), hist_ThrPyth_180_100->GetMean(), hist_ThrPyth_240_100->GetMean(), hist_ThrPyth_365_100->GetMean(), hist_ThrPyth_500_100->GetMean()};
+	double Hadron[] = {hist_nHadron_912_100->GetMean(), hist_nHadron_160_100->GetMean(), hist_nHadron_180_100->GetMean(), hist_nHadron_240_100->GetMean(), hist_nHadron_365_100->GetMean(), hist_nHadron_500_100->GetMean()};
 
 	TGraph* grap_RunThrust = new TGraph(sizeof(Sprime)/sizeof(Sprime[0]), Sprime, Thrust);
 	grap_RunThrust->SetTitle("Running of Inverse Thrust");
