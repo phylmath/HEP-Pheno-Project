@@ -37,6 +37,7 @@ void ImpactofISR() {
 	TFile *input_180 = new TFile("cut_FCC180.root", "READ");
 	TFile *input_240 = new TFile("cut_FCC240.root", "READ");
 	TFile *input_365 = new TFile("cut_FCC365.root", "READ");
+	TFile *input_500 = new TFile("cut_FCC500.root", "READ");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Impact of centre-of-mass on ISR photons and ISR energy

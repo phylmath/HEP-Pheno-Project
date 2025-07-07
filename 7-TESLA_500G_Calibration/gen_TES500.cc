@@ -117,7 +117,7 @@ int main(){
 	pythia.readString("WeakDoubleBoson:ffbar2WW = on");										// (233) ee'->WW
 	// Constrain decays
 	pythia.readString("24:onMode = off");													// turn off W production
-	pythia.readString("24:onIfAny = 1 2 3 4 5 6");									// turn on W iff duscbt
+	pythia.readString("24:onIfAny = 1 2 3 4 5 6");											// turn on W iff duscbt
 	
 	// // Higgs processes
 	pythia.readString("HiggsSM:ffbar2HZ = on");												// (904) ee'->H/Z
@@ -198,7 +198,7 @@ int main(){
 						
 						// Print isr info
 						// cout << "ISR Photon at " << jParts << " with " << pythia.event[jParts].e() << endl;
-						// Count isr photons
+
 						nISR++;																// Count isr photons
 						isrEng.push_back(pythia.event[jParts].e()/nEnerg);					// Count event isr
 						sigISR =+ pythia.event[jParts].e();									// 
