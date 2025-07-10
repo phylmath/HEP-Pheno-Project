@@ -413,7 +413,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_nJetTot_tt->GetXaxis()->SetTitle("N_{JETS}");
 	hist_nJetTot_tt->GetYaxis()->SetTitle("P(N_{JETS})");
 	otree->Branch("hist_nJetTot_tt", &hist_nJetTot_tt, "hist_nJetTot_tt");
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	float xbin[] = {0.0E+00,1.0E-02,2.0E-02,3.0E-02,4.0E-02,5.0E-02,7.0E-02,9.0E-02,1.2E-01,1.5E-01,2.2E-01,3.0E-01,4.0E-01};
@@ -843,12 +843,14 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 int main() {
 
 	// Call cut function
-	applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
-	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
-	applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
-	applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
-	applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
-	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
+	// applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
+	// applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
+	// applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	// applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
+	// applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+
+	applyCuts("gen_FCC912_wiHadron.root", "cut_FCC912_wiHadron.root", 91.2);
+	applyCuts("gen_FCC912_woHadron.root", "cut_FCC912_woHadron.root", 91.2);
 
 	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
 	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);

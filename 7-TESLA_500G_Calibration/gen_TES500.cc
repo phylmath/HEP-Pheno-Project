@@ -48,7 +48,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC912_woHadron.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -100,8 +100,12 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", nEnerg);												// c-om energy
-	pythia.readString("PDF:lepton = on");													// ISR toggle
+	pythia.readString("PDF:lepton = off");													// ISR toggle
 	
+	// Hadronisation
+	pythia.readString("HadronLevel:Hadronize = off");
+	pythia.readString("HadronLevel:Decay = off");
+
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
 
