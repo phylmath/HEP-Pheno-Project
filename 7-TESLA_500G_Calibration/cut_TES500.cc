@@ -487,7 +487,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_ThrPyth_hW->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_hW", &hist_ThrPyth_hW, "hist_ThrPyth_hW");
 
-	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 100, 0, 0.4);
+	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 45, 0.0, 0.45);
 	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_Zq->GetYaxis()->SetTitle("#events");
 	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");

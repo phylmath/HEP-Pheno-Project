@@ -31,14 +31,58 @@
 // Header
 using namespace std;
 
-// Theoretical model
-double Thrust_LOOO(double *x, double *y) {
+// bin widths
+vector<double> bins = { 0.005, 0.015, 0.025, 0.035, 0.045, 0.055, 0.065, 0.075, 0.085, 0.095, 0.105, 0.115, 0.125, 0.135, 0.145, 0.155, \
+						0.165, 0.175, 0.185, 0.195, 0.205, 0.215, 0.225, 0.235, 0.245, 0.255, 0.265, 0.275, 0.285, 0.295, 0.305, 0.315, \
+						0.325, 0.335, 0.345, 0.355, 0.365, 0.375, 0.385, 0.395, 0.405, 0.415, 0.425, 0.435, 0.445 };
+// LO params
+vector<double> Aval = { 2.58E+01, 1.83E+01, 1.54E+01, 1.35E+01, 1.21E+01, 1.10E+01, 1.00E+01, 9.21E+00, 8.50E+00, 7.87E+00, 7.30E+00, \
+						6.79E+00, 6.32E+00, 5.88E+00, 5.48E+00, 5.10E+00, 4.75E+00, 4.41E+00, 4.10E+00, 3.79E+00, 3.50E+00, 3.22E+00, \
+						2.95E+00, 2.68E+00, 2.42E+00, 2.16E+00, 1.91E+00, 1.65E+00, 1.38E+00, 1.12E+00, 8.42E-01, 5.57E-01, 2.59E-01, \
+						1.71E-02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+// NLO params
+vector<double> Bval = { -4.96E+02, 2.17E+02, 2.81E+02, 2.92E+02, 2.88E+02, 2.77E+02, 2.64E+02, 2.51E+02, 2.37E+02, 2.24E+02, 2.11E+02, \
+						1.99E+02, 1.88E+02, 1.77E+02, 1.67E+02, 1.57E+02, 1.48E+02, 1.39E+02, 1.31E+02, 1.23E+02, 1.15E+02, 1.08E+02, \
+						1.01E+02, 9.47E+01, 8.82E+01, 8.21E+01, 7.54E+01, 6.94E+01, 6.30E+01, 5.64E+01, 4.89E+01, 4.14E+01, 3.35E+01, \
+						2.11E+01, 8.57E+00, 4.47E+00, 2.43E+00, 1.30E+00, 6.44E-01, 2.82E-01, 5.12E-02, 1.46E-05, 4.66E-05, 0, 0 };
+// NNLO params
+vector<double> Cval = { -9.00E+03, -3.30E+03, 1.60E+03, 4.00E+03, 4.90E+03, 5.30E+03, 5.50E+03, 5.40E+03, 5.50E+03, 5.20E+03, 5.10E+03, \
+						4.80E+03, 4.50E+03, 4.30E+03, 4.10E+03, 3.90E+03, 3.80E+03, 3.50E+03, 3.29E+03, 3.20E+03, 2.98E+03, 2.85E+03, \
+						2.63E+03, 2.50E+03, 2.33E+03, 2.35E+03, 2.15E+03, 1.97E+03, 1.80E+03, 1.83E+03, 1.74E+03, 1.57E+03, 1.42E+03, \
+						1.03E+03, 2.96E+02, 1.55E+02, 5.30E+01, 3.57E+01, 1.09E+01, 1.80E-01, -1.00E-03, -1.95E-01, -9.00E-03, -1.00E-03, 0 };
+
+// Theory model
+double Thrust_Order(double *x, double *par, const vector<double>& A, const vector<double>& B, const vector<double>& C, int order) {
     
-	// Vars
 	double tau = x[0];
-    double alp = y[0]/(2*TMath::Pi());
-    
-	return exp(-5 * t) * (1 + 2 * a * log(1 / (t + 1e-4)));
+    double alphaS = par[0];
+    double asbar = alphaS / (2 * TMath::Pi());
+
+    for (size_t i = 0; i < bins.size(); ++i) {
+        if (fabs(tau - bins[i]) < 0.005) {
+            double val = 0;
+            if (order >= 1) val += asbar * A[i];
+            if (order >= 2) val += asbar * asbar * B[i];
+            if (order >= 3) val += asbar * asbar * asbar * C[i];
+            return val;
+        }
+    }
+    return 0;
+}
+
+// Wrapper LO 
+double Thrust_LOOO(double *x, double *par) {
+    return Thrust_Order(x, par, Aval, Bval, Cval, 1)/0.0395971;
+}
+
+// Wrapper NLO
+double Thrust_NLOO(double *x, double *par) {
+    return Thrust_Order(x, par, Aval, Bval, Cval, 2)/0.0555136;
+}
+
+// Wrapper NNLO
+double Thrust_NNLO(double *x, double *par) {
+    return Thrust_Order(x, par, Aval, Bval, Cval, 3)/0.0618737;
 }
 
 // Code
@@ -56,9 +100,9 @@ void ImpactofAlpha()
 // Defining histograms
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_wiHadron = (TH1F*)input_912_wiHadron->Get("hist_ThrPyth");
+	TH1F *hist_wiHadron = (TH1F*)input_912_wiHadron->Get("hist_ThrPyth_Zq");
 	hist_wiHadron->SetLineColor(kBlack); hist_wiHadron->SetMarkerColor(kBlack); hist_wiHadron->SetMarkerStyle(kStar); hist_wiHadron->SetLineWidth(1); 
-	TH1F *hist_woHadron = (TH1F*)input_912_woHadron->Get("hist_ThrPyth");
+	TH1F *hist_woHadron = (TH1F*)input_912_woHadron->Get("hist_ThrPyth_Zq");
 	hist_woHadron->SetLineColor(kRed+2); hist_woHadron->SetMarkerColor(kRed+2); hist_woHadron->SetMarkerStyle(kStar); hist_woHadron->SetLineWidth(1); 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +122,7 @@ void ImpactofAlpha()
 	
 	// Buffers
 	double T, A, B, C, LOOO, NLOO, NNLO;
-	double alps=0.118/(2*TMath::Pi());
+	double alps=0.1183/(2*TMath::Pi());
 	
 	// Read
 	while ( !infile_01.eof() ) {
@@ -108,12 +152,16 @@ void ImpactofAlpha()
 // Normalising probabilities
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
+	cout << hist_LOOO->Integral("width") << endl;
+	cout << hist_NLOO->Integral("width") << endl;
+	cout << hist_NNLO->Integral("width") << endl;
+
 	// Divide by area under hist
-	hist_wiHadron->Scale(1.0/hist_wiHadron->Integral());
-	hist_woHadron->Scale(1.0/hist_woHadron->Integral());
-	hist_LOOO->Scale(1.0/hist_LOOO->Integral());
-	hist_NLOO->Scale(1.0/hist_NLOO->Integral());
-	hist_NNLO->Scale(1.0/hist_NNLO->Integral());
+	hist_wiHadron->Scale(1.0/hist_wiHadron->Integral("width"));
+	hist_woHadron->Scale(1.0/hist_woHadron->Integral("width"));
+	hist_LOOO->Scale(1.0/hist_LOOO->Integral("width"));
+	hist_NLOO->Scale(1.0/hist_NLOO->Integral("width"));
+	hist_NNLO->Scale(1.0/hist_NNLO->Integral("width"));
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compute hadronisation correction factor
@@ -128,10 +176,17 @@ void ImpactofAlpha()
 // Extract alphaS from fit to thrust distribution
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TF1 *fitTheory = new TF1("fitTheory", theory_thrust, 0.1, 0.3, 1);
-	fitTheory->SetParameter(0, 0.12);
-	fitTheory->SetParName(0, "#alpha_{s}");
-	hist_woHadron->Fit("fitTheory", "RN");
+	TF1 *fitLOOO = new TF1("fitLOOO", Thrust_LOOO, 0.1, 0.3, 1);
+	TF1 *fitNLOO = new TF1("fitNLOO", Thrust_NLOO, 0.1, 0.3, 1);
+	TF1 *fitNNLO = new TF1("fitNNLO", Thrust_NNLO, 0.1, 0.3, 1);
+
+	fitLOOO->SetParameter(0, 0.1183); fitLOOO->SetParName(0, "#alpha_{s}");
+	fitNLOO->SetParameter(0, 0.1183); fitNLOO->SetParName(0, "#alpha_{s}");
+	fitNNLO->SetParameter(0, 0.1183); fitNNLO->SetParName(0, "#alpha_{s}");
+
+	hist_woHadron->Fit(fitLOOO, "RN");
+	hist_woHadron->Fit(fitNLOO, "RN");
+	hist_woHadron->Fit(fitNNLO, "RN");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable histogram stats
@@ -156,9 +211,10 @@ void ImpactofAlpha()
 
 	// Add legend
 	TLegend *lg2 = new TLegend(0.64, 0.65, 0.87, 0.87);
-	lg2->AddEntry(hist_LOOO, "LO", "p");
-	lg2->AddEntry(hist_NLOO, "NLO", "p");
-	lg2->AddEntry(hist_NNLO, "NNLO", "p");
+	lg2->AddEntry(hist_LOOO, "Theory-LO", "p");
+	lg2->AddEntry(hist_NLOO, "Theory-NLO", "p");
+	lg2->AddEntry(hist_NNLO, "Theory-NNLO", "p");
+	lg2->AddEntry(hist_woHadron, "Pythia data", "p");
 	lg2->SetTextSize(0.03);
 
 	// Create canvas
@@ -181,21 +237,21 @@ void ImpactofAlpha()
 	
 	// Draw
 	cv->cd(1);
-	hist_wiHadron->Draw("P");
-	hist_woHadron->Draw("P SAME");
+	hist_woHadron->Draw("P");
+	hist_wiHadron->Draw("P SAME");
 	lg1->Draw("SAME");	
 	cv->cd(2);
-	hist_LOOO->Draw("P");
+	hist_woHadron->Draw("P");
+	hist_LOOO->Draw("P SAME");
 	hist_NLOO->Draw("P SAME");
 	hist_NNLO->Draw("P SAME");
-	hist_woHadron->Draw("P SAME");
 	lg2->Draw("SAME");
 	cv->cd(3);
 	hist_HadrFact->Draw("P");
 
 	// Set limits
 	// hist_wiHadron->GetYaxis()->SetRangeUser(1E-4,1E0);
-	// hist_woHadron->GetYaxis()->SetRangeUser(1E-4,1E0);
+	hist_woHadron->GetYaxis()->SetRangeUser(1E-4,1E2);
 	hist_HadrFact->GetYaxis()->SetRangeUser(0,2);
 
 	// Modify stat-box
@@ -204,7 +260,11 @@ void ImpactofAlpha()
 	cv->Modified();
 
 	// Output alpha_s result
-	std::cout << "\nExtracted alpha_s = " << fitTheory->GetParameter(0)
-	          << " ± " << fitTheory->GetParError(0) << std::endl;
+	std::cout << "\nExtracted alpha_s (LO)   = " << fitLOOO->GetParameter(0) 
+			<< " ± " << fitLOOO->GetParError(0) << std::endl;
+	std::cout << "Extracted alpha_s (NLO)  = " << fitNLOO->GetParameter(0) 
+			<< " ± " << fitNLOO->GetParError(0) << std::endl;
+	std::cout << "Extracted alpha_s (NNLO) = " << fitNNLO->GetParameter(0) 
+			<< " ± " << fitNNLO->GetParError(0) << std::endl;
 
 }
