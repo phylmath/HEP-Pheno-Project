@@ -200,20 +200,45 @@ void ImpactofAlpha()
 
 	fitLOOO->SetParameter(0, 0.1183); 
 	// fitLOOO->SetParameter(1, 3.95971);
-	// fitLOOO->SetParLimits(0, 0.10, 0.14);
-	// fitLOOO->SetParLimits(1, 0.5, 7.0);
+	fitLOOO->SetParLimits(0, 0.02, 0.20);
+	fitLOOO->SetParLimits(1, 0, 60E3);
 
 	// fitNLOO->SetParameter(0, 0.1183); 
-	// fitNLOO->SetParameter(1, 1.0);
-	// fitLOOO->SetParLimits(0, 0.10, 0.14);
-	// fitLOOO->SetParLimits(1, 0.5, 4.0);
+	// fitNLOO->SetParameter(1, 3.95971);
+	// fitNLOO->SetParLimits(0, 0.02, 0.20);
+	// fitNLOO->SetParLimits(1, 50E3, 60E3);
 
 	// fitNNLO->SetParameter(0, 0.1183); 
-	// fitNNLO->SetParameter(1, 1.0);
+	// fitNNLO->SetParameter(1, 3.95971);
+	// fitNNLO->SetParLimits(0, 0.02, 0.20);
+	// fitNNLO->SetParLimits(1, 50E3, 60E3);
 
-	hist_woHadron->Fit(fitLOOO, "R");
-	// hist_woHadron->Fit(fitNLOO, "R");
-	// hist_woHadron->Fit(fitNNLO, "R");
+	hist_woHadron->Fit(fitLOOO, "RN");
+	// hist_woHadron->Fit(fitNLOO, "RN");
+	// hist_woHadron->Fit(fitNNLO, "RN");
+
+	TCanvas* c_fit = new TCanvas("c_fit", "Fits of Thrust Distribution", 800, 600);
+	c_fit->cd(); c_fit->SetLogy();
+	c_fit->SetLeftMargin(0.15);
+	c_fit->SetTickx(); c_fit->SetTicky();
+	c_fit->SetGridx(); c_fit->SetGridy();
+
+	TLegend* leg = new TLegend(0.64, 0.65, 0.87, 0.87);
+	leg->AddEntry(hist_woHadron, "PYTHIA 8.312", "P");
+	leg->AddEntry(fitLOOO, "Fit Theory-LO", "L");
+	// leg->AddEntry(fitNLOO, "Fit Theory-NLO", "L");
+	// leg->AddEntry(fitNNLO, "Fit Theory-NNLO", "L");
+	leg->SetTextSize(0.03);	
+
+	fitLOOO->SetLineColor(kGreen+2);
+	fitNLOO->SetLineColor(kBlue+2);
+	fitNNLO->SetLineColor(kRed+2);
+
+	hist_woHadron->Draw("PL");
+	fitLOOO->Draw("SAME");
+	// fitNLOO->Draw("SAME");
+	// fitNNLO->Draw("SAME");
+	leg->Draw();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable histogram stats
@@ -231,16 +256,16 @@ void ImpactofAlpha()
 // Normalising with area under hist
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	cout << hist_LOOO->Integral() << endl;
-	cout << hist_NLOO->Integral() << endl;
-	cout << hist_NNLO->Integral() << endl;
+	// cout << hist_LOOO->Integral() << endl;
+	// cout << hist_NLOO->Integral() << endl;
+	// cout << hist_NNLO->Integral() << endl;
 
-	hist_wiHadron->Scale(1.0/hist_wiHadron->Integral());
-	hist_woHadron->Scale(1.0/hist_woHadron->Integral());
-	hist_ThrExpAL->Scale(1.0/hist_ThrExpAL->Integral());
-	hist_LOOO->Scale(1.0/hist_LOOO->Integral());
-	hist_NLOO->Scale(1.0/hist_NLOO->Integral());
-	hist_NNLO->Scale(1.0/hist_NNLO->Integral());
+	// hist_wiHadron->Scale(1.0/hist_wiHadron->Integral());
+	// hist_woHadron->Scale(1.0/hist_woHadron->Integral());
+	// hist_ThrExpAL->Scale(1.0/hist_ThrExpAL->Integral());
+	// hist_LOOO->Scale(1.0/hist_LOOO->Integral());
+	// hist_NLOO->Scale(1.0/hist_NLOO->Integral());
+	// hist_NNLO->Scale(1.0/hist_NNLO->Integral());
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Draw plots
