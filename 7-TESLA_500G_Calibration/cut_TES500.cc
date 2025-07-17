@@ -76,7 +76,7 @@ void DrawJets3D_Combined(const vector<vector<PseudoJet>>& allJets, const vector<
         edge->SetLineStyle(1);
         edge->Draw();
     }
-
+	
     TLegend* legend = new TLegend(0.7, 0.7, 0.95, 0.9);
     TLatex* title = new TLatex(0.1, 0.95, "Combined Jet Visualization for 3 Events");
     title->SetNDC();

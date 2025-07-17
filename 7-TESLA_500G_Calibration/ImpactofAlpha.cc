@@ -70,19 +70,19 @@ double Thrust_Order(double *x, double *par, const vector<double>& A, const vecto
     return 0;
 }
 
-// Wrapper LO 
+// Wrapper LO
 double Thrust_LOOO(double *x, double *par) {
-    return Thrust_Order(x, par, Aval, Bval, Cval, 1)/0.0395971;
+    return par[1] * Thrust_Order(x, par, Aval, Bval, Cval, 1);
 }
 
 // Wrapper NLO
 double Thrust_NLOO(double *x, double *par) {
-    return Thrust_Order(x, par, Aval, Bval, Cval, 2)/0.0555136;
+    return par[1] * Thrust_Order(x, par, Aval, Bval, Cval, 2);
 }
 
 // Wrapper NNLO
 double Thrust_NNLO(double *x, double *par) {
-    return Thrust_Order(x, par, Aval, Bval, Cval, 3)/0.0618737;
+    return par[1] * Thrust_Order(x, par, Aval, Bval, Cval, 3);
 }
 
 // Code
@@ -103,7 +103,7 @@ void ImpactofAlpha()
 	TH1F *hist_wiHadron = (TH1F*)input_912_wiHadron->Get("hist_ThrPyth_Zq");
 	hist_wiHadron->SetLineColor(kBlack); hist_wiHadron->SetMarkerColor(kBlack); hist_wiHadron->SetMarkerStyle(kStar); hist_wiHadron->SetLineWidth(1); 
 	TH1F *hist_woHadron = (TH1F*)input_912_woHadron->Get("hist_ThrPyth_Zq");
-	hist_woHadron->SetLineColor(kRed+2); hist_woHadron->SetMarkerColor(kRed+2); hist_woHadron->SetMarkerStyle(kStar); hist_woHadron->SetLineWidth(1); 
+	hist_woHadron->SetLineColor(kBlack); hist_woHadron->SetMarkerColor(kBlack); hist_woHadron->SetMarkerStyle(kStar); hist_woHadron->SetLineWidth(1); 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Reading theory curves
@@ -146,22 +146,36 @@ void ImpactofAlpha()
 
 	}
 	// Close
-	infile_01.close();	
+	infile_01.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Normalising probabilities
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+// Reading experimental curves
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	cout << hist_LOOO->Integral("width") << endl;
-	cout << hist_NLOO->Integral("width") << endl;
-	cout << hist_NNLO->Integral("width") << endl;
+	// Buffers
+	double Thr, Prb, Err_Thr, Err_Prb;
 
-	// Divide by area under hist
-	hist_wiHadron->Scale(1.0/hist_wiHadron->Integral("width"));
-	hist_woHadron->Scale(1.0/hist_woHadron->Integral("width"));
-	hist_LOOO->Scale(1.0/hist_LOOO->Integral("width"));
-	hist_NLOO->Scale(1.0/hist_NLOO->Integral("width"));
-	hist_NNLO->Scale(1.0/hist_NNLO->Integral("width"));
+	// // Read Histogram
+	TH1F *hist_ThrExpAL = new TH1F("hist_ThrExpAL", "Inverse Thrust", 45, 0.0, 0.45);
+	// Beautify
+	hist_ThrExpAL->SetLineColor(kYellow+2); hist_ThrExpAL->SetMarkerColor(kYellow+2); hist_ThrExpAL->SetMarkerStyle(kOpenTriangleUp);
+	hist_ThrExpAL->SetTitle("Inverse Thrust");
+	hist_ThrExpAL->SetName("hist_ThrExpAL");
+	hist_ThrExpAL->GetXaxis()->SetTitle("1-T");
+	hist_ThrExpAL->GetYaxis()->SetTitle("P(1-T)");
+	// Import data
+	ifstream infile_03("EXP_LEP_912_ALEPH_THR.txt");
+	// Read through TXT
+	while ( !infile_03.eof() ) {
+		// Set reading order
+		infile_03 >> Thr >> Prb >> Err_Thr >> Err_Prb;
+		// Populate histogram
+		hist_ThrExpAL->SetBinContent(hist_ThrExpAL->FindBin(Thr), Prb);
+		// Populate error bar
+		hist_ThrExpAL->SetBinError(hist_ThrExpAL->FindBin(Thr), Err_Thr);
+	}
+	// Close file
+	infile_03.close();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Compute hadronisation correction factor
@@ -176,17 +190,30 @@ void ImpactofAlpha()
 // Extract alphaS from fit to thrust distribution
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TF1 *fitLOOO = new TF1("fitLOOO", Thrust_LOOO, 0.1, 0.3, 1);
-	TF1 *fitNLOO = new TF1("fitNLOO", Thrust_NLOO, 0.1, 0.3, 1);
-	TF1 *fitNNLO = new TF1("fitNNLO", Thrust_NNLO, 0.1, 0.3, 1);
+	TF1 *fitLOOO = new TF1("fitLOOO", Thrust_LOOO, 0.1, 0.3, 2);
+	TF1 *fitNLOO = new TF1("fitNLOO", Thrust_NLOO, 0.1, 0.3, 2);
+	TF1 *fitNNLO = new TF1("fitNNLO", Thrust_NNLO, 0.1, 0.3, 2);
 
-	fitLOOO->SetParameter(0, 0.1183); fitLOOO->SetParName(0, "#alpha_{s}");
-	fitNLOO->SetParameter(0, 0.1183); fitNLOO->SetParName(0, "#alpha_{s}");
-	fitNNLO->SetParameter(0, 0.1183); fitNNLO->SetParName(0, "#alpha_{s}");
+	fitLOOO->SetParName(0, "#alpha_{s}"); fitLOOO->SetParName(1, "Norm");
+	fitNLOO->SetParName(0, "#alpha_{s}"); fitNLOO->SetParName(1, "Norm");
+	fitNNLO->SetParName(0, "#alpha_{s}"); fitNNLO->SetParName(1, "Norm");
 
-	hist_woHadron->Fit(fitLOOO, "RN");
-	hist_woHadron->Fit(fitNLOO, "RN");
-	hist_woHadron->Fit(fitNNLO, "RN");
+	fitLOOO->SetParameter(0, 0.1183); 
+	// fitLOOO->SetParameter(1, 3.95971);
+	// fitLOOO->SetParLimits(0, 0.10, 0.14);
+	// fitLOOO->SetParLimits(1, 0.5, 7.0);
+
+	// fitNLOO->SetParameter(0, 0.1183); 
+	// fitNLOO->SetParameter(1, 1.0);
+	// fitLOOO->SetParLimits(0, 0.10, 0.14);
+	// fitLOOO->SetParLimits(1, 0.5, 4.0);
+
+	// fitNNLO->SetParameter(0, 0.1183); 
+	// fitNNLO->SetParameter(1, 1.0);
+
+	hist_woHadron->Fit(fitLOOO, "R");
+	// hist_woHadron->Fit(fitNLOO, "R");
+	// hist_woHadron->Fit(fitNNLO, "R");
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable histogram stats
@@ -194,77 +221,95 @@ void ImpactofAlpha()
 
 	hist_wiHadron->SetStats(kFALSE);
 	hist_woHadron->SetStats(kFALSE);
+	hist_ThrExpAL->SetStats(kFALSE);
 	hist_HadrFact->SetStats(kFALSE);
 	hist_LOOO->SetStats(kFALSE);
 	hist_NLOO->SetStats(kFALSE);
 	hist_NNLO->SetStats(kFALSE);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Normalising with area under hist
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	cout << hist_LOOO->Integral() << endl;
+	cout << hist_NLOO->Integral() << endl;
+	cout << hist_NNLO->Integral() << endl;
+
+	hist_wiHadron->Scale(1.0/hist_wiHadron->Integral());
+	hist_woHadron->Scale(1.0/hist_woHadron->Integral());
+	hist_ThrExpAL->Scale(1.0/hist_ThrExpAL->Integral());
+	hist_LOOO->Scale(1.0/hist_LOOO->Integral());
+	hist_NLOO->Scale(1.0/hist_NLOO->Integral());
+	hist_NNLO->Scale(1.0/hist_NNLO->Integral());
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Draw plots
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Add legend
-	TLegend *lg1 = new TLegend(0.64, 0.65, 0.87, 0.87);
-	lg1->AddEntry(hist_wiHadron, "with hadronisation", "p");
-	lg1->AddEntry(hist_woHadron, "woth hadronisation", "p");
-	lg1->SetTextSize(0.03);
+	// // Add legend
+	// TLegend *lg1 = new TLegend(0.64, 0.65, 0.87, 0.87);
+	// lg1->AddEntry(hist_wiHadron, "with hadronisation", "p");
+	// lg1->AddEntry(hist_woHadron, "woth hadronisation", "p");
+	// lg1->SetTextSize(0.03);
 
-	// Add legend
-	TLegend *lg2 = new TLegend(0.64, 0.65, 0.87, 0.87);
-	lg2->AddEntry(hist_LOOO, "Theory-LO", "p");
-	lg2->AddEntry(hist_NLOO, "Theory-NLO", "p");
-	lg2->AddEntry(hist_NNLO, "Theory-NNLO", "p");
-	lg2->AddEntry(hist_woHadron, "Pythia data", "p");
-	lg2->SetTextSize(0.03);
+	// // Add legend
+	// TLegend *lg2 = new TLegend(0.64, 0.65, 0.87, 0.87);
+	// // lg2->AddEntry(hist_LOOO, "Theory-LO", "p");
+	// // lg2->AddEntry(hist_NLOO, "Theory-NLO", "p");
+	// lg2->AddEntry(hist_NNLO, "Theory-NNLO", "p");
+	// lg2->AddEntry(hist_ThrExpAL, "Exp-ALEPH", "p");
+	// lg2->AddEntry(hist_woHadron, "PYTHIA 8.312", "p");
+	// lg2->SetTextSize(0.03);
 
-	// Create canvas
-	TCanvas* cv = new TCanvas("cv", "FCC-ee Studies", 1000, 800);
+	// // Create canvas
+	// TCanvas* cv = new TCanvas("cv", "FCC-ee Studies", 1000, 800);
 
-	// Beautify
-	gStyle->SetErrorX(0.000000001);
-	cv->Divide(2,2);
-	cv->cd(1)->SetLeftMargin(0.15);
-	cv->cd(1)->SetLogy();
-	cv->cd(1)->SetTickx(); cv->cd(1)->SetTicky();
-	cv->cd(1)->SetGridx(); cv->cd(1)->SetGridy();
-	cv->cd(2)->SetLeftMargin(0.15);
-	cv->cd(2)->SetLogy();
-	cv->cd(2)->SetTickx(); cv->cd(2)->SetTicky();
-	cv->cd(2)->SetGridx(); cv->cd(2)->SetGridy();
-	cv->cd(3)->SetLeftMargin(0.15);
-	cv->cd(3)->SetTickx(); cv->cd(3)->SetTicky();
-	cv->cd(3)->SetGridx(); cv->cd(3)->SetGridy();
+	// // Beautify
+	// gStyle->SetErrorX(0.000000001);
+	// cv->Divide(2,2);
+	// cv->cd(1)->SetLeftMargin(0.15);
+	// cv->cd(1)->SetLogy();
+	// cv->cd(1)->SetTickx(); cv->cd(1)->SetTicky();
+	// cv->cd(1)->SetGridx(); cv->cd(1)->SetGridy();
+	// cv->cd(2)->SetLeftMargin(0.15);
+	// cv->cd(2)->SetLogy();
+	// cv->cd(2)->SetTickx(); cv->cd(2)->SetTicky();
+	// cv->cd(2)->SetGridx(); cv->cd(2)->SetGridy();
+	// cv->cd(3)->SetLeftMargin(0.15);
+	// cv->cd(3)->SetTickx(); cv->cd(3)->SetTicky();
+	// cv->cd(3)->SetGridx(); cv->cd(3)->SetGridy();
 	
-	// Draw
-	cv->cd(1);
-	hist_woHadron->Draw("P");
-	hist_wiHadron->Draw("P SAME");
-	lg1->Draw("SAME");	
-	cv->cd(2);
-	hist_woHadron->Draw("P");
-	hist_LOOO->Draw("P SAME");
-	hist_NLOO->Draw("P SAME");
-	hist_NNLO->Draw("P SAME");
-	lg2->Draw("SAME");
-	cv->cd(3);
-	hist_HadrFact->Draw("P");
+	// // Draw
+	// cv->cd(1);
+	// hist_woHadron->Draw("P");
+	// hist_wiHadron->Draw("P SAME");
+	// lg1->Draw("SAME");	
+	// cv->cd(2);
+	// hist_woHadron->Draw("P");
+	// // hist_LOOO->Draw("P SAME");
+	// // hist_NLOO->Draw("P SAME");
+	// hist_NNLO->Draw("P SAME");
+	// hist_ThrExpAL->Draw("P SAME");
+	// lg2->Draw("SAME");
+	// cv->cd(3);
+	// hist_HadrFact->Draw("P");
 
-	// Set limits
-	// hist_wiHadron->GetYaxis()->SetRangeUser(1E-4,1E0);
-	hist_woHadron->GetYaxis()->SetRangeUser(1E-4,1E2);
-	hist_HadrFact->GetYaxis()->SetRangeUser(0,2);
+	// // Set limits
+	// // hist_wiHadron->GetYaxis()->SetRangeUser(1E-4,1E0);
+	// hist_woHadron->GetYaxis()->SetRangeUser(1E-6,1E0);
+	// hist_HadrFact->GetYaxis()->SetRangeUser(0,2);
 
-	// Modify stat-box
-	gStyle->SetOptStat();
-	// Update canvas
-	cv->Modified();
+	// // Modify stat-box
+	// gStyle->SetOptStat();
+	// // Update canvas
+	// cv->Modified();
 
-	// Output alpha_s result
-	std::cout << "\nExtracted alpha_s (LO)   = " << fitLOOO->GetParameter(0) 
-			<< " ± " << fitLOOO->GetParError(0) << std::endl;
-	std::cout << "Extracted alpha_s (NLO)  = " << fitNLOO->GetParameter(0) 
-			<< " ± " << fitNLOO->GetParError(0) << std::endl;
-	std::cout << "Extracted alpha_s (NNLO) = " << fitNNLO->GetParameter(0) 
-			<< " ± " << fitNNLO->GetParError(0) << std::endl;
+	// // Output alpha_s result
+	// std::cout << "\nExtracted alpha_s (LO)   = " << fitLOOO->GetParameter(0) 
+	// 		<< " ± " << fitLOOO->GetParError(0) << std::endl;
+	// std::cout << "Extracted alpha_s (NLO)  = " << fitNLOO->GetParameter(0) 
+	// 		<< " ± " << fitNLOO->GetParError(0) << std::endl;
+	// std::cout << "Extracted alpha_s (NNLO) = " << fitNNLO->GetParameter(0) 
+	// 		<< " ± " << fitNNLO->GetParError(0) << std::endl;
 
 }
