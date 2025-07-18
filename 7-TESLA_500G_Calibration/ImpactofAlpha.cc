@@ -61,9 +61,9 @@ double Thrust_Order(double *x, double *par, const vector<double>& A, const vecto
     for (size_t i = 0; i < bins.size(); ++i) {
         if (fabs(tau - bins[i]) < 0.005) {
             double val = 0;
-            if (order >= 1) val += asbar * A[i];
-            if (order >= 2) val += asbar * asbar * B[i];
-            if (order >= 3) val += asbar * asbar * asbar * C[i];
+            if (order == 1) val += asbar * A[i];
+            if (order == 2) val += asbar * A[i] + asbar * asbar * B[i];
+            if (order == 3) val += asbar * A[i] + asbar * asbar * B[i] + asbar * asbar * asbar * C[i];
             return val;
         }
     }
@@ -172,7 +172,7 @@ void ImpactofAlpha()
 		// Populate histogram
 		hist_ThrExpAL->SetBinContent(hist_ThrExpAL->FindBin(Thr), Prb);
 		// Populate error bar
-		hist_ThrExpAL->SetBinError(hist_ThrExpAL->FindBin(Thr), Err_Thr);
+		hist_ThrExpAL->SetBinError(hist_ThrExpAL->FindBin(Thr), Err_Prb);
 	}
 	// Close file
 	infile_03.close();
@@ -185,23 +185,34 @@ void ImpactofAlpha()
 	hist_HadrFact->SetTitle("Hadronisation Correction;1 - T;Correction Factor");
 	hist_HadrFact->Divide(hist_wiHadron);
 	hist_HadrFact->SetLineColor(kBlue+2); hist_HadrFact->SetMarkerColor(kBlue+2); hist_HadrFact->SetMarkerStyle(kStar);
-
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Extract alphaS from fit to thrust distribution
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	hist_woHadron->Scale(1.0/hist_woHadron->Integral("width"));
+	
+	for (int i = 1; i <= hist_ThrExpAL->GetNbinsX(); ++i) {
+		double val = hist_ThrExpAL->GetBinContent(i);
+		double err = hist_ThrExpAL->GetBinError(i);  // keep original error
+		double corr = hist_HadrFact->GetBinContent(i);
+
+		hist_ThrExpAL->SetBinContent(i, val * corr);
+		hist_ThrExpAL->SetBinError(i, err);  // or set to 0 if you want no error
+	}
 
 	TF1 *fitLOOO = new TF1("fitLOOO", Thrust_LOOO, 0.1, 0.3, 2);
 	TF1 *fitNLOO = new TF1("fitNLOO", Thrust_NLOO, 0.1, 0.3, 2);
 	TF1 *fitNNLO = new TF1("fitNNLO", Thrust_NNLO, 0.1, 0.3, 2);
 
-	fitLOOO->SetParName(0, "#alpha_{s}"); fitLOOO->SetParName(1, "Norm");
-	fitNLOO->SetParName(0, "#alpha_{s}"); fitNLOO->SetParName(1, "Norm");
-	fitNNLO->SetParName(0, "#alpha_{s}"); fitNNLO->SetParName(1, "Norm");
+	fitLOOO->SetParName(0, "alpha_{s}"); fitLOOO->SetParName(1, "Norm");
+	fitNLOO->SetParName(0, "alpha_{s}"); fitNLOO->SetParName(1, "Norm");
+	fitNNLO->SetParName(0, "alpha_{s}"); fitNNLO->SetParName(1, "Norm");
 
-	fitLOOO->SetParameter(0, 0.1183); 
-	// fitLOOO->SetParameter(1, 3.95971);
+	fitLOOO->SetParameter(0, 0.112); 
+	// fitLOOO->SetParameter(1, 60E3);
 	fitLOOO->SetParLimits(0, 0.02, 0.20);
-	fitLOOO->SetParLimits(1, 0, 60E3);
+	// fitLOOO->SetParLimits(1, 0, 60E3);
 
 	// fitNLOO->SetParameter(0, 0.1183); 
 	// fitNLOO->SetParameter(1, 3.95971);
@@ -213,8 +224,8 @@ void ImpactofAlpha()
 	// fitNNLO->SetParLimits(0, 0.02, 0.20);
 	// fitNNLO->SetParLimits(1, 50E3, 60E3);
 
-	hist_woHadron->Fit(fitLOOO, "RN");
-	// hist_woHadron->Fit(fitNLOO, "RN");
+	hist_ThrExpAL->Fit(fitLOOO, "RN");
+	// hist_ThrExpAL->Fit(fitNLOO, "RN");
 	// hist_woHadron->Fit(fitNNLO, "RN");
 
 	TCanvas* c_fit = new TCanvas("c_fit", "Fits of Thrust Distribution", 800, 600);
@@ -225,7 +236,8 @@ void ImpactofAlpha()
 
 	TLegend* leg = new TLegend(0.64, 0.65, 0.87, 0.87);
 	leg->AddEntry(hist_woHadron, "PYTHIA 8.312", "P");
-	leg->AddEntry(fitLOOO, "Fit Theory-LO", "L");
+	leg->AddEntry(hist_ThrExpAL, "ALEPH (corrected)", "P");
+	leg->AddEntry(fitLOOO, "Theory-LO fitting", "L");
 	// leg->AddEntry(fitNLOO, "Fit Theory-NLO", "L");
 	// leg->AddEntry(fitNNLO, "Fit Theory-NNLO", "L");
 	leg->SetTextSize(0.03);	
@@ -235,6 +247,7 @@ void ImpactofAlpha()
 	fitNNLO->SetLineColor(kRed+2);
 
 	hist_woHadron->Draw("PL");
+	hist_ThrExpAL->Draw("PL SAME");
 	fitLOOO->Draw("SAME");
 	// fitNLOO->Draw("SAME");
 	// fitNNLO->Draw("SAME");
