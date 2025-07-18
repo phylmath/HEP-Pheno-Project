@@ -65,7 +65,7 @@ void ImpactofExp()
 	hist_Thr1999->GetXaxis()->SetTitle("1-T");
 	hist_Thr1999->GetYaxis()->SetTitle("P(1-T)");
 	// Import data
-	ifstream infile_01("EXP_TES_500_THR_wot.txt");
+	ifstream infile_01("3-LEP-data/EXP_TES_500_THR_wot.txt");
 	// Read through TXT
 	while ( !infile_01.eof() ) {
 		// Set reading order
@@ -76,7 +76,7 @@ void ImpactofExp()
 		hist_Thr1999->SetBinError(hist_Thr1999->FindBin(Nch), Err_Prb);
 	}
 	// Close file
-	infile_01.close();	
+	infile_01.close();
 
 	// // Read Histogram
 	TH1F *hist_Thr199T = new TH1F("hist_Thr199T", "Inverse Thrust (wi top)", 500, 0, 0.4);
@@ -86,7 +86,7 @@ void ImpactofExp()
 	hist_Thr199T->GetXaxis()->SetTitle("1-T");
 	hist_Thr199T->GetYaxis()->SetTitle("P(1-T)");
 	// Import data
-	ifstream infile_02("EXP_TES_500_THR_wit.txt");
+	ifstream infile_02("3-LEP-data/EXP_TES_500_THR_wit.txt");
 	// Read through TXT
 	while ( !infile_02.eof() ) {
 		// Set reading order

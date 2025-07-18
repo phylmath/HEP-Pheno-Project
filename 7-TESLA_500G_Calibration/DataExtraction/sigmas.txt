@@ -1,6 +1,0 @@
-PROCESS			1999 Study	Pythia 8.3
-f fbar -> γ*/Z		2.80 pb		2.80 pb
-f fbar -> γ -> f fbar	11.6 pb		2.77 pb
-f fbar -> γ*/Z0 γ*/Z0	0.30 pb		0.25 pb
-f fbar -> W+ W-		4.80 pb		4.57 pb
-f fbar -> t tbar	0.30 pb		0.38 pb
