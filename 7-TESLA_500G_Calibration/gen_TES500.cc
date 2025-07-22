@@ -32,6 +32,9 @@
 #include "TPaveStats.h"
 #include "TList.h"
 #include "TLorentzVector.h"
+#include "TMatrixD.h"
+#include "TMatrixDEigen.h"
+#include "TVectorD.h"
 #include <algorithm>
 #include <numeric>
 // Header
@@ -48,14 +51,16 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC912_woHadron.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
 
 	// Intialise vecs
 	vector<int> eveNum, eveSiz, eveCod, isrNum, parNum, parPdg, parChg;
-	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, isrMax, sigmaT, parEto, parEtt, parPmx, parPmy, parPmz;
+	vector<float> eveSph, eveSax, eveThr, eveTax, eveSpr, isrMax, \
+					eveCpr, eveHjm, eveBto, eveBwi, sigmaT, parEto, \
+					parEtt, parPmx, parPmy, parPmz;
 
 	// Define branches
 	tree->Branch("sigmaT", "vector<float>", &sigmaT);										// Total sigma
@@ -67,6 +72,10 @@ int main(){
 	tree->Branch("eveSax", "vector<float>", &eveSax);										// Event sphaxis
 	tree->Branch("eveThr", "vector<float>", &eveThr);										// Event thrust
 	tree->Branch("eveTax", "vector<float>", &eveTax);										// Event thraxis
+	tree->Branch("eveCpr", "vector<float>", &eveCpr);  										// Event C-param
+	tree->Branch("eveHjm", "vector<float>", &eveHjm);  										// Event rho
+	tree->Branch("eveBto", "vector<float>", &eveBto);										// Event BTotal
+	tree->Branch("eveBwi", "vector<float>", &eveBwi);										// Event Bwide
 	tree->Branch("isrNum", "vector<int>", &isrNum);											// ISR γ number
 	tree->Branch("isrMax", "vector<float>", &isrMax);										// ISR γ energy
 	tree->Branch("parNum", "vector<int>", &parNum);											// Parts number
@@ -90,7 +99,7 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 5E5;
+	int nEvent = 1E4;
 	// Set centre mass
 	int nEnerg = 91.2;
 
@@ -103,8 +112,8 @@ int main(){
 	pythia.readString("PDF:lepton = off");													// ISR toggle
 	
 	// Hadronisation
-	pythia.readString("HadronLevel:Hadronize = off");
-	pythia.readString("HadronLevel:Decay = off");
+	// pythia.readString("HadronLevel:Hadronize = off");
+	// pythia.readString("HadronLevel:Decay = off");
 
 	// Top processes
 	pythia.readString("Top:ffbar2ttbar(s:gmZ) = on");										// (604) ee'->tt'
@@ -164,6 +173,7 @@ int main(){
 		// Reset event vectors
 		event_fch.init(); event_fch.clear(); eveNum.clear(); sigmaT.clear();
 		eveSpr.clear(); eveThr.clear(); eveTax.clear(); eveSiz.clear();
+		eveCpr.clear(); eveHjm.clear(); eveBto.clear(); eveBwi.clear();
 		eveCod.clear(); eveSph.clear(); eveSax.clear();
 		// Reset ISR vectors
 		isrNum.clear(); isrEng.clear(); isrMax.clear();
@@ -245,6 +255,83 @@ int main(){
 		if (nCh!=0) if (sph.analyze(event_fch)) {
 			eveSph.push_back(sph.sphericity());												// Add event spheric
 			eveSax.push_back(sph.eventAxis(1).pz());										// Add event sphθ
+		}
+
+		// Compute additional event shapes
+		if (nCh != 0) {
+			
+			std::vector<Vec4> particles;
+			for (int i = 0; i < event_fch.size(); ++i) {
+				particles.emplace_back(event_fch[i].p());
+			}
+
+			// Compute C-parameter
+			double norm = 0.0;
+			TMatrixD cMatrix(3, 3);  // 3x3 linear momentum tensor
+			cMatrix.Zero();
+
+			for (const auto& p : particles) {
+				TVector3 pi(p.px(), p.py(), p.pz());
+				double p_abs = pi.Mag();
+				if (p_abs > 0) {
+					norm += p_abs;
+					for (int i = 0; i < 3; ++i) {
+						for (int j = 0; j < 3; ++j) {
+							cMatrix(i, j) += (pi[i] * pi[j]) / p_abs;
+						}
+					}
+				}
+			}
+
+			if (norm > 0) {
+				cMatrix *= (1.0 / norm);
+				TMatrixDEigen eig(cMatrix);
+				TVectorD eigenVals = eig.GetEigenValuesRe();
+				double lambda1 = eigenVals[0];
+				double lambda2 = eigenVals[1];
+				double lambda3 = eigenVals[2];
+				double C = 3.0 * (lambda1 * lambda2 + lambda2 * lambda3 + lambda3 * lambda1);
+				eveCpr.push_back(C);
+			}
+
+
+			// Heavy jet mass (hemisphere split along thrust axis)
+			if (thr.analyze(event_fch)) {
+				Vec4 thrustAxis = thr.eventAxis(1);
+				double m2_heavy = 0.0, m2_light = 0.0;
+				Vec4 h1, h2;
+				for (auto &p : particles) {
+					if (p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz() > 0)
+						h1 += p;
+					else
+						h2 += p;
+				}
+				double m1 = h1.mCalc(), m2 = h2.mCalc();
+				double mjmax = std::max(m1, m2);
+				eveHjm.push_back((mjmax * mjmax) / (nEnerg * nEnerg));
+			}
+
+			// Jet broadenings
+			if (thr.analyze(event_fch)) {
+				Vec4 thrustAxis = thr.eventAxis(1);
+				double BT = 0.0, BW = 0.0, B1 = 0.0, B2 = 0.0, normT = 0.0;
+				for (auto &p : particles) {
+					double pt = sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz());
+					normT += pt;
+
+					// project p onto thrust axis
+					double dot = p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz();
+					if (dot > 0)
+						B1 += pt * sqrt(1 - pow(dot / pt, 2));
+					else
+						B2 += pt * sqrt(1 - pow(dot / pt, 2));
+				}
+				BT = (B1 + B2) / (2.0 * normT);
+				BW = std::max(B1, B2) / normT;
+
+				eveBto.push_back(BT);
+				eveBwi.push_back(BW);
+			}
 		}
 
 		// Populate
