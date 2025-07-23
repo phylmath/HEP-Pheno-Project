@@ -369,34 +369,34 @@ void ImpactofExp()
 	hist_Thr199T->SetLineColor(kBlack); hist_Thr199T->SetMarkerColor(kBlack); hist_Thr199T->SetMarkerStyle(kOpenTriangleUp); hist_Thr199T->SetLineWidth(2); 
 
 	TH1F *hist_ThrPyth_912 = (TH1F*)input_912->Get("hist_ThrPyth_Zq");
-	hist_ThrPyth_912->SetLineColor(kBlack); hist_ThrPyth_912->SetMarkerColor(kBlack); hist_ThrPyth_912->SetMarkerStyle(kStar); hist_ThrPyth_912->SetLineWidth(2);
-	hist_ThrExL3_912->SetLineColor(kBlue); hist_ThrExL3_912->SetMarkerColor(kBlue); hist_ThrExL3_912->SetMarkerStyle(kOpenTriangleUp); hist_ThrExL3_912->SetLineWidth(2); 
-	hist_ThrExAL_912->SetLineColor(kRed+2); hist_ThrExAL_912->SetMarkerColor(kRed+2); hist_ThrExAL_912->SetMarkerStyle(kOpenTriangleUp); hist_ThrExAL_912->SetLineWidth(2);
+	hist_ThrPyth_912->SetLineColor(kBlack); hist_ThrPyth_912->SetMarkerColor(kBlack); hist_ThrPyth_912->SetMarkerStyle(26); hist_ThrPyth_912->SetLineWidth(2); hist_ThrPyth_912->SetMarkerSize(2);
+	hist_ThrExL3_912->SetLineColor(kBlue); hist_ThrExL3_912->SetMarkerColor(kBlue); hist_ThrExL3_912->SetMarkerStyle(53); hist_ThrExL3_912->SetLineWidth(1); hist_ThrExL3_912->SetMarkerSize(2);
+	hist_ThrExAL_912->SetLineColor(kRed+2); hist_ThrExAL_912->SetMarkerColor(kRed+2); hist_ThrExAL_912->SetMarkerStyle(53); hist_ThrExAL_912->SetLineWidth(1); hist_ThrExAL_912->SetMarkerSize(2);
 
-	// TH1F *hist_ThrPyth_161 = (TH1F*)input_161->Get("hist_ThrPyth_Zq");
-	// hist_ThrPyth_161->SetLineColor(kYellow+2); hist_ThrPyth_161->SetMarkerColor(kYellow+2); hist_ThrPyth_161->SetMarkerStyle(kStar); hist_ThrPyth_161->SetLineWidth(2);
-	hist_ThrExL3_161->SetLineColor(kBlue); hist_ThrExL3_161->SetMarkerColor(kBlue); hist_ThrExL3_161->SetMarkerStyle(kOpenTriangleUp); hist_ThrExL3_161->SetLineWidth(2); 
-	hist_ThrExAL_161->SetLineColor(kRed+2); hist_ThrExAL_161->SetMarkerColor(kRed+2); hist_ThrExAL_161->SetMarkerStyle(kOpenTriangleUp); hist_ThrExAL_161->SetLineWidth(2);
+	TH1F *hist_ThrPyth_161 = (TH1F*)input_161->Get("hist_ThrPyth_Zq");
+	hist_ThrPyth_161->SetLineColor(kBlack); hist_ThrPyth_161->SetMarkerColor(kBlack); hist_ThrPyth_161->SetMarkerStyle(26); hist_ThrPyth_161->SetLineWidth(2); hist_ThrPyth_161->SetMarkerSize(2);
+	hist_ThrExL3_161->SetLineColor(kBlue); hist_ThrExL3_161->SetMarkerColor(kBlue); hist_ThrExL3_161->SetMarkerStyle(53); hist_ThrExL3_161->SetLineWidth(1); hist_ThrExL3_161->SetMarkerSize(2);
+	hist_ThrExAL_161->SetLineColor(kRed+2); hist_ThrExAL_161->SetMarkerColor(kRed+2); hist_ThrExAL_161->SetMarkerStyle(53); hist_ThrExAL_161->SetLineWidth(1); hist_ThrExAL_161->SetMarkerSize(2);
 
-	// TH1F *hist_ThrPyth_183 = (TH1F*)input_183->Get("hist_ThrPyth_Zq");
-	// hist_ThrPyth_183->SetLineColor(kYellow+2); hist_ThrPyth_183->SetMarkerColor(kYellow+2); hist_ThrPyth_183->SetMarkerStyle(kStar); hist_ThrPyth_183->SetLineWidth(2);
-	hist_ThrExL3_183->SetLineColor(kBlue); hist_ThrExL3_183->SetMarkerColor(kBlue); hist_ThrExL3_183->SetMarkerStyle(kOpenTriangleUp); hist_ThrExL3_183->SetLineWidth(2); 
-	hist_ThrExAL_183->SetLineColor(kRed+2); hist_ThrExAL_183->SetMarkerColor(kRed+2); hist_ThrExAL_183->SetMarkerStyle(kOpenTriangleUp); hist_ThrExAL_183->SetLineWidth(2);	
+	TH1F *hist_ThrPyth_183 = (TH1F*)input_183->Get("hist_ThrPyth_Zq");
+	hist_ThrPyth_183->SetLineColor(kBlack); hist_ThrPyth_183->SetMarkerColor(kBlack); hist_ThrPyth_183->SetMarkerStyle(26); hist_ThrPyth_183->SetLineWidth(2); hist_ThrPyth_183->SetMarkerSize(2);
+	hist_ThrExL3_183->SetLineColor(kBlue); hist_ThrExL3_183->SetMarkerColor(kBlue); hist_ThrExL3_183->SetMarkerStyle(53); hist_ThrExL3_183->SetLineWidth(1); hist_ThrExL3_183->SetMarkerSize(2);
+	hist_ThrExAL_183->SetLineColor(kRed+2); hist_ThrExAL_183->SetMarkerColor(kRed+2); hist_ThrExAL_183->SetMarkerStyle(53); hist_ThrExAL_183->SetLineWidth(1);	hist_ThrExAL_183->SetMarkerSize(2);
 
 	TH1F *hist_CprPyth_912 = (TH1F*)input_912->Get("hist_CprPyth");
-	hist_CprPyth_912->SetLineColor(kBlack); hist_CprPyth_912->SetMarkerColor(kBlack); hist_CprPyth_912->SetMarkerStyle(kStar); hist_CprPyth_912->SetLineWidth(2);
-	hist_CprExL3_912->SetLineColor(kBlue); hist_CprExL3_912->SetMarkerColor(kBlue); hist_CprExL3_912->SetMarkerStyle(kOpenTriangleUp); hist_CprExL3_912->SetLineWidth(2); 
-	hist_CprExAL_912->SetLineColor(kRed+2); hist_CprExAL_912->SetMarkerColor(kRed+2); hist_CprExAL_912->SetMarkerStyle(kOpenTriangleUp); hist_CprExAL_912->SetLineWidth(2);
+	hist_CprPyth_912->SetLineColor(kBlack); hist_CprPyth_912->SetMarkerColor(kBlack); hist_CprPyth_912->SetMarkerStyle(26); hist_CprPyth_912->SetLineWidth(2); hist_CprPyth_912->SetMarkerSize(2);
+	hist_CprExL3_912->SetLineColor(kBlue); hist_CprExL3_912->SetMarkerColor(kBlue); hist_CprExL3_912->SetMarkerStyle(53); hist_CprExL3_912->SetLineWidth(1); hist_CprExL3_912->SetMarkerSize(2);
+	hist_CprExAL_912->SetLineColor(kRed+2); hist_CprExAL_912->SetMarkerColor(kRed+2); hist_CprExAL_912->SetMarkerStyle(53); hist_CprExAL_912->SetLineWidth(1); hist_CprExAL_912->SetMarkerSize(2);
 
-	// TH1F *hist_CprPyth_161 = (TH1F*)input_161->Get("hist_CprPyth");
-	// hist_CprPyth_161->SetLineColor(kYellow+2); hist_CprPyth_161->SetMarkerColor(kYellow+2); hist_CprPyth_161->SetMarkerStyle(kStar); hist_CprPyth_161->SetLineWidth(2);
-	hist_CprExL3_161->SetLineColor(kBlue); hist_CprExL3_161->SetMarkerColor(kBlue); hist_CprExL3_161->SetMarkerStyle(kOpenTriangleUp); hist_CprExL3_161->SetLineWidth(2); 
-	hist_CprExAL_161->SetLineColor(kRed+2); hist_CprExAL_161->SetMarkerColor(kRed+2); hist_CprExAL_161->SetMarkerStyle(kOpenTriangleUp); hist_CprExAL_161->SetLineWidth(2);
+	TH1F *hist_CprPyth_161 = (TH1F*)input_161->Get("hist_CprPyth");
+	hist_CprPyth_161->SetLineColor(kBlack); hist_CprPyth_161->SetMarkerColor(kBlack); hist_CprPyth_161->SetMarkerStyle(26); hist_CprPyth_161->SetLineWidth(2); hist_CprPyth_161->SetMarkerSize(2);
+	hist_CprExL3_161->SetLineColor(kBlue); hist_CprExL3_161->SetMarkerColor(kBlue); hist_CprExL3_161->SetMarkerStyle(53); hist_CprExL3_161->SetLineWidth(1); hist_CprExL3_161->SetMarkerSize(2);
+	hist_CprExAL_161->SetLineColor(kRed+2); hist_CprExAL_161->SetMarkerColor(kRed+2); hist_CprExAL_161->SetMarkerStyle(53); hist_CprExAL_161->SetLineWidth(1); hist_CprExAL_161->SetMarkerSize(2);
 
-	// TH1F *hist_CprPyth_183 = (TH1F*)input_183->Get("hist_CprPyth");
-	// hist_CprPyth_183->SetLineColor(kYellow+2); hist_CprPyth_183->SetMarkerColor(kYellow+2); hist_CprPyth_183->SetMarkerStyle(kStar); hist_CprPyth_183->SetLineWidth(2);
-	hist_CprExL3_183->SetLineColor(kBlue); hist_CprExL3_183->SetMarkerColor(kBlue); hist_CprExL3_183->SetMarkerStyle(kOpenTriangleUp); hist_CprExL3_183->SetLineWidth(2); 
-	hist_CprExAL_183->SetLineColor(kRed+2); hist_CprExAL_183->SetMarkerColor(kRed+2); hist_CprExAL_183->SetMarkerStyle(kOpenTriangleUp); hist_CprExAL_183->SetLineWidth(2);	
+	TH1F *hist_CprPyth_183 = (TH1F*)input_183->Get("hist_CprPyth");
+	hist_CprPyth_183->SetLineColor(kBlack); hist_CprPyth_183->SetMarkerColor(kBlack); hist_CprPyth_183->SetMarkerStyle(26); hist_CprPyth_183->SetLineWidth(2); hist_CprPyth_183->SetMarkerSize(2);
+	hist_CprExL3_183->SetLineColor(kBlue); hist_CprExL3_183->SetMarkerColor(kBlue); hist_CprExL3_183->SetMarkerStyle(53); hist_CprExL3_183->SetLineWidth(1); hist_CprExL3_183->SetMarkerSize(2);
+	hist_CprExAL_183->SetLineColor(kRed+2); hist_CprExAL_183->SetMarkerColor(kRed+2); hist_CprExAL_183->SetMarkerStyle(53); hist_CprExAL_183->SetLineWidth(1);	hist_CprExAL_183->SetMarkerSize(2);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Normalising by area under histogram
@@ -404,6 +404,13 @@ void ImpactofExp()
 
 	hist_ThrPyth_912->Scale(1.0/hist_ThrPyth_912->Integral("width"));
 	hist_CprPyth_912->Scale(1.0/hist_CprPyth_912->Integral("width"));
+
+	hist_ThrPyth_161->Scale(1.0/hist_ThrPyth_161->Integral("width"));
+	hist_CprPyth_161->Scale(1.0/hist_CprPyth_161->Integral("width"));
+
+	hist_ThrPyth_183->Scale(1.0/hist_ThrPyth_183->Integral("width"));
+	hist_CprPyth_183->Scale(1.0/hist_CprPyth_183->Integral("width"));
+
 	// hist_ThrExL3_912->Scale(1.0/hist_ThrExL3_912->Integral());
 	// hist_ThrExAL_912->Scale(1.0/hist_ThrExAL_912->Integral());
 
@@ -414,20 +421,24 @@ void ImpactofExp()
 	hist_ThrPyth_912->SetStats(kFALSE);
 	hist_ThrExL3_912->SetStats(kFALSE);
 	hist_ThrExAL_912->SetStats(kFALSE);
-	// hist_ThrPyth_161->SetStats(kFALSE);
+
+	hist_ThrPyth_161->SetStats(kFALSE);
 	hist_ThrExL3_161->SetStats(kFALSE);
 	hist_ThrExAL_161->SetStats(kFALSE);
-	// hist_ThrPyth_183->SetStats(kFALSE);
+
+	hist_ThrPyth_183->SetStats(kFALSE);
 	hist_ThrExL3_183->SetStats(kFALSE);
 	hist_ThrExAL_183->SetStats(kFALSE);
 
 	hist_CprPyth_912->SetStats(kFALSE);
 	hist_CprExL3_912->SetStats(kFALSE);
 	hist_CprExAL_912->SetStats(kFALSE);
-	// hist_CprPyth_161->SetStats(kFALSE);
+
+	hist_CprPyth_161->SetStats(kFALSE);
 	hist_CprExL3_161->SetStats(kFALSE);
 	hist_CprExAL_161->SetStats(kFALSE);
-	// hist_CprPyth_183->SetStats(kFALSE);
+
+	hist_CprPyth_183->SetStats(kFALSE);
 	hist_CprExL3_183->SetStats(kFALSE);
 	hist_CprExAL_183->SetStats(kFALSE);
 
@@ -436,82 +447,127 @@ void ImpactofExp()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	hist_ThrPyth_912->SetTitle("Inverse Thrust at 91.2 GeV");
+	hist_ThrPyth_161->SetTitle("Inverse Thrust at 161 GeV");
+	hist_ThrPyth_183->SetTitle("Inverse Thrust at 183 GeV");
+
 	hist_CprPyth_912->SetTitle("C-parameter at 91.2 GeV");
+	hist_CprPyth_161->SetTitle("C-parameter at 161 GeV");
+	hist_CprPyth_183->SetTitle("C-parameter at 183 GeV");
+
+	hist_ThrPyth_912->GetXaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_912->GetXaxis()->SetTitleSize(0.04);
+	hist_ThrPyth_912->GetYaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_912->GetYaxis()->SetTitleSize(0.04);
+
+	hist_ThrPyth_161->GetXaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_161->GetXaxis()->SetTitleSize(0.04);
+	hist_ThrPyth_161->GetYaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_161->GetYaxis()->SetTitleSize(0.04);
+
+	hist_ThrPyth_183->GetXaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_183->GetXaxis()->SetTitleSize(0.04);
+	hist_ThrPyth_183->GetYaxis()->SetLabelSize(0.04);
+	hist_ThrPyth_183->GetYaxis()->SetTitleSize(0.04);
+
+	hist_CprPyth_912->GetXaxis()->SetLabelSize(0.04);
+	hist_CprPyth_912->GetXaxis()->SetTitleSize(0.04);
+	hist_CprPyth_912->GetYaxis()->SetLabelSize(0.04);
+	hist_CprPyth_912->GetYaxis()->SetTitleSize(0.04);
+
+	hist_CprPyth_161->GetXaxis()->SetLabelSize(0.04);
+	hist_CprPyth_161->GetXaxis()->SetTitleSize(0.04);
+	hist_CprPyth_161->GetYaxis()->SetLabelSize(0.04);
+	hist_CprPyth_161->GetYaxis()->SetTitleSize(0.04);
+
+	hist_CprPyth_183->GetXaxis()->SetLabelSize(0.04);
+	hist_CprPyth_183->GetXaxis()->SetTitleSize(0.04);
+	hist_CprPyth_183->GetYaxis()->SetLabelSize(0.04);
+	hist_CprPyth_183->GetYaxis()->SetTitleSize(0.04);
+
+	hist_ThrPyth_912->SetTitle("");
+	hist_ThrPyth_161->SetTitle("");
+	hist_ThrPyth_183->SetTitle("");
+
+	hist_CprPyth_912->SetTitle("");
+	hist_CprPyth_161->SetTitle("");
+	hist_CprPyth_183->SetTitle("");
 
 	// Add legend
 	TLegend *lg = new TLegend(0.64, 0.65, 0.87, 0.87);
-	lg->AddEntry(hist_ThrPyth_912, "PYTHIA 8.312", "p");
-	lg->AddEntry(hist_ThrExL3_912, "LEP-L3 data", "p");
-	lg->AddEntry(hist_ThrExAL_912, "ALEPH data", "p");
-	lg->SetTextSize(0.03);
+	lg->AddEntry(hist_ThrPyth_912, "PYTHIA", "L");
+	lg->AddEntry(hist_ThrExL3_912, "L3", "P");
+	lg->AddEntry(hist_ThrExAL_912, "ALEPH", "P");
+	lg->SetTextSize(0.04);
 
 	// Create canvas
-	TCanvas* cv = new TCanvas("cv", "FCC-ee ISR Studies", 1200, 1200);
+	TCanvas* cv = new TCanvas("cv", "FCC-ee ISR Studies", 2400, 1200);
 
 	// Beautify
 	gStyle->SetErrorX(0.000000001);
-	cv->Divide(2,3);
-	cv->cd(1)->SetLeftMargin(0.15);
-	cv->cd(1)->SetLogy();
-	cv->cd(1)->SetTickx(); cv->cd(1)->SetTicky();
-	cv->cd(1)->SetGridx(); cv->cd(1)->SetGridy();
-	cv->cd(2)->SetLeftMargin(0.15);
-	cv->cd(2)->SetLogy();
-	cv->cd(2)->SetTickx(); cv->cd(2)->SetTicky();
-	cv->cd(2)->SetGridx(); cv->cd(2)->SetGridy();
-	cv->cd(3)->SetLeftMargin(0.15);
-	cv->cd(3)->SetLogy();
-	cv->cd(3)->SetTickx(); cv->cd(3)->SetTicky();
-	cv->cd(3)->SetGridx(); cv->cd(3)->SetGridy();
-	cv->cd(4)->SetLeftMargin(0.15);
-	cv->cd(4)->SetLogy();
-	cv->cd(4)->SetTickx(); cv->cd(4)->SetTicky();
-	cv->cd(4)->SetGridx(); cv->cd(4)->SetGridy();
-	cv->cd(5)->SetLeftMargin(0.15);
-	cv->cd(5)->SetLogy();
-	cv->cd(5)->SetTickx(); cv->cd(5)->SetTicky();
-	cv->cd(5)->SetGridx(); cv->cd(5)->SetGridy();
-	cv->cd(6)->SetLeftMargin(0.15);
-	cv->cd(6)->SetLogy();
-	cv->cd(6)->SetTickx(); cv->cd(6)->SetTicky();
-	cv->cd(6)->SetGridx(); cv->cd(6)->SetGridy();
- 
+	gStyle->SetLabelSize(0.05, "X");
+	gStyle->SetLabelSize(0.05, "Y");
+	gStyle->SetTitleSize(0.06, "X");
+	gStyle->SetTitleSize(0.06, "Y");
+	cv->SetMargin(0, 0, 0, 0); 
+	cv->Divide(3,2);
+	for (int i = 1; i <= 6; i++) {
+		cv->cd(i);
+		gPad->SetTopMargin(0.015);
+		gPad->SetBottomMargin(0.1);
+		gPad->SetLeftMargin(0.11);
+		gPad->SetRightMargin(0.02);
+		gPad->SetTickx(); gPad->SetTicky();
+		// gPad->SetGridx(); gPad->SetGridy();
+		gPad->SetLogy();
+	}
+
 	// Draw
 	cv->cd(1);
-	hist_ThrPyth_912->Draw("P");
+	hist_ThrPyth_912->Draw("HIST");
 	hist_ThrExL3_912->Draw("P SAME");
 	hist_ThrExAL_912->Draw("P SAME");
 	lg->Draw("SAME");	
-	cv->cd(3);
-	hist_ThrPyth_912->Draw("P");
+	cv->cd(2);
+	hist_ThrPyth_161->Draw("HIST");
 	hist_ThrExL3_161->Draw("P SAME");
 	hist_ThrExAL_161->Draw("P SAME");
 	lg->Draw("SAME");
-	cv->cd(5);
-	hist_ThrPyth_912->Draw("P");
+	cv->cd(3);
+	hist_ThrPyth_183->Draw("HIST");
 	hist_ThrExL3_183->Draw("P SAME");
 	hist_ThrExAL_183->Draw("P SAME");
 	lg->Draw("SAME");
 	
-	cv->cd(2);
-	hist_CprPyth_912->Draw("P");
-	hist_CprExL3_183->Draw("P SAME");
-	hist_CprExAL_183->Draw("P SAME");
-	lg->Draw("SAME");
 	cv->cd(4);
-	hist_ThrPyth_912->Draw("P");
-	hist_CprExL3_183->Draw("P SAME");
-	hist_CprExAL_183->Draw("P SAME");
+	hist_CprPyth_912->Draw("HIST");
+	hist_CprExL3_912->Draw("P SAME");
+	hist_CprExAL_912->Draw("P SAME");
+	lg->Draw("SAME");
+	cv->cd(5);
+	hist_CprPyth_161->Draw("HIST");
+	hist_CprExL3_161->Draw("P SAME");
+	hist_CprExAL_161->Draw("P SAME");
 	lg->Draw("SAME");
 	cv->cd(6);
-	hist_ThrPyth_912->Draw("P");
+	hist_CprPyth_183->Draw("HIST");
 	hist_CprExL3_183->Draw("P SAME");
 	hist_CprExAL_183->Draw("P SAME");
 	lg->Draw("SAME");
 
 	// Set limits
-	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-4,1E2);
-	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-3,1E1);
+	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-3,5E1);
+	hist_ThrPyth_912->GetXaxis()->SetRangeUser(0,0.4);
+	hist_ThrPyth_161->GetYaxis()->SetRangeUser(1E-3,5E1);
+	hist_ThrPyth_161->GetXaxis()->SetRangeUser(0,0.4);
+	hist_ThrPyth_183->GetYaxis()->SetRangeUser(1E-3,5E1);
+	hist_ThrPyth_183->GetXaxis()->SetRangeUser(0,0.4);
+
+	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-2,1E1);
+	hist_CprPyth_912->GetXaxis()->SetRangeUser(0,0.4);	
+	hist_CprPyth_161->GetYaxis()->SetRangeUser(1E-2,1E1);
+	hist_CprPyth_161->GetXaxis()->SetRangeUser(0,0.4);	
+	hist_CprPyth_183->GetYaxis()->SetRangeUser(1E-2,1E1);
+	hist_CprPyth_183->GetXaxis()->SetRangeUser(0,0.4);
 
 	// Modify stat-box
 	gStyle->SetOptStat();

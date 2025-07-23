@@ -883,8 +883,8 @@ int main() {
 	// applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
 	// applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
 	// applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
-	// applyCuts("gen_FCC180.root", "cut_FCC180.root", 180.0);
-	// applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+	applyCuts("gen_FCC183.root", "cut_FCC183.root", 183.0);
+	applyCuts("gen_FCC161.root", "cut_FCC161.root", 161.0);
 	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
 
 	// applyCuts("gen_FCC912_wiHadron.root", "cut_FCC912_wiHadron.root", 91.2);
