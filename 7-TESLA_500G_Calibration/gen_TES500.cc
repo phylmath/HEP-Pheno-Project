@@ -51,7 +51,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC912.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -99,9 +99,9 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1E4;
+	int nEvent = 1E5;
 	// Set centre mass
-	int nEnerg = 91.2;
+	int nEnerg = 365.0;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
@@ -294,44 +294,6 @@ int main(){
 				eveCpr.push_back(C);
 			}
 
-
-			// Heavy jet mass (hemisphere split along thrust axis)
-			if (thr.analyze(event_fch)) {
-				Vec4 thrustAxis = thr.eventAxis(1);
-				double m2_heavy = 0.0, m2_light = 0.0;
-				Vec4 h1, h2;
-				for (auto &p : particles) {
-					if (p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz() > 0)
-						h1 += p;
-					else
-						h2 += p;
-				}
-				double m1 = h1.mCalc(), m2 = h2.mCalc();
-				double mjmax = std::max(m1, m2);
-				eveHjm.push_back((mjmax * mjmax) / (nEnerg * nEnerg));
-			}
-
-			// Jet broadenings
-			if (thr.analyze(event_fch)) {
-				Vec4 thrustAxis = thr.eventAxis(1);
-				double BT = 0.0, BW = 0.0, B1 = 0.0, B2 = 0.0, normT = 0.0;
-				for (auto &p : particles) {
-					double pt = sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz());
-					normT += pt;
-
-					// project p onto thrust axis
-					double dot = p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz();
-					if (dot > 0)
-						B1 += pt * sqrt(1 - pow(dot / pt, 2));
-					else
-						B2 += pt * sqrt(1 - pow(dot / pt, 2));
-				}
-				BT = (B1 + B2) / (2.0 * normT);
-				BW = std::max(B1, B2) / normT;
-
-				eveBto.push_back(BT);
-				eveBwi.push_back(BW);
-			}
 		}
 
 		// Populate
@@ -396,3 +358,41 @@ int main(){
 // 	}
 
 // }
+
+			// // Heavy jet mass (hemisphere split along thrust axis)
+			// if (thr.analyze(event_fch)) {
+			// 	Vec4 thrustAxis = thr.eventAxis(1);
+			// 	double m2_heavy = 0.0, m2_light = 0.0;
+			// 	Vec4 h1, h2;
+			// 	for (auto &p : particles) {
+			// 		if (p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz() > 0)
+			// 			h1 += p;
+			// 		else
+			// 			h2 += p;
+			// 	}
+			// 	double m1 = h1.mCalc(), m2 = h2.mCalc();
+			// 	double mjmax = std::max(m1, m2);
+			// 	eveHjm.push_back((mjmax * mjmax) / (nEnerg * nEnerg));
+			// }
+
+			// // Jet broadenings
+			// if (thr.analyze(event_fch)) {
+			// 	Vec4 thrustAxis = thr.eventAxis(1);
+			// 	double BT = 0.0, BW = 0.0, B1 = 0.0, B2 = 0.0, normT = 0.0;
+			// 	for (auto &p : particles) {
+			// 		double pt = sqrt(p.px()*p.px() + p.py()*p.py() + p.pz()*p.pz());
+			// 		normT += pt;
+
+			// 		// project p onto thrust axis
+			// 		double dot = p.px()*thrustAxis.px() + p.py()*thrustAxis.py() + p.pz()*thrustAxis.pz();
+			// 		if (dot > 0)
+			// 			B1 += pt * sqrt(1 - pow(dot / pt, 2));
+			// 		else
+			// 			B2 += pt * sqrt(1 - pow(dot / pt, 2));
+			// 	}
+			// 	BT = (B1 + B2) / (2.0 * normT);
+			// 	BW = std::max(B1, B2) / normT;
+
+			// 	eveBto.push_back(BT);
+			// 	eveBwi.push_back(BW);
+			// }

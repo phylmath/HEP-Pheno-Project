@@ -420,6 +420,15 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	float xbin1[] = {
+		8.1526e+00, 8.1526e+00, 8.3521e+00, 8.5181e+00, 8.6545e+00, 8.7791e+00, 8.9004e+00, 9.0491e+00, 9.1940e+00, 9.3321e+00,
+		9.4488e+00, 9.6281e+00, 9.7874e+00, 9.9461e+00, 1.0101e+01, 1.0273e+01, 1.0451e+01, 1.0627e+01, 1.0810e+01, 1.1002e+01,
+		1.1197e+01, 1.1392e+01, 1.1608e+01, 1.1823e+01, 1.2046e+01, 1.2281e+01, 1.2524e+01, 1.2779e+01, 1.3039e+01, 1.3321e+01,
+		1.3609e+01, 1.3915e+01, 1.4228e+01, 1.4572e+01, 1.4933e+01, 1.5312e+01, 1.5713e+01, 1.6145e+01, 1.6637e+01, 1.7152e+01,
+		1.7710e+01, 1.8340e+01, 1.9042e+01, 1.9831e+01, 2.0774e+01, 2.1887e+01, 2.2369e+01, 2.5124e+01, 2.7963e+01, 3.5327e+01
+	};
+
+
 	TH1F *hist_ThrPyth = new TH1F("hist_ThrPyth", "Inverse Thrust", 100, 0, 0.4);
 	hist_ThrPyth->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth->GetYaxis()->SetTitle("1/#sigma_{had} d#sigma/d(1-T)");
@@ -550,7 +559,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	TH1F *hist_CprPyth = new TH1F("hist_CprPyth", "C-Parameter", 100, 0, 1.0);
+	TH1F *hist_CprPyth = new TH1F("hist_CprPyth", "C-Parameter", 50, 0, 1.0);
 	hist_CprPyth->GetXaxis()->SetTitle("C");
 	hist_CprPyth->GetYaxis()->SetTitle("1/#sigma_{had} d#sigma/d(C)");
 	otree->Branch("hist_CprPyth", &hist_CprPyth, "hist_CprPyth");
@@ -702,9 +711,9 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 				hist_nJetTot_Zq->Fill(nCj);
 
 				hist_CprPyth->Fill((*eveCpr)[0]);
-				hist_HjmPyth->Fill((*eveHjm)[0]); 
-				hist_BtoPyth->Fill((*eveBto)[0]); 
-				hist_BwiPyth->Fill((*eveBwi)[0]);
+				// hist_HjmPyth->Fill((*eveHjm)[0]); 
+				// hist_BtoPyth->Fill((*eveBto)[0]); 
+				// hist_BwiPyth->Fill((*eveBwi)[0]);
 
 				hist_ThrPyth_Zq->Fill((*eveThr)[0]); 
 				hist_ThrPy99_Zq->Fill((*eveThr)[0]);
@@ -879,17 +888,21 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 // Code
 int main() {
 
-	// Call cut function
-	// applyCuts("gen_FCC500.root", "cut_FCC500.root", 500.0);
-	// applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
-	// applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	// Extraction
+	applyCuts("gen_FCC365.root", "cut_FCC365.root", 365.0);
+	applyCuts("gen_FCC240.root", "cut_FCC240.root", 240.0);
+	applyCuts("gen_FCC160.root", "cut_FCC160.root", 160.0);
+	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.20);
+	
+	// Calibration
 	applyCuts("gen_FCC183.root", "cut_FCC183.root", 183.0);
 	applyCuts("gen_FCC161.root", "cut_FCC161.root", 161.0);
-	applyCuts("gen_FCC912.root", "cut_FCC912.root", 91.2);
 
+	// Hadronisation
 	// applyCuts("gen_FCC912_wiHadron.root", "cut_FCC912_wiHadron.root", 91.2);
 	// applyCuts("gen_FCC912_woHadron.root", "cut_FCC912_woHadron.root", 91.2);
 
+	// Old	
 	// applyCuts("gen_LEP912_wiR.root", "cut_LEP912_wiR.root", 91.0);
 	// applyCuts("gen_TES50t_wiR.root", "cut_TES50t_wiR.root", 500.0);
 	// applyCuts("gen_TES50t_noR.root", "cut_TES50t_noR.root", 500.0);
