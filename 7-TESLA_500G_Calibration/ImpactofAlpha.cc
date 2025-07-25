@@ -384,12 +384,13 @@ void ImpactofAlpha()
 	hist_CprPyth_365->SetTitle("");
 
 	// Create canvas
-	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1400, 1000);
+	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1400, 850);
 
-	TLegend* lg = new TLegend(0.65, 0.88, 0.92, 0.95);
+	TLegend* lg = new TLegend(0.65, 0.83, 0.92, 0.95);
 	lg->AddEntry(hist_ThrPyth_912, "PYTHIA 8.312", "L");
-	lg->AddEntry(hist_fitThLO_912, "#it{O}(#alpha_{s}^{1}) theory fit", "L");
-	lg->AddEntry(hist_fitThNL_912, "#it{O}(#alpha_{s}^{2}) theory fit", "L");
+	lg->AddEntry(hist_fitThLO_912, "#it{O}(#alpha_{s}^{1} theory fit)", "L");
+	lg->AddEntry(hist_fitThNL_912, "#it{O}(#alpha_{s}^{2} theory fit)", "L");
+	lg->AddEntry(hist_fitThNN_912, "#it{O}(#alpha_{s}^{3} theory fit)", "L");
 	lg->SetTextSize(0.03);	
 
 	// Beautify
@@ -447,9 +448,9 @@ void ImpactofAlpha()
 	lg->Draw("SAME");
 
 	// Set limits
-	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-4,1E12);
+	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-3,1E12);
 	hist_ThrPyth_912->GetXaxis()->SetRangeUser(0,0.38);
-	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-4,1E12);
+	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-3,1E12);
 	hist_CprPyth_912->GetXaxis()->SetRangeUser(0,0.38);
 
 	// Modify stat-box
@@ -472,7 +473,6 @@ void ImpactofAlpha()
 	// // lg2->AddEntry(hist_LOOO, "Theory-LO", "p");
 	// // lg2->AddEntry(hist_NLOO, "Theory-NLO", "p");
 	// lg2->AddEntry(hist_NNLO, "Theory-NNLO", "p");
-	// lg2->AddEntry(hist_ThrExAL_912, "Exp-ALEPH", "p");
 	// lg2->AddEntry(hist_woHadron, "PYTHIA 8.312", "p");
 	// lg2->SetTextSize(0.03);
 
@@ -504,7 +504,6 @@ void ImpactofAlpha()
 	// // hist_LOOO->Draw("P SAME");
 	// // hist_NLOO->Draw("P SAME");
 	// hist_NNLO->Draw("P SAME");
-	// hist_ThrExAL_912->Draw("P SAME");
 	// lg2->Draw("SAME");
 	// cv->cd(3);
 	// hist_ThrCorr_912->Draw("P");
@@ -518,13 +517,5 @@ void ImpactofAlpha()
 	// gStyle->SetOptStat();
 	// // Update canvas
 	// cv->Modified();
-
-	// // Output alpha_s result
-	// std::cout << "\nExtracted alpha_s (LO)   = " << hist_fitThLO_912->GetParameter(0) 
-	// 		<< " ± " << hist_fitThLO_912->GetParError(0) << std::endl;
-	// std::cout << "Extracted alpha_s (NLO)  = " << fitNLOO->GetParameter(0) 
-	// 		<< " ± " << fitNLOO->GetParError(0) << std::endl;
-	// std::cout << "Extracted alpha_s (NNLO) = " << fitNNLO->GetParameter(0) 
-	// 		<< " ± " << fitNNLO->GetParError(0) << std::endl;
 
 }

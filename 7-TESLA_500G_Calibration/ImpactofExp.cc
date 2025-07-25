@@ -578,7 +578,7 @@ void ImpactofExp()
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Create canvas
-	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1400, 1000);
+	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1400, 850);
 
 	// Beautify
 	gStyle->SetErrorX(0.000000001);
@@ -645,9 +645,9 @@ void ImpactofExp()
 	lg->Draw("SAME");
 
 	// Set limits
-	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-4,1E9);
+	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-3,1E9);
 	hist_ThrPyth_912->GetXaxis()->SetRangeUser(0,0.4);
-	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-4,1E9);
+	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-3,1E9);
 	hist_CprPyth_912->GetXaxis()->SetRangeUser(0,0.4);	
 
 	// Modify stat-box

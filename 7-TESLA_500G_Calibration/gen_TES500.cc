@@ -99,7 +99,7 @@ int main(){
 	float mW = pythia.particleData.m0(24);													// W+ mass
 
 	// Set # of events
-	int nEvent = 1E5;
+	int nEvent = 1E6;
 	// Set centre mass
 	int nEnerg = 365.0;
 
