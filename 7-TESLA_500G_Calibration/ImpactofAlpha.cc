@@ -83,7 +83,7 @@ double THR_Order(double *x, double *par, const vector<double>& A, const vector<d
             if (order == 1) val += asbar * A[i];
             if (order == 2) val += asbar * A[i] + asbar * asbar * B[i];
             if (order == 3) val += asbar * A[i] + asbar * asbar * B[i] + asbar * asbar * asbar * C[i];
-            return val;
+            return val / bins[i];
         }
     }
     return 0;
@@ -148,7 +148,7 @@ double CPR_Order(double *x, double *par, const vector<double>& A, const vector<d
 			if (order == 1) val += asbar * A[i];
 			if (order == 2) val += asbar * A[i] + asbar * asbar * B[i];
 			if (order == 3) val += asbar * A[i] + asbar * asbar * B[i] + asbar * asbar * asbar * C[i];
-            return val;
+            return val / bins[i];
         }
     }
     return 0;
@@ -219,13 +219,13 @@ void ImpactofAlpha()
 	TH1F *hist_ThrPyth_365 = (TH1F*)input_365->Get("hist_ThrPyth_Zq");
 	hist_ThrPyth_365->SetLineColor(kBlack); hist_ThrPyth_365->SetMarkerColor(kBlack); hist_ThrPyth_365->SetMarkerStyle(26); hist_ThrPyth_365->SetLineWidth(2); hist_ThrPyth_365->SetMarkerSize(2);
 
-	TH1F *hist_CprPyth_912 = (TH1F*)input_912->Get("hist_CprPyth");
+	TH1F *hist_CprPyth_912 = (TH1F*)input_912->Get("hist_CprPyth_Zq");
 	hist_CprPyth_912->SetLineColor(kBlack); hist_CprPyth_912->SetMarkerColor(kBlack); hist_CprPyth_912->SetMarkerStyle(26); hist_CprPyth_912->SetLineWidth(2); hist_CprPyth_912->SetMarkerSize(2);
-	TH1F *hist_CprPyth_160 = (TH1F*)input_160->Get("hist_CprPyth");
+	TH1F *hist_CprPyth_160 = (TH1F*)input_160->Get("hist_CprPyth_Zq");
 	hist_CprPyth_160->SetLineColor(kBlack); hist_CprPyth_160->SetMarkerColor(kBlack); hist_CprPyth_160->SetMarkerStyle(26); hist_CprPyth_160->SetLineWidth(2); hist_CprPyth_160->SetMarkerSize(2);
-	TH1F *hist_CprPyth_240 = (TH1F*)input_240->Get("hist_CprPyth");
+	TH1F *hist_CprPyth_240 = (TH1F*)input_240->Get("hist_CprPyth_Zq");
 	hist_CprPyth_240->SetLineColor(kBlack); hist_CprPyth_240->SetMarkerColor(kBlack); hist_CprPyth_240->SetMarkerStyle(26); hist_CprPyth_240->SetLineWidth(2); hist_CprPyth_240->SetMarkerSize(2);
-	TH1F *hist_CprPyth_365 = (TH1F*)input_365->Get("hist_CprPyth");
+	TH1F *hist_CprPyth_365 = (TH1F*)input_365->Get("hist_CprPyth_Zq");
 	hist_CprPyth_365->SetLineColor(kBlack); hist_CprPyth_365->SetMarkerColor(kBlack); hist_CprPyth_365->SetMarkerStyle(26); hist_CprPyth_365->SetLineWidth(2); hist_CprPyth_365->SetMarkerSize(2);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,9 +275,7 @@ void ImpactofAlpha()
 	hist_fitThLO_912->SetLineColor(kGreen+1); hist_fitThLO_912->SetMarkerColor(kGreen+1); hist_fitThLO_912->SetMarkerStyle(53); hist_fitThLO_912->SetLineWidth(2); hist_fitThLO_912->SetMarkerSize(1);
 
 	hist_fitThLO_912->SetParameter(0, 0.112); 
-	// hist_fitThLO_912->SetParameter(1, 60E3);
 	hist_fitThLO_912->SetParLimits(0, 0.02, 0.20);
-	// hist_fitThLO_912->SetParLimits(1, 0, 60E3);
 
 	hist_ThrPyth_912->Fit(hist_fitThLO_912, "RN");
 
@@ -291,9 +289,7 @@ void ImpactofAlpha()
 	hist_fitThNL_912->SetLineColor(kRed+1); hist_fitThNL_912->SetMarkerColor(kRed+1); hist_fitThNL_912->SetMarkerStyle(53); hist_fitThNL_912->SetLineWidth(2); hist_fitThNL_912->SetMarkerSize(1);
 
 	hist_fitThNL_912->SetParameter(0, 0.112); 
-	// hist_fitThNL_912->SetParameter(1, 60E3);
 	hist_fitThNL_912->SetParLimits(0, 0.02, 0.20);
-	// hist_fitThNL_912->SetParLimits(1, 0, 60E3);
 
 	hist_ThrPyth_912->Fit(hist_fitThNL_912, "RN");
 
@@ -307,18 +303,146 @@ void ImpactofAlpha()
 	hist_fitThNN_912->SetLineColor(kBlue+1); hist_fitThNN_912->SetMarkerColor(kBlue+1); hist_fitThNN_912->SetMarkerStyle(53); hist_fitThNN_912->SetLineWidth(2); hist_fitThNN_912->SetMarkerSize(1);
 
 	hist_fitThNN_912->SetParameter(0, 0.112); 
-	// hist_fitThNN_912->SetParameter(1, 60E3);
 	hist_fitThNN_912->SetParLimits(0, 0.02, 0.20);
-	// hist_fitThNN_912->SetParLimits(1, 0, 60E3);
 
 	hist_ThrPyth_912->Fit(hist_fitThNN_912, "RN");
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 160 GeV at LO" << endl;
+
+	TF1 *hist_fitThLO_160 = new TF1("hist_fitThLO_160", THR_LOOO, 0.1, 0.3, 2);
+	hist_fitThLO_160->SetParName(0, "alpha_{s}"); hist_fitThLO_160->SetParName(1, "Norm"); 
+	hist_fitThLO_160->SetLineColor(kGreen+1); hist_fitThLO_160->SetMarkerColor(kGreen+1); hist_fitThLO_160->SetMarkerStyle(53); hist_fitThLO_160->SetLineWidth(2); hist_fitThLO_160->SetMarkerSize(1);
+
+	hist_fitThLO_160->SetParameter(0, 0.112); 
+	hist_fitThLO_160->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_160->Fit(hist_fitThLO_160, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 160 GeV at NLO" << endl;
+
+	TF1 *hist_fitThNL_160 = new TF1("hist_fitThNL_160", THR_NLOO, 0.1, 0.3, 2);
+	hist_fitThNL_160->SetParName(0, "alpha_{s}"); hist_fitThNL_160->SetParName(1, "Norm"); 
+	hist_fitThNL_160->SetLineColor(kRed+1); hist_fitThNL_160->SetMarkerColor(kRed+1); hist_fitThNL_160->SetMarkerStyle(53); hist_fitThNL_160->SetLineWidth(2); hist_fitThNL_160->SetMarkerSize(1);
+
+	hist_fitThNL_160->SetParameter(0, 0.112); 
+	hist_fitThNL_160->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_160->Fit(hist_fitThNL_160, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 160 GeV at NNLO" << endl;
+
+	TF1 *hist_fitThNN_160 = new TF1("hist_fitThNN_160", THR_NNLO, 0.1, 0.3, 2);
+	hist_fitThNN_160->SetParName(0, "alpha_{s}"); hist_fitThNN_160->SetParName(1, "Norm"); 
+	hist_fitThNN_160->SetLineColor(kBlue+1); hist_fitThNN_160->SetMarkerColor(kBlue+1); hist_fitThNN_160->SetMarkerStyle(53); hist_fitThNN_160->SetLineWidth(2); hist_fitThNN_160->SetMarkerSize(1);
+
+	hist_fitThNN_160->SetParameter(0, 0.112); 
+	hist_fitThNN_160->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_160->Fit(hist_fitThNN_160, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 240 GeV at LO" << endl;
+
+	TF1 *hist_fitThLO_240 = new TF1("hist_fitThLO_240", THR_LOOO, 0.1, 0.3, 2);
+	hist_fitThLO_240->SetParName(0, "alpha_{s}"); hist_fitThLO_240->SetParName(1, "Norm"); 
+	hist_fitThLO_240->SetLineColor(kGreen+1); hist_fitThLO_240->SetMarkerColor(kGreen+1); hist_fitThLO_240->SetMarkerStyle(53); hist_fitThLO_240->SetLineWidth(2); hist_fitThLO_240->SetMarkerSize(1);
+
+	hist_fitThLO_240->SetParameter(0, 0.112); 
+	hist_fitThLO_240->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_240->Fit(hist_fitThLO_240, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 240 GeV at NLO" << endl;
+
+	TF1 *hist_fitThNL_240 = new TF1("hist_fitThNL_240", THR_NLOO, 0.1, 0.3, 2);
+	hist_fitThNL_240->SetParName(0, "alpha_{s}"); hist_fitThNL_240->SetParName(1, "Norm"); 
+	hist_fitThNL_240->SetLineColor(kRed+1); hist_fitThNL_240->SetMarkerColor(kRed+1); hist_fitThNL_240->SetMarkerStyle(53); hist_fitThNL_240->SetLineWidth(2); hist_fitThNL_240->SetMarkerSize(1);
+
+	hist_fitThNL_240->SetParameter(0, 0.112); 
+	hist_fitThNL_240->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_240->Fit(hist_fitThNL_240, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 240 GeV at NNLO" << endl;
+
+	TF1 *hist_fitThNN_240 = new TF1("hist_fitThNN_240", THR_NNLO, 0.1, 0.3, 2);
+	hist_fitThNN_240->SetParName(0, "alpha_{s}"); hist_fitThNN_240->SetParName(1, "Norm"); 
+	hist_fitThNN_240->SetLineColor(kBlue+1); hist_fitThNN_240->SetMarkerColor(kBlue+1); hist_fitThNN_240->SetMarkerStyle(53); hist_fitThNN_240->SetLineWidth(2); hist_fitThNN_240->SetMarkerSize(1);
+
+	hist_fitThNN_240->SetParameter(0, 0.112); 
+	hist_fitThNN_240->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_240->Fit(hist_fitThNN_240, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 365 GeV at LO" << endl;
+
+	TF1 *hist_fitThLO_365 = new TF1("hist_fitThLO_365", THR_LOOO, 0.1, 0.3, 2);
+	hist_fitThLO_365->SetParName(0, "alpha_{s}"); hist_fitThLO_365->SetParName(1, "Norm"); 
+	hist_fitThLO_365->SetLineColor(kGreen+1); hist_fitThLO_365->SetMarkerColor(kGreen+1); hist_fitThLO_365->SetMarkerStyle(53); hist_fitThLO_365->SetLineWidth(2); hist_fitThLO_365->SetMarkerSize(1);
+
+	hist_fitThLO_365->SetParameter(0, 0.112); 
+	hist_fitThLO_365->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_365->Fit(hist_fitThLO_365, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 365 GeV at NLO" << endl;
+
+	TF1 *hist_fitThNL_365 = new TF1("hist_fitThNL_365", THR_NLOO, 0.1, 0.3, 2);
+	hist_fitThNL_365->SetParName(0, "alpha_{s}"); hist_fitThNL_365->SetParName(1, "Norm"); 
+	hist_fitThNL_365->SetLineColor(kRed+1); hist_fitThNL_365->SetMarkerColor(kRed+1); hist_fitThNL_365->SetMarkerStyle(53); hist_fitThNL_365->SetLineWidth(2); hist_fitThNL_365->SetMarkerSize(1);
+
+	hist_fitThNL_365->SetParameter(0, 0.112); 
+	hist_fitThNL_365->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_365->Fit(hist_fitThNL_365, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	cout << "****************************************" << endl;
+	cout << "Fitting (1-T) at 365 GeV at NNLO" << endl;
+
+	TF1 *hist_fitThNN_365 = new TF1("hist_fitThNN_365", THR_NNLO, 0.1, 0.3, 2);
+	hist_fitThNN_365->SetParName(0, "alpha_{s}"); hist_fitThNN_365->SetParName(1, "Norm"); 
+	hist_fitThNN_365->SetLineColor(kBlue+1); hist_fitThNN_365->SetMarkerColor(kBlue+1); hist_fitThNN_365->SetMarkerStyle(53); hist_fitThNN_365->SetLineWidth(2); hist_fitThNN_365->SetMarkerSize(1);
+
+	hist_fitThNN_365->SetParameter(0, 0.112); 
+	hist_fitThNN_365->SetParLimits(0, 0.02, 0.20);
+
+	hist_ThrPyth_365->Fit(hist_fitThNN_365, "RN");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	cout << "****************************************" << endl;
 	cout << "Fitting (Cpar) at 91.2 GeV at LO" << endl;
 
-	TF1 *hist_fitCpLO_912 = new TF1("hist_fitCpLO_912", CPR_LOOO, 0.1, 0.3, 2);
+	TF1 *hist_fitCpLO_912 = new TF1("hist_fitCpLO_912", CPR_LOOO, 0.3, 0.6, 2);
 	hist_fitCpLO_912->SetParName(0, "alpha_{s}"); hist_fitCpLO_912->SetParName(1, "Norm"); 
 	hist_fitCpLO_912->SetLineColor(kGreen+1); hist_fitCpLO_912->SetMarkerColor(kGreen+1); hist_fitCpLO_912->SetMarkerStyle(53); hist_fitCpLO_912->SetLineWidth(2); hist_fitCpLO_912->SetMarkerSize(1);
 
@@ -384,9 +508,9 @@ void ImpactofAlpha()
 	hist_CprPyth_365->SetTitle("");
 
 	// Create canvas
-	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1400, 850);
+	TCanvas* cv1 = new TCanvas("cv1", "FCC-ee ISR Studies", 1600, 2000);
 
-	TLegend* lg = new TLegend(0.65, 0.83, 0.92, 0.95);
+	TLegend* lg = new TLegend(0.76, 0.76, 0.92, 0.93);
 	lg->AddEntry(hist_ThrPyth_912, "PYTHIA 8.312", "L");
 	lg->AddEntry(hist_fitThLO_912, "#it{O}(#alpha_{s}^{1} theory fit)", "L");
 	lg->AddEntry(hist_fitThNL_912, "#it{O}(#alpha_{s}^{2} theory fit)", "L");
@@ -400,58 +524,77 @@ void ImpactofAlpha()
 	gStyle->SetTitleSize(0.06, "X");
 	gStyle->SetTitleSize(0.06, "Y");
 	cv1->SetMargin(0, 0, 0, 0); 
-	cv1->Divide(2,1);
-	for (int i = 1; i <= 2; i++) {
+	cv1->Divide(2,4);
+	for (int i = 1; i <= 8; i++) {
 		cv1->cd(i);
-		gPad->SetTopMargin(0.015);
-		gPad->SetBottomMargin(0.1);
+		gPad->SetTopMargin(0.025);
+		gPad->SetBottomMargin(0.14);
 		gPad->SetLeftMargin(0.15);
 		gPad->SetRightMargin(0.04);
 		gPad->SetTickx(); gPad->SetTicky();
-		// gPad->SetGridx(); gPad->SetGridy();
 		gPad->SetLogy();
 	}
 
-	// Draw
-	cv1->cd(1);
-
+	cv1->cd(7);
 	hist_ThrPyth_912->Draw("HIST");
-	hist_fitThLO_912->Draw("L SAME");
-	hist_fitThNL_912->Draw("L SAME");
-	hist_fitThNN_912->Draw("L SAME");
+	hist_fitThLO_912->Draw("HIST SAME");
+	hist_fitThNL_912->Draw("HIST SAME");
+	hist_fitThNN_912->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(5);
+	hist_ThrPyth_160->Draw("HIST");
+	hist_fitThLO_160->Draw("HIST SAME");
+	hist_fitThNL_160->Draw("HIST SAME");
+	hist_fitThNN_160->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(3);
+	hist_ThrPyth_240->Draw("HIST");
+	hist_fitThLO_240->Draw("HIST SAME");
+	hist_fitThNL_240->Draw("HIST SAME");
+	hist_fitThNN_240->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(1);
+	hist_ThrPyth_365->Draw("HIST");
+	hist_fitThLO_365->Draw("HIST SAME");
+	hist_fitThNL_365->Draw("HIST SAME");
+	hist_fitThNN_365->Draw("HIST SAME");
+	lg->Draw("SAME");
 
-	hist_ThrPyth_160->Scale(1E3);
-	hist_ThrPyth_160->Draw("HIST SAME");
-	
-	hist_ThrPyth_240->Scale(1E6);
-	hist_ThrPyth_240->Draw("HIST SAME");
-
-	hist_ThrPyth_365->Scale(1E9);
-	hist_ThrPyth_365->Draw("HIST SAME");
-
-	lg->Draw("SAME");	
-
-	cv1->cd(2);
-
+	cv1->cd(8);
 	hist_CprPyth_912->Draw("HIST");
-	hist_fitCpLO_912->Draw("L SAME");
-
-	hist_CprPyth_160->Scale(1E3);
-	hist_CprPyth_160->Draw("HIST SAME");
-	
-	hist_CprPyth_240->Scale(1E6);
-	hist_CprPyth_240->Draw("HIST SAME");
-
-	hist_CprPyth_365->Scale(1E9);
-	hist_CprPyth_365->Draw("HIST SAME");
-
+	hist_fitCpLO_912->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(6);
+	hist_CprPyth_160->Draw("HIST");
+	hist_fitCpLO_912->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(4);
+	hist_CprPyth_240->Draw("HIST");
+	hist_fitCpLO_912->Draw("HIST SAME");
+	lg->Draw("SAME");
+	cv1->cd(2);
+	hist_CprPyth_365->Draw("HIST");
+	hist_fitCpLO_912->Draw("HIST SAME");
 	lg->Draw("SAME");
 
 	// Set limits
-	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-3,1E12);
-	hist_ThrPyth_912->GetXaxis()->SetRangeUser(0,0.38);
-	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-3,1E12);
-	hist_CprPyth_912->GetXaxis()->SetRangeUser(0,0.38);
+	hist_ThrPyth_912->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_ThrPyth_912->GetXaxis()->SetRangeUser(0,0.4);
+	hist_ThrPyth_160->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_ThrPyth_160->GetXaxis()->SetRangeUser(0,0.4);
+	hist_ThrPyth_240->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_ThrPyth_240->GetXaxis()->SetRangeUser(0,0.4);
+	hist_ThrPyth_365->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_ThrPyth_365->GetXaxis()->SetRangeUser(0,0.4);
+
+	hist_CprPyth_912->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_CprPyth_912->GetXaxis()->SetRangeUser(0,1.0);
+	hist_CprPyth_160->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_CprPyth_160->GetXaxis()->SetRangeUser(0,1.0);
+	hist_CprPyth_240->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_CprPyth_240->GetXaxis()->SetRangeUser(0,1.0);
+	hist_CprPyth_365->GetYaxis()->SetRangeUser(1E-4,1E2);
+	hist_CprPyth_365->GetXaxis()->SetRangeUser(0,1.0);
 
 	// Modify stat-box
 	gStyle->SetOptStat();

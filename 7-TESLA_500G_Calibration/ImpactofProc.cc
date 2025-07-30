@@ -503,75 +503,75 @@ void ImpactofProc()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// // Create canvas
-	// TCanvas* cv2 = new TCanvas("cv2", "FCC-ee ISR Studies", 1400, 800);
+	// Create canvas
+	TCanvas* cv2 = new TCanvas("cv2", "FCC-ee ISR Studies", 1400, 800);
 
-	// // Add legend
-	// TLegend* lg2 = new TLegend(0.65, 0.70, 0.92, 0.95);
-	// lg2->AddEntry(hist_ThrPyth_al_365, "ee#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_Zq_365, "ee#rightarrow#gamma*/Z#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_ZZ_365, "ee#rightarrowWW#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_WW_365, "ee#rightarrowZZ#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_tt_365, "ee#rightarrowt#bar{t}#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_HZ_365, "ee#rightarrowZH#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_hZ_365, "ee#rightarroweeH#rightarrowq#bar{q}", "L");
-	// lg2->AddEntry(hist_ThrPyth_hW_365, "ee#rightarrow#nu_{e}#bar{#nu_{e}}H#rightarrowq#bar{q}", "L");
-	// lg2->SetTextSize(0.03);
+	// Add legend
+	TLegend* lg2 = new TLegend(0.65, 0.70, 0.92, 0.95);
+	lg2->AddEntry(hist_ThrPyth_al_365, "ee#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_Zq_365, "ee#rightarrow#gamma*/Z#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_ZZ_365, "ee#rightarrowWW#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_WW_365, "ee#rightarrowZZ#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_tt_365, "ee#rightarrowt#bar{t}#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_HZ_365, "ee#rightarrowZH#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_hZ_365, "ee#rightarroweeH#rightarrowq#bar{q}", "L");
+	lg2->AddEntry(hist_ThrPyth_hW_365, "ee#rightarrow#nu_{e}#bar{#nu_{e}}H#rightarrowq#bar{q}", "L");
+	lg2->SetTextSize(0.03);
 
-	// // Beautify
-	// gStyle->SetErrorX(0.000000001);
-	// gStyle->SetLabelSize(0.05, "X");
-	// gStyle->SetLabelSize(0.05, "Y");
-	// gStyle->SetTitleSize(0.06, "X");
-	// gStyle->SetTitleSize(0.06, "Y");
-	// cv2->SetMargin(0, 0, 0, 0); 
-	// cv2->Divide(2,1);
-	// for (int i = 1; i <= 2; i++) {
-	// 	cv2->cd(i);
-	// 	gPad->SetTopMargin(0.015);
-	// 	gPad->SetBottomMargin(0.1);
-	// 	gPad->SetLeftMargin(0.15);
-	// 	gPad->SetRightMargin(0.04);
-	// 	gPad->SetTickx(); gPad->SetTicky();
-	// 	gPad->SetLogy();
-	// }
+	// Beautify
+	gStyle->SetErrorX(0.000000001);
+	gStyle->SetLabelSize(0.05, "X");
+	gStyle->SetLabelSize(0.05, "Y");
+	gStyle->SetTitleSize(0.06, "X");
+	gStyle->SetTitleSize(0.06, "Y");
+	cv2->SetMargin(0, 0, 0, 0); 
+	cv2->Divide(2,1);
+	for (int i = 1; i <= 2; i++) {
+		cv2->cd(i);
+		gPad->SetTopMargin(0.015);
+		gPad->SetBottomMargin(0.1);
+		gPad->SetLeftMargin(0.15);
+		gPad->SetRightMargin(0.04);
+		gPad->SetTickx(); gPad->SetTicky();
+		gPad->SetLogy();
+	}
 
-	// // Draw
-	// cv2->cd(1);
+	// Draw
+	cv2->cd(1);
 
-	// hist_ThrPyth_al_365->Draw("C");
-	// hist_ThrPyth_Zq_365->Draw("C SAME");
-	// hist_ThrPyth_WW_365->Draw("C SAME");
-	// hist_ThrPyth_ZZ_365->Draw("C SAME");
-	// hist_ThrPyth_tt_365->Draw("C SAME");
-	// hist_ThrPyth_HZ_365->Draw("C SAME");
-	// hist_ThrPyth_hZ_365->Draw("C SAME");
-	// hist_ThrPyth_hW_365->Draw("C SAME");
+	hist_ThrPyth_al_365->Draw("C");
+	hist_ThrPyth_Zq_365->Draw("C SAME");
+	hist_ThrPyth_WW_365->Draw("C SAME");
+	hist_ThrPyth_ZZ_365->Draw("C SAME");
+	hist_ThrPyth_tt_365->Draw("C SAME");
+	hist_ThrPyth_HZ_365->Draw("C SAME");
+	hist_ThrPyth_hZ_365->Draw("C SAME");
+	hist_ThrPyth_hW_365->Draw("C SAME");
 
-	// lg2->Draw("SAME");
+	lg2->Draw("SAME");
 
-	// cv2->cd(2);
+	cv2->cd(2);
 
-	// hist_CprPyth_al_365->Draw("C");
-	// hist_CprPyth_Zq_365->Draw("C SAME");
-	// hist_CprPyth_WW_365->Draw("C SAME");
-	// hist_CprPyth_ZZ_365->Draw("C SAME");
-	// hist_CprPyth_tt_365->Draw("C SAME");
-	// hist_CprPyth_HZ_365->Draw("C SAME");
-	// hist_CprPyth_hZ_365->Draw("C SAME");
-	// hist_CprPyth_hW_365->Draw("C SAME");
+	hist_CprPyth_al_365->Draw("C");
+	hist_CprPyth_Zq_365->Draw("C SAME");
+	hist_CprPyth_WW_365->Draw("C SAME");
+	hist_CprPyth_ZZ_365->Draw("C SAME");
+	hist_CprPyth_tt_365->Draw("C SAME");
+	hist_CprPyth_HZ_365->Draw("C SAME");
+	hist_CprPyth_hZ_365->Draw("C SAME");
+	hist_CprPyth_hW_365->Draw("C SAME");
 
-	// lg2->Draw("SAME");
+	lg2->Draw("SAME");
 
-	// // Set limits
-	// hist_ThrPyth_al_365->GetYaxis()->SetRangeUser(1E0,1E6);
-	// hist_ThrPyth_al_365->GetXaxis()->SetRangeUser(0,0.4);
-	// hist_CprPyth_al_365->GetYaxis()->SetRangeUser(1E0,1E6);
-	// // hist_CprPyth_al_365->GetXaxis()->SetRangeUser(0,0.4);	
+	// Set limits
+	hist_ThrPyth_al_365->GetYaxis()->SetRangeUser(1E0,1E6);
+	hist_ThrPyth_al_365->GetXaxis()->SetRangeUser(0,0.4);
+	hist_CprPyth_al_365->GetYaxis()->SetRangeUser(1E0,1E6);
+	// hist_CprPyth_al_365->GetXaxis()->SetRangeUser(0,0.4);	
 
-	// // Modify stat-box
-	// gStyle->SetOptStat();
-	// // Update canvas
-	// cv2->Modified();
+	// Modify stat-box
+	gStyle->SetOptStat();
+	// Update canvas
+	cv2->Modified();
 
 }

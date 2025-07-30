@@ -51,7 +51,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC365.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC365_ISR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -109,7 +109,7 @@ int main(){
 	pythia.readString("Beams:idA = 11"); 													// beam energy
 	pythia.readString("Beams:idB = -11"); 													// beam energy
 	pythia.settings.parm("Beams:eCM", nEnerg);												// c-om energy
-	pythia.readString("PDF:lepton = off");													// ISR toggle
+	// pythia.readString("PDF:lepton = off");													// ISR toggle
 	
 	// Hadronisation
 	// pythia.readString("HadronLevel:Hadronize = off");
