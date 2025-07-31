@@ -303,7 +303,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_ThrPyth_hW->GetYaxis()->SetTitle("1/#sigma d#sigma/d(1-T)");
 	otree->Branch("hist_ThrPyth_hW", &hist_ThrPyth_hW, "hist_ThrPyth_hW");
 
-	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 200, 0.0, 0.4);
+	TH1F *hist_ThrPyth_Zq = new TH1F("hist_ThrPyth_Zq", "Inverse Thrust", 45, 0, 0.45);
 	hist_ThrPyth_Zq->GetXaxis()->SetTitle("(1-T)");
 	hist_ThrPyth_Zq->GetYaxis()->SetTitle("1/#sigma d#sigma/d(1-T)");
 	otree->Branch("hist_ThrPyth_Zq", &hist_ThrPyth_Zq, "hist_ThrPyth_Zq");
@@ -377,7 +377,7 @@ void applyCuts( const std::string& inputFileName, const std::string& outputFileN
 	hist_CprPyth_hW->GetYaxis()->SetTitle("1/#sigma d#sigma/d(C)");
 	otree->Branch("hist_CprPyth_hW", &hist_CprPyth_hW, "hist_CprPyth_hW");
 
-	TH1F *hist_CprPyth_Zq = new TH1F("hist_CprPyth_Zq", "C-parameter", 200, 0.0, 1.0);
+	TH1F *hist_CprPyth_Zq = new TH1F("hist_CprPyth_Zq", "C-parameter", 45, 0, 0.45);
 	hist_CprPyth_Zq->GetXaxis()->SetTitle("C");
 	hist_CprPyth_Zq->GetYaxis()->SetTitle("1/#sigma d#sigma/d(C)");
 	otree->Branch("hist_CprPyth_Zq", &hist_CprPyth_Zq, "hist_CprPyth_Zq");

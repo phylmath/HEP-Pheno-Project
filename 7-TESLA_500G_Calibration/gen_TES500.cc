@@ -51,7 +51,7 @@ int main(){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Define file
-  	TFile *output = new TFile("gen_FCC365_ISR.root", "RECREATE");
+  	TFile *output = new TFile("gen_FCC240_ISR.root", "RECREATE");
 	
 	// Define tree
 	TTree *tree = new TTree("tree_raw", "Raw Pythia data");
@@ -101,7 +101,7 @@ int main(){
 	// Set # of events
 	int nEvent = 1E6;
 	// Set centre mass
-	int nEnerg = 365.0;
+	int nEnerg = 240.0;
 
 ///////////////////////////////PHYSICS SWITCHES FOR TESLA 500 GeV ///////////////////////////////////////////
 	
